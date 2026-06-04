@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Инструменты · Васильковский</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=Golos+Text:wght@400;500;600&display=swap');
+:root {
+  --bg:#0a0c10; --surface:#12151c; --surface2:#1a1e28; --border:rgba(255,255,255,0.08);
+  --text:#eef0f6; --muted:#636880; --blue:#4d8ef0; --green:#34d399;
+  --yellow:#fbbf24; --red:#f87171; --purple:#a78bfa; --orange:#fb923c;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Golos Text',sans-serif;font-size:15px;padding:0 0 80px;max-width:480px;margin:0 auto;}
+
+/* NAV */
+.nav{display:flex;gap:6px;padding:12px 16px 0;position:sticky;top:0;background:var(--bg);z-index:100;border-bottom:1px solid var(--border);padding-bottom:12px;}
+.nav-btn{flex:1;padding:9px 4px;background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--muted);font-family:'Golos Text',sans-serif;font-size:11px;font-weight:600;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;transition:all 0.15s;}
+.nav-btn .nav-icon{font-size:18px;}
+.nav-btn.active{background:rgba(77,142,240,0.1);border-color:rgba(77,142,240,0.35);color:var(--blue);}
+.nav-btn:active{opacity:0.8;}
+
+/* SCREENS */
+.screen{display:none;padding:16px 16px 0;}
+.screen.active{display:block;}
+
+/* COMMON */
+.top{text-align:center;padding:20px 0 16px;border-bottom:1px solid var(--border);margin-bottom:20px;}
+.top-icon{font-size:38px;margin-bottom:10px;}
+.top h1{font-family:'Unbounded',sans-serif;font-size:17px;font-weight:900;color:var(--text);margin-bottom:4px;}
+.top p{font-size:12px;color:var(--muted);}
+.badge{display:inline-block;margin-top:8px;font-size:11px;font-weight:600;padding:3px 12px;border-radius:20px;font-family:'Unbounded',sans-serif;}
+.badge-green{background:rgba(52,211,153,0.12);color:var(--green);}
+.badge-blue{background:rgba(77,142,240,0.12);color:var(--blue);}
+
+/* CARD */
+.card{background:var(--surface);border-radius:14px;border:1px solid var(--border);overflow:hidden;margin-bottom:10px;}
+.card-head{display:flex;align-items:center;gap:10px;padding:12px 14px 10px;}
+.s-badge{width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Unbounded',sans-serif;font-weight:700;font-size:11px;flex-shrink:0;}
+.s-info{flex:1;}
+.s-title{font-family:'Unbounded',sans-serif;font-size:11px;font-weight:700;}
+.s-hint{font-size:11px;color:var(--muted);margin-top:2px;}
+textarea{background:transparent;border:none;border-top:1px solid var(--border);color:var(--text);font-family:'Golos Text',sans-serif;font-size:14px;line-height:1.6;padding:11px 14px;width:100%;outline:none;resize:none;min-height:70px;}
+textarea::placeholder{color:var(--muted);}
+input[type=text]{background:var(--surface);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:'Golos Text',sans-serif;font-size:15px;padding:12px 14px;width:100%;outline:none;}
+input[type=text]:focus{border-color:var(--blue);}
+input[type=text]::placeholder{color:var(--muted);}
+
+/* BUTTONS */
+.btn-primary{width:100%;padding:15px;background:var(--blue);border:none;border-radius:13px;color:white;font-family:'Unbounded',sans-serif;font-weight:700;font-size:13px;cursor:pointer;margin-top:16px;}
+.btn-primary:active{opacity:0.85;}
+.btn-primary:disabled{opacity:0.5;cursor:not-allowed;}
+.btn-ghost{width:100%;padding:13px;background:transparent;border:1px solid var(--border);border-radius:13px;color:var(--muted);font-family:'Unbounded',sans-serif;font-weight:700;font-size:12px;cursor:pointer;margin-top:8px;display:none;}
+.status{margin-top:12px;padding:13px 14px;border-radius:11px;font-size:13px;text-align:center;display:none;}
+.status.ok{background:rgba(52,211,153,0.08);border:1px solid rgba(52,211,153,0.2);color:var(--green);display:block;}
+.status.err{background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.2);color:var(--red);display:block;}
+
+/* =================== SCREEN 1: 6 СЕКТОРОВ =================== */
+.s1b .s-badge{background:rgba(77,142,240,0.15);color:var(--blue);}   .s1b .s-title{color:var(--blue);}
+.s2b .s-badge{background:rgba(52,211,153,0.12);color:var(--green);}  .s2b .s-title{color:var(--green);}
+.s3b .s-badge{background:rgba(251,191,36,0.12);color:var(--yellow);}  .s3b .s-title{color:var(--yellow);}
+.s4b .s-badge{background:rgba(248,113,113,0.12);color:var(--red);}   .s4b .s-title{color:var(--red);}
+.s5b .s-badge{background:rgba(167,139,250,0.12);color:var(--purple);}  .s5b .s-title{color:var(--purple);}
+.s6b .s-badge{background:rgba(251,146,60,0.12);color:var(--orange);}  .s6b .s-title{color:var(--orange);}
+.name-row{display:flex;gap:8px;margin-bottom:10px;}
+.name-row input:last-child{max-width:110px;}
+
+/* =================== SCREEN 2: 4 ВОПРОСА =================== */
+.q1c::before{background:var(--blue);}   .q2c::before{background:var(--green);}
+.q3c::before{background:var(--yellow);}  .q4c::before{background:var(--red);}
+.q-card{background:var(--surface);border-radius:14px;border:1px solid var(--border);margin-bottom:10px;position:relative;overflow:hidden;padding:16px;}
+.q-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;}
+.q-num-box{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:'Unbounded',sans-serif;font-weight:800;font-size:13px;flex-shrink:0;}
+.q1c .q-num-box{background:rgba(77,142,240,0.15);color:var(--blue);}
+.q2c .q-num-box{background:rgba(52,211,153,0.12);color:var(--green);}
+.q3c .q-num-box{background:rgba(251,191,36,0.12);color:var(--yellow);}
+.q4c .q-num-box{background:rgba(248,113,113,0.12);color:var(--red);}
+.q-head-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.q-card-title{font-family:'Unbounded',sans-serif;font-size:13px;font-weight:700;}
+.q-card-q{font-size:14px;font-weight:600;color:var(--text);margin-bottom:10px;line-height:1.4;}
+.hint-list{display:flex;flex-direction:column;gap:5px;}
+.hint-row{font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:7px;line-height:1.5;}
+.hint-dot{width:4px;height:4px;border-radius:50%;margin-top:6px;flex-shrink:0;}
+.q1c .hint-dot{background:var(--blue);}  .q2c .hint-dot{background:var(--green);}
+.q3c .hint-dot{background:var(--yellow);}  .q4c .hint-dot{background:var(--red);}
+.reminder-box{background:rgba(77,142,240,0.07);border:1px solid rgba(77,142,240,0.15);border-radius:13px;padding:14px;font-size:13px;color:#9ba3bb;line-height:1.7;margin-top:14px;}
+.reminder-box strong{color:var(--blue);}
+.after-sec{margin-top:20px;}
+.after-label{font-family:'Unbounded',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.after-label::after{content:'';flex:1;height:1px;background:var(--border);}
+.after-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;color:#b0b5c8;}
+.after-item:last-child{border-bottom:none;}
+.after-card{background:var(--surface);border-radius:13px;border:1px solid var(--border);padding:4px 14px;}
+
+/* =================== SCREEN 3: ДНЕВНИК =================== */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:18px;}
+.stat-box{background:var(--surface);border-radius:11px;border:1px solid var(--border);padding:12px 8px;text-align:center;}
+.stat-n{font-family:'Unbounded',sans-serif;font-size:22px;font-weight:900;line-height:1;margin-bottom:3px;}
+.stat-l{font-size:10px;color:var(--muted);line-height:1.3;}
+.stat-box.blue .stat-n{color:var(--blue);} .stat-box.green .stat-n{color:var(--green);} .stat-box.purple .stat-n{color:var(--purple);}
+.menu-action{width:100%;padding:16px 18px;background:var(--surface);border:1px solid var(--border);border-radius:14px;color:var(--text);font-family:'Golos Text',sans-serif;font-size:14px;font-weight:600;cursor:pointer;margin-bottom:10px;display:flex;align-items:center;gap:12px;text-align:left;}
+.menu-action.primary{border-color:rgba(77,142,240,0.3);background:rgba(77,142,240,0.07);}
+.ma-icon{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.menu-action.primary .ma-icon{background:rgba(77,142,240,0.15);color:var(--blue);}
+.menu-action.secondary .ma-icon{background:rgba(52,211,153,0.12);color:var(--green);}
+.ma-text{flex:1;}
+.ma-title{font-weight:700;margin-bottom:2px;}
+.ma-sub{font-size:11px;color:var(--muted);font-weight:400;}
+.sub-screen{display:none;}
+.sub-screen.active{display:block;}
+.back-row{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+.back-b{width:34px;height:34px;background:var(--surface);border:1px solid var(--border);border-radius:9px;color:var(--muted);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.sub-title{font-family:'Unbounded',sans-serif;font-size:14px;font-weight:700;color:var(--text);}
+.period-tag{margin-left:auto;background:rgba(251,191,36,0.12);color:var(--yellow);font-size:10px;font-weight:600;padding:3px 9px;border-radius:20px;font-family:'Unbounded',sans-serif;white-space:nowrap;}
+.d-card{background:var(--surface);border-radius:13px;border:1px solid var(--border);margin-bottom:9px;overflow:hidden;}
+.d-head{display:flex;align-items:center;gap:9px;padding:11px 13px 9px;}
+.d-icon{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.dq1 .d-icon{background:rgba(52,211,153,0.12);}  .dq2 .d-icon{background:rgba(248,113,113,0.12);}
+.dq3 .d-icon{background:rgba(77,142,240,0.12);}   .dq4 .d-icon{background:rgba(167,139,250,0.12);}  .dq5 .d-icon{background:rgba(251,191,36,0.12);}
+.d-info-title{font-family:'Unbounded',sans-serif;font-size:11px;font-weight:700;}
+.dq1 .d-info-title{color:var(--green);}  .dq2 .d-info-title{color:var(--red);}
+.dq3 .d-info-title{color:var(--blue);}   .dq4 .d-info-title{color:var(--purple);}  .dq5 .d-info-title{color:var(--yellow);}
+.d-hint{font-size:11px;color:var(--muted);margin-top:1px;}
+.mood-row{display:flex;gap:7px;padding:11px 13px;border-top:1px solid var(--border);}
+.mood-b{flex:1;padding:9px 3px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:9px;font-size:18px;cursor:pointer;text-align:center;}
+.mood-b.selected{border-color:var(--blue);background:rgba(77,142,240,0.1);}
+.mood-label{font-size:9px;color:var(--muted);display:block;margin-top:3px;font-family:'Golos Text',sans-serif;}
+.btn-save-diary{width:100%;padding:15px;background:var(--green);border:none;border-radius:13px;color:#0a1a12;font-family:'Unbounded',sans-serif;font-weight:700;font-size:13px;cursor:pointer;margin-top:14px;}
+.success-note{background:rgba(52,211,153,0.08);border:1px solid rgba(52,211,153,0.2);border-radius:11px;padding:13px;color:var(--green);font-size:13px;text-align:center;margin-top:10px;display:none;}
+.entry-card{background:var(--surface);border-radius:13px;border:1px solid var(--border);margin-bottom:10px;overflow:hidden;}
+.entry-top{display:flex;align-items:center;padding:12px 14px;border-bottom:1px solid var(--border);}
+.entry-date{font-family:'Unbounded',sans-serif;font-size:11px;color:var(--muted);}
+.entry-mood{font-size:18px;margin:0 10px 0 auto;}
+.entry-num{font-size:10px;color:var(--muted);background:rgba(255,255,255,0.05);padding:2px 8px;border-radius:20px;}
+.entry-body{padding:12px 14px;display:flex;flex-direction:column;gap:10px;}
+.es1 .esect-title{color:var(--green);} .es2 .esect-title{color:var(--red);}
+.es3 .esect-title{color:var(--blue);} .es4 .esect-title{color:var(--purple);}
+.esect-title{font-family:'Unbounded',sans-serif;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px;}
+.esect-text{font-size:13px;color:#9ba3bb;line-height:1.6;}
+.empty-state{text-align:center;padding:50px 20px;color:var(--muted);font-size:13px;line-height:1.7;}
+.empty-state div:first-child{font-size:44px;margin-bottom:12px;}
+
+/* =================== SCREEN 4: ДЗ =================== */
+.mod-label{font-family:'Unbounded',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin:20px 0 10px;display:flex;align-items:center;gap:8px;}
+.mod-label::after{content:'';flex:1;height:1px;background:var(--border);}
+.mod-num{width:24px;height:24px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;font-family:'Unbounded',sans-serif;flex-shrink:0;}
+.m1n{background:rgba(77,142,240,0.15);color:var(--blue);}
+.m2n{background:rgba(52,211,153,0.12);color:var(--green);}
+.dz-card{background:var(--surface);border-radius:14px;border:1px solid var(--border);padding:16px;margin-bottom:10px;position:relative;overflow:hidden;}
+.dz-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;}
+.dz-m1::before{background:var(--blue);}
+.dz-m2::before{background:var(--green);}
+.dz-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px;}
+.dz-pt{font-size:10px;font-weight:700;padding:2px 7px;border-radius:5px;}
+.dz-m1 .dz-pt{background:rgba(77,142,240,0.15);color:var(--blue);}
+.dz-m2 .dz-pt{background:rgba(52,211,153,0.12);color:var(--green);}
+.dz-title{font-family:'Unbounded',sans-serif;font-size:13px;font-weight:700;color:var(--text);line-height:1.3;}
+.dz-body{font-size:13px;color:#b0b5c8;line-height:1.7;}
+.dz-ex{background:rgba(255,255,255,0.04);border-radius:9px;padding:11px 13px;margin-top:10px;font-size:12px;color:#8b91a8;border-left:2px solid;}
+.dz-m1 .dz-ex{border-color:rgba(77,142,240,0.4);}
+.dz-m2 .dz-ex{border-color:rgba(52,211,153,0.3);}
+.dz-ex strong{display:block;font-size:10px;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;font-weight:600;}
+.dz-m1 .dz-ex strong{color:var(--blue);}
+.dz-m2 .dz-ex strong{color:var(--green);}
+.footer-tag{text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid var(--border);}
+.ftag{display:inline-block;background:rgba(251,191,36,0.1);color:var(--yellow);padding:6px 16px;border-radius:20px;font-size:11px;font-weight:600;margin-bottom:8px;font-family:'Unbounded',sans-serif;}
+.footer-sub{font-size:11px;color:var(--muted);}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="nav">
+  <button class="nav-btn active" onclick="showScreen('s6')" id="nav-s6">
+    <span class="nav-icon">🎯</span><span>6 секторов</span>
+  </button>
+  <button class="nav-btn" onclick="showScreen('s4q')" id="nav-s4q">
+    <span class="nav-icon">🧠</span><span>4 вопроса</span>
+  </button>
+  <button class="nav-btn" onclick="showScreen('sdiary')" id="nav-sdiary">
+    <span class="nav-icon">📈</span><span>Дневник</span>
+  </button>
+  <button class="nav-btn" onclick="showScreen('sdz')" id="nav-sdz">
+    <span class="nav-icon">📚</span><span>Домашка</span>
+  </button>
+</div>
+
+<!-- =================== SCREEN: 6 СЕКТОРОВ =================== -->
+<div class="screen active" id="screen-s6">
+  <div class="top">
+    <div class="top-icon">🎯</div>
+    <h1>6 секторов · Визит</h1>
+    <p>Заполни в свободной форме — сохранится в таблицу</p>
+  </div>
+
+  <div class="name-row">
+    <input type="text" id="inp-name" placeholder="Имя сотрудника">
+    <input type="text" id="inp-shop" placeholder="Магазин №">
+  </div>
+
+  <div class="card s1b">
+    <div class="card-head"><div class="s-badge">1</div><div class="s-info"><div class="s-title">Цель</div><div class="s-hint">Какую задачу решаю этим разговором?</div></div></div>
+    <textarea id="s1" placeholder="Пиши как думаешь..."></textarea>
+  </div>
+  <div class="card s2b">
+    <div class="card-head"><div class="s-badge">2</div><div class="s-info"><div class="s-title">Требования</div><div class="s-hint">Что должно произойти после разговора?</div></div></div>
+    <textarea id="s2" placeholder="Что конкретно сделает сотрудник..."></textarea>
+  </div>
+  <div class="card s3b">
+    <div class="card-head"><div class="s-badge">3</div><div class="s-info"><div class="s-title">Варианты</div><div class="s-hint">Какие пути решения есть?</div></div></div>
+    <textarea id="s3" placeholder="2–3 варианта действий..."></textarea>
+  </div>
+  <div class="card s4b">
+    <div class="card-head"><div class="s-badge">4</div><div class="s-info"><div class="s-title">Ресурсы</div><div class="s-hint">Что есть и что понадобится?</div></div></div>
+    <textarea id="s4" placeholder="Данные, аудио, кейсы коллег..."></textarea>
+  </div>
+  <div class="card s5b">
+    <div class="card-head"><div class="s-badge">5</div><div class="s-info"><div class="s-title">Риски</div><div class="s-hint">Что может пойти не так?</div></div></div>
+    <textarea id="s5" placeholder="Как может среагировать сотрудник..."></textarea>
+  </div>
+  <div class="card s6b">
+    <div class="card-head"><div class="s-badge">6</div><div class="s-info"><div class="s-title">Критерий успеха</div><div class="s-hint">Как пойму что разговор прошёл хорошо?</div></div></div>
+    <textarea id="s6" placeholder="Конкретный результат с цифрой..."></textarea>
+  </div>
+
+  <button class="btn-primary" id="btn-save6" onclick="save6sectors()">Сохранить в таблицу →</button>
+  <div class="status" id="status6"></div>
+  <button class="btn-ghost" id="btn-new6" onclick="reset6sectors()">← Новый визит</button>
+  <div style="text-align:center;font-size:11px;color:var(--muted);margin-top:10px;" id="counter6">Сохранено визитов: <span style="color:var(--green);font-weight:600;">0</span></div>
+</div>
+
+<!-- =================== SCREEN: 4 ВОПРОСА =================== -->
+<div class="screen" id="screen-s4q">
+  <div class="top">
+    <div class="top-icon">🧠</div>
+    <h1>4 вопроса перед разговором</h1>
+    <p>Открой · Прочитай · Зайди к сотруднику</p>
+    <span class="badge badge-green">⏱ 30 секунд</span>
+  </div>
+
+  <div class="q-card q1c">
+    <div class="q-head-row"><div class="q-num-box">1</div><div class="q-card-title" style="color:var(--blue);">Что я знаю — факты?</div></div>
+    <div class="q-card-q">Какие у меня цифры и факты по этому сотруднику прямо сейчас?</div>
+    <div class="hint-list">
+      <div class="hint-row"><span class="hint-dot"></span>Табель — сколько опозданий, часов</div>
+      <div class="hint-row"><span class="hint-dot"></span>Журнал — % выполнения задач</div>
+      <div class="hint-row"><span class="hint-dot"></span>Продажи — план / факт / динамика</div>
+      <div class="hint-row"><span class="hint-dot"></span>Это факт или мой домысел?</div>
+    </div>
+  </div>
+
+  <div class="q-card q2c">
+    <div class="q-head-row"><div class="q-num-box">2</div><div class="q-card-title" style="color:var(--green);">Чего я хочу достичь?</div></div>
+    <div class="q-card-q">Какой результат я хочу получить после этого разговора?</div>
+    <div class="hint-list">
+      <div class="hint-row"><span class="hint-dot"></span>Конкретный шаг от сотрудника</div>
+      <div class="hint-row"><span class="hint-dot"></span>Срок и форма отчёта</div>
+      <div class="hint-row"><span class="hint-dot"></span>Критерий — как пойму что выполнено</div>
+      <div class="hint-row"><span class="hint-dot"></span>Сотрудник сам назовёт шаг — или я скажу?</div>
+    </div>
+  </div>
+
+  <div class="q-card q3c">
+    <div class="q-head-row"><div class="q-num-box">3</div><div class="q-card-title" style="color:var(--yellow);">Какой он человек?</div></div>
+    <div class="q-card-q">Как мотивирован этот сотрудник и что на него влияет?</div>
+    <div class="hint-list">
+      <div class="hint-row"><span class="hint-dot"></span>Тип по Герчикову — патриот, избегательный, другой</div>
+      <div class="hint-row"><span class="hint-dot"></span>Что сейчас происходит у него лично</div>
+      <div class="hint-row"><span class="hint-dot"></span>Давление или поддержка — что сработает</div>
+      <div class="hint-row"><span class="hint-dot"></span>Как он реагировал в прошлый раз</div>
+    </div>
+  </div>
+
+  <div class="q-card q4c">
+    <div class="q-head-row"><div class="q-num-box">4</div><div class="q-card-title" style="color:var(--red);">Какой первый вопрос задам?</div></div>
+    <div class="q-card-q">Как открою разговор чтобы он говорил, а не я?</div>
+    <div class="hint-list">
+      <div class="hint-row"><span class="hint-dot"></span>Открытый вопрос — не «почему не сделал», а «как складывается ситуация»</div>
+      <div class="hint-row"><span class="hint-dot"></span>Сначала слушаю — потом говорю</div>
+      <div class="hint-row"><span class="hint-dot"></span>Не останавливаюсь на первом ответе</div>
+      <div class="hint-row"><span class="hint-dot"></span>Правило +1 вопрос после каждого ответа</div>
+    </div>
+  </div>
+
+  <div class="reminder-box">
+    <strong>Главное правило:</strong> если чувствуешь что начинаешь давить и злиться — вернись к вопросу №1. Факты, не эмоции. Цифры убирают субъективность из любого разговора.
+  </div>
+
+  <div class="after-sec">
+    <div class="after-label">После разговора</div>
+    <div class="after-card">
+      <div class="after-item"><span style="font-size:16px;flex-shrink:0;">✉️</span><span>Отправь протокол — что обсудили, что договорились, срок</span></div>
+      <div class="after-item"><span style="font-size:16px;flex-shrink:0;">📋</span><span>Зафикси в журнале — задача поставлена, дедлайн, форма отчёта</span></div>
+      <div class="after-item"><span style="font-size:16px;flex-shrink:0;">🎧</span><span>Если была аудиозапись — разбери один момент через фильтр фактов</span></div>
+      <div class="after-item"><span style="font-size:16px;flex-shrink:0;">📝</span><span>Одно предложение в OneNote — что узнал нового об этом человеке</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- =================== SCREEN: ДНЕВНИК =================== -->
+<div class="screen" id="screen-sdiary">
+  <!-- MAIN MENU -->
+  <div class="sub-screen active" id="diary-menu">
+    <div class="top">
+      <div class="top-icon">📈</div>
+      <h1>Дневник роста</h1>
+      <p>Васильковский Роман · Раз в две недели · 5 минут</p>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-box blue"><div class="stat-n" id="d-stat1">0</div><div class="stat-l">записей всего</div></div>
+      <div class="stat-box green"><div class="stat-n" id="d-stat2">0</div><div class="stat-l">недель в работе</div></div>
+      <div class="stat-box purple"><div class="stat-n" id="d-stat3">0</div><div class="stat-l">дней до след.</div></div>
+    </div>
+    <button class="menu-action primary" onclick="diaryShow('write')">
+      <div class="ma-icon">✏️</div>
+      <div class="ma-text"><div class="ma-title">Новая запись</div><div class="ma-sub">5 вопросов · займёт 5 минут</div></div>
+    </button>
+    <button class="menu-action secondary" onclick="diaryShow('history')">
+      <div class="ma-icon">📚</div>
+      <div class="ma-text"><div class="ma-title">История записей</div><div class="ma-sub" id="d-hist-sub">Пока пусто — сделай первую запись</div></div>
+    </button>
+  </div>
+
+  <!-- WRITE -->
+  <div class="sub-screen" id="diary-write">
+    <div class="back-row">
+      <button class="back-b" onclick="diaryShow('menu')">←</button>
+      <div class="sub-title">Новая запись</div>
+      <div class="period-tag" id="d-write-date"></div>
+    </div>
+    <div class="d-card dq1"><div class="d-head"><div class="d-icon">✅</div><div><div class="d-info-title">Что применил</div><div class="d-hint">Какие инструменты использовал за эти две недели?</div></div></div><textarea id="d1" placeholder="Например: воронку вопросов с Кариной..."></textarea></div>
+    <div class="d-card dq2"><div class="d-head"><div class="d-icon">🔥</div><div><div class="d-info-title">Что получилось</div><div class="d-hint">Конкретный результат — с цифрой или примером</div></div></div><textarea id="d2" placeholder="Например: Карина сама назвала шаг..."></textarea></div>
+    <div class="d-card dq3"><div class="d-head"><div class="d-icon">💡</div><div><div class="d-info-title">Что не получилось</div><div class="d-hint">Где ушёл в эмоцию или не применил инструмент?</div></div></div><textarea id="d3" placeholder="Например: с Запорожцем сразу надавил..."></textarea></div>
+    <div class="d-card dq4"><div class="d-head"><div class="d-icon">🎯</div><div><div class="d-info-title">Вывод и следующий шаг</div><div class="d-hint">Что буду делать иначе в следующие две недели?</div></div></div><textarea id="d4" placeholder="Например: прогонять 4 вопроса перед каждым..."></textarea></div>
+    <div class="d-card dq5">
+      <div class="d-head"><div class="d-icon">⭐</div><div><div class="d-info-title">Настроение периода</div><div class="d-hint">Как ощущаешь свой прогресс?</div></div></div>
+      <div class="mood-row">
+        <div class="mood-b" onclick="pickMood(this,'🔥')">🔥<span class="mood-label">Горю</span></div>
+        <div class="mood-b" onclick="pickMood(this,'💪')">💪<span class="mood-label">Расту</span></div>
+        <div class="mood-b" onclick="pickMood(this,'😐')">😐<span class="mood-label">Ровно</span></div>
+        <div class="mood-b" onclick="pickMood(this,'😓')">😓<span class="mood-label">Тяжело</span></div>
+      </div>
+    </div>
+    <button class="btn-save-diary" onclick="saveDiary()">Сохранить запись →</button>
+    <div class="success-note" id="d-success">✓ Запись сохранена! Так держать.</div>
+  </div>
+
+  <!-- HISTORY -->
+  <div class="sub-screen" id="diary-history">
+    <div class="back-row">
+      <button class="back-b" onclick="diaryShow('menu')">←</button>
+      <div class="sub-title">История записей</div>
+    </div>
+    <div id="d-hist-list"></div>
+  </div>
+</div>
+
+<!-- =================== SCREEN: ДОМАШКА =================== -->
+<div class="screen" id="screen-sdz">
+  <div class="top">
+    <div class="top-icon">📚</div>
+    <h1>Домашнее задание</h1>
+    <p>Васильковский Роман · Модули 1 и 2 · Июнь 2026</p>
+    <span class="badge badge-blue">Готов применять с сегодняшнего дня</span>
+  </div>
+
+  <div class="mod-label"><span class="mod-num m1n">1</span>Структура и контроль</div>
+
+  <div class="dz-card dz-m1">
+    <div class="dz-top"><span class="dz-pt">1.1</span><span class="dz-title">SMART+ в каждой задаче</span></div>
+    <div class="dz-body">Взял в работу постановку задач по формату SMART+. Каждая задача содержит: что сделать, срок, результат, форму отчёта.</div>
+    <div class="dz-ex"><strong>Пример</strong>Матецкий 3382 — задача по модели 6565: изменить воронку консультаций, аудиозапись к 05.06, критерий — 2 продажи.</div>
+  </div>
+
+  <div class="dz-card dz-m1">
+    <div class="dz-top"><span class="dz-pt">1.3</span><span class="dz-title">Трёхуровневый контроль</span></div>
+    <div class="dz-body">Веду цифровой журнал задач по каждому сотруднику — постановка, промежуточная проверка, итоговый результат.</div>
+    <div class="dz-ex"><strong>Пример</strong>Веселкова 2906 — задачи выполнены на 75%, зафиксировано в журнале. Полный цикл контроля с фиксацией.</div>
+  </div>
+
+  <div class="dz-card dz-m1">
+    <div class="dz-top"><span class="dz-pt">1.5</span><span class="dz-title">Протокол после каждого разговора</span></div>
+    <div class="dz-body">После каждого визита отправляю сотруднику письменное резюме — что обсудили, договорились, сроки.</div>
+    <div class="dz-ex"><strong>Пример</strong>Хуснулин 1467 — три задачи SMART+ с дедлайнами. Карина ответила «взяла в работу» сразу после протокола.</div>
+  </div>
+
+  <div class="mod-label"><span class="mod-num m2n">2</span>Факты и анализ</div>
+
+  <div class="dz-card dz-m2">
+    <div class="dz-top"><span class="dz-pt">2.1</span><span class="dz-title">Фильтр фактов</span></div>
+    <div class="dz-body">Разделяю информацию на факты, домыслы и стереотипы. Не пишу оценок — открываю источники и фиксирую конкретную картину.</div>
+    <div class="dz-ex"><strong>Пример</strong>Веселкова 2906: не «плохо работает» — аудио визита + журнал задач 75% + табель 4 опоздания. Три независимых факта.</div>
+  </div>
+
+  <div class="dz-card dz-m2">
+    <div class="dz-top"><span class="dz-pt">2.2</span><span class="dz-title">Воронка вопросов</span></div>
+    <div class="dz-body">Не останавливаюсь на первом ответе. Четыре уровня: открытый → уточняющий → детализирующий → проверочный.</div>
+    <div class="dz-ex"><strong>Пример</strong>Пинчук: «трафика нет» → уточнил → детализировал → выяснил: знание УТП слабое. Поставил задачу — 5 причин покупки робота.</div>
+  </div>
+
+  <div class="dz-card dz-m2">
+    <div class="dz-top"><span class="dz-pt">2.3</span><span class="dz-title">6 секторов информации</span></div>
+    <div class="dz-body">Перед важным решением прохожу все 6 секторов — не интуитивно, а через структуру.</div>
+    <div class="dz-ex"><strong>Пример</strong>Вакансия ДНС Прибрежная: цель → требования → варианты → ресурсы → риски → критерий. Принял обоснованное решение.</div>
+  </div>
+
+  <div class="dz-card dz-m2">
+    <div class="dz-top"><span class="dz-pt">2.4</span><span class="dz-title">Анализ с цифрами</span></div>
+    <div class="dz-body">В каждом разговоре и отчёте использую цифры. Цифры переводят разговор из эмоций в факты.</div>
+    <div class="dz-ex"><strong>Пример</strong>Пинчуку: не «плохо продаёшь» — наш робот 51к, Trouver 64к, разница 13к в нашу пользу. Вакууматор = 1% от твоего плана.</div>
+  </div>
+
+  <div class="footer-tag">
+    <div class="ftag">Готов применять с сегодняшнего дня</div>
+    <div class="footer-sub">Васильковский Роман · Супервайзер Polaris · Июнь 2026</div>
+  </div>
+</div>
+
+<script>
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxrnxFrJPgzjhY85lUAujtv9eQWCaUfag6Iwt_B_4n1bxUJFktlG0l1SjirOE9cUFk_kA/exec';
+
+// === NAV ===
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('screen-' + id).classList.add('active');
+  document.getElementById('nav-' + id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// === 6 СЕКТОРОВ ===
+let savedCount = parseInt(localStorage.getItem('savedCount') || '0');
+updateCounter6();
+
+function updateCounter6() {
+  const el = document.getElementById('counter6');
+  el.innerHTML = 'Сохранено визитов: <span style="color:var(--green);font-weight:600;">' + savedCount + '</span>';
+}
+
+async function save6sectors() {
+  const btn = document.getElementById('btn-save6');
+  const statusEl = document.getElementById('status6');
+  const btnNew = document.getElementById('btn-new6');
+  const data = {
+    name: document.getElementById('inp-name').value.trim() || '—',
+    shop: document.getElementById('inp-shop').value.trim() || '—',
+    s1: document.getElementById('s1').value.trim() || '—',
+    s2: document.getElementById('s2').value.trim() || '—',
+    s3: document.getElementById('s3').value.trim() || '—',
+    s4: document.getElementById('s4').value.trim() || '—',
+    s5: document.getElementById('s5').value.trim() || '—',
+    s6: document.getElementById('s6').value.trim() || '—'
+  };
+  btn.disabled = true; btn.textContent = 'Сохраняю...';
+  statusEl.className = 'status';
+  try {
+    await fetch(SCRIPT_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data) });
+    savedCount++;
+    localStorage.setItem('savedCount', savedCount);
+    updateCounter6();
+    statusEl.className = 'status ok';
+    statusEl.textContent = '✓ Сохранено в таблицу! Визит зафиксирован.';
+    btn.style.display = 'none';
+    btnNew.style.display = 'block';
+  } catch(err) {
+    statusEl.className = 'status err';
+    statusEl.textContent = 'Ошибка. Проверь интернет и попробуй ещё раз.';
+    btn.disabled = false; btn.textContent = 'Сохранить в таблицу →';
+  }
+}
+
+function reset6sectors() {
+  ['inp-name','inp-shop','s1','s2','s3','s4','s5','s6'].forEach(id => document.getElementById(id).value = '');
+  const btn = document.getElementById('btn-save6');
+  btn.disabled = false; btn.textContent = 'Сохранить в таблицу →'; btn.style.display = 'block';
+  document.getElementById('btn-new6').style.display = 'none';
+  document.getElementById('status6').className = 'status';
+  window.scrollTo(0,0);
+}
+
+// === ДНЕВНИК ===
+let selectedMood = '';
+
+function pickMood(el, mood) {
+  document.querySelectorAll('.mood-b').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedMood = mood;
+}
+
+function diaryShow(sub) {
+  document.querySelectorAll('#screen-sdiary .sub-screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('diary-' + sub).classList.add('active');
+  if (sub === 'write') {
+    const now = new Date();
+    document.getElementById('d-write-date').textContent = now.toLocaleDateString('ru-RU', {day:'numeric', month:'long'});
+    document.getElementById('d-success').style.display = 'none';
+  }
+  if (sub === 'history') renderDiaryHistory();
+  if (sub === 'menu') updateDiaryStats();
+  window.scrollTo(0,0);
+}
+
+function getDiaryEntries() {
+  try { return JSON.parse(localStorage.getItem('diary_entries') || '[]'); } catch(e) { return []; }
+}
+
+function saveDiary() {
+  const d1 = document.getElementById('d1').value.trim();
+  const d2 = document.getElementById('d2').value.trim();
+  if (!d1 && !d2) { alert('Заполни хотя бы первые два вопроса'); return; }
+  const entries = getDiaryEntries();
+  entries.unshift({
+    id: Date.now(),
+    date: new Date().toLocaleDateString('ru-RU', {day:'numeric', month:'long', year:'numeric'}),
+    w1: d1, w2: d2,
+    w3: document.getElementById('d3').value.trim(),
+    w4: document.getElementById('d4').value.trim(),
+    mood: selectedMood || '😐'
+  });
+  localStorage.setItem('diary_entries', JSON.stringify(entries));
+  ['d1','d2','d3','d4'].forEach(id => document.getElementById(id).value = '');
+  document.querySelectorAll('.mood-b').forEach(b => b.classList.remove('selected'));
+  selectedMood = '';
+  document.getElementById('d-success').style.display = 'block';
+  updateDiaryStats();
+  setTimeout(() => document.getElementById('d-success').style.display = 'none', 3000);
+}
+
+function renderDiaryHistory() {
+  const entries = getDiaryEntries();
+  const list = document.getElementById('d-hist-list');
+  if (!entries.length) {
+    list.innerHTML = '<div class="empty-state"><div>📭</div>Пока нет записей.<br>Сделай первую — займёт 5 минут.</div>';
+    return;
+  }
+  const labels = ['Что применил','Что получилось','Что не получилось','Следующий шаг'];
+  const cls = ['es1','es2','es3','es4'];
+  const flds = ['w1','w2','w3','w4'];
+  list.innerHTML = entries.map((e,i) => `
+    <div class="entry-card">
+      <div class="entry-top">
+        <div class="entry-date">${e.date}</div>
+        <div class="entry-mood">${e.mood}</div>
+        <div class="entry-num">запись ${entries.length - i}</div>
+      </div>
+      <div class="entry-body">
+        ${flds.map((f,fi) => e[f] ? `<div class="${cls[fi]}"><div class="esect-title">${labels[fi]}</div><div class="esect-text">${e[f]}</div></div>` : '').join('')}
+      </div>
+    </div>`).join('');
+}
+
+function updateDiaryStats() {
+  const entries = getDiaryEntries();
+  document.getElementById('d-stat1').textContent = entries.length;
+  document.getElementById('d-stat2').textContent = entries.length * 2;
+  if (entries.length > 0) {
+    const last = new Date(entries[0].id);
+    const next = new Date(last.getTime() + 14*24*60*60*1000);
+    const diff = Math.max(0, Math.ceil((next - new Date()) / (1000*60*60*24)));
+    document.getElementById('d-stat3').textContent = diff;
+    document.getElementById('d-hist-sub').textContent = `${entries.length} записей · последняя ${entries[0].date}`;
+  }
+}
+
+updateDiaryStats();
+</script>
+</body>
+</html>
