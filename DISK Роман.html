@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<!-- saved from url=(0148)file:///C:/Users/vasil/Downloads/DISC_%D1%82%D0%B5%D1%81%D1%82_%D0%92%D0%B0%D1%81%D0%B8%D0%BB%D1%8C%D0%BA%D0%BE%D0%B2%D1%81%D0%BA%D0%B8%D0%B9_4.html -->
+<html lang="ru"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Анкета сотрудника · Polaris</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+  *{box-sizing:border-box;margin:0;padding:0}
+
+  :root{
+    --bg:#0f1117;
+    --surface:#1a1d27;
+    --surface2:#22263a;
+    --border:#2e3250;
+    --accent:#6c63ff;
+    --accent2:#a78bfa;
+    --gold:#f59e0b;
+    --text:#e8eaf6;
+    --muted:#8b92b8;
+    --success:#10b981;
+    --D:#ef4444;
+    --I:#f59e0b;
+    --S:#10b981;
+    --C:#6c63ff;
+  }
+
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    min-height:100vh;
+    padding:0;
+  }
+
+  /* HEADER */
+  .header{
+    background:linear-gradient(135deg,#1a1d27 0%,#0f1117 100%);
+    border-bottom:1px solid var(--border);
+    padding:40px 24px 36px;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+  }
+  .header::before{
+    content:'';
+    position:absolute;
+    top:-60px;left:50%;transform:translateX(-50%);
+    width:400px;height:400px;
+    background:radial-gradient(circle,rgba(108,99,255,.15) 0%,transparent 70%);
+    pointer-events:none;
+  }
+  .header-badge{
+    display:inline-block;
+    background:rgba(108,99,255,.15);
+    border:1px solid rgba(108,99,255,.3);
+    color:var(--accent2);
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    padding:6px 14px;
+    border-radius:999px;
+    margin-bottom:18px;
+  }
+  .header h1{
+    font-size:clamp(28px,5vw,46px);
+    font-weight:800;
+    letter-spacing:-1px;
+    background:linear-gradient(135deg,#e8eaf6,#a78bfa);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    background-clip:text;
+    margin-bottom:12px;
+  }
+  .header p{
+    color:var(--muted);
+    font-size:15px;
+    max-width:520px;
+    margin:0 auto 28px;
+    line-height:1.6;
+  }
+
+  /* DISC ТИПЫ В ШАПКЕ */
+  .type-row{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .type-pill{
+    padding:7px 16px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.5px;
+  }
+  .type-pill.D{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);color:#fca5a5}
+  .type-pill.I{background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.3);color:#fcd34d}
+  .type-pill.S{background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.3);color:#6ee7b7}
+  .type-pill.C{background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);color:#c4b5fd}
+
+  /* MAIN */
+  .main{max-width:720px;margin:0 auto;padding:32px 20px 80px}
+
+  /* БЛОК ИМЕНИ */
+  .name-block{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:28px;
+    margin-bottom:28px;
+  }
+  .name-block label{
+    display:block;
+    font-size:13px;
+    font-weight:600;
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:1px;
+    margin-bottom:10px;
+  }
+  .name-block input{
+    width:100%;
+    background:var(--surface2);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:14px 18px;
+    font-size:16px;
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    outline:none;
+    transition:border-color .2s;
+  }
+  .name-block input:focus{border-color:var(--accent)}
+  .name-block input::placeholder{color:var(--muted)}
+
+  /* ПРОГРЕСС */
+  .progress-wrap{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:20px 24px;
+    margin-bottom:28px;
+    display:flex;
+    align-items:center;
+    gap:16px;
+  }
+  .progress-bar-outer{
+    flex:1;
+    height:8px;
+    background:var(--surface2);
+    border-radius:999px;
+    overflow:hidden;
+  }
+  .progress-bar-inner{
+    height:100%;
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    border-radius:999px;
+    width:0%;
+    transition:width .4s ease;
+  }
+  .progress-label{
+    font-size:13px;
+    font-weight:700;
+    color:var(--accent2);
+    white-space:nowrap;
+  }
+
+  /* ВОПРОС */
+  .question-card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:28px;
+    margin-bottom:16px;
+    transition:border-color .2s;
+  }
+  .question-card.answered{border-color:rgba(108,99,255,.4)}
+
+  .q-num{
+    font-size:11px;
+    font-weight:700;
+    color:var(--accent2);
+    text-transform:uppercase;
+    letter-spacing:1.5px;
+    margin-bottom:10px;
+  }
+  .q-text{
+    font-size:16px;
+    font-weight:600;
+    color:var(--text);
+    line-height:1.5;
+    margin-bottom:20px;
+  }
+
+  .options{display:flex;flex-direction:column;gap:10px}
+
+  .option{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    background:var(--surface2);
+    border:1.5px solid var(--border);
+    border-radius:14px;
+    padding:14px 18px;
+    cursor:pointer;
+    transition:all .18s;
+    user-select:none;
+  }
+  .option:hover{border-color:var(--accent);background:rgba(108,99,255,.08)}
+  .option.selected{
+    border-color:var(--accent);
+    background:rgba(108,99,255,.15);
+  }
+  .option.selected .opt-letter{
+    background:var(--accent);
+    color:#fff;
+  }
+
+  .opt-letter{
+    width:32px;height:32px;
+    border-radius:8px;
+    background:var(--border);
+    color:var(--muted);
+    font-size:13px;
+    font-weight:700;
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+    transition:all .18s;
+  }
+  .opt-text{font-size:14px;color:var(--text);line-height:1.4}
+
+  /* КНОПКА */
+  .submit-wrap{
+    text-align:center;
+    margin-top:36px;
+  }
+  .btn-submit{
+    background:linear-gradient(135deg,var(--accent),#8b5cf6);
+    color:#fff;
+    border:none;
+    border-radius:16px;
+    padding:18px 48px;
+    font-size:16px;
+    font-weight:700;
+    font-family:'Inter',sans-serif;
+    cursor:pointer;
+    transition:all .2s;
+    box-shadow:0 8px 32px rgba(108,99,255,.3);
+  }
+  .btn-submit:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(108,99,255,.4)}
+  .btn-submit:disabled{opacity:.4;cursor:not-allowed;transform:none}
+
+  .submit-note{
+    margin-top:14px;
+    font-size:13px;
+    color:var(--muted);
+  }
+
+  /* РЕЗУЛЬТАТ */
+  #result{display:none}
+  .result-card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:24px;
+    padding:36px;
+    text-align:center;
+    margin-bottom:24px;
+  }
+  .result-emoji{font-size:56px;margin-bottom:16px}
+  .result-type{
+    font-size:48px;
+    font-weight:800;
+    letter-spacing:-2px;
+    margin-bottom:8px;
+  }
+  .result-name{
+    font-size:22px;
+    font-weight:700;
+    margin-bottom:12px;
+    color:var(--text);
+  }
+  .result-desc{
+    font-size:15px;
+    color:var(--muted);
+    line-height:1.7;
+    max-width:500px;
+    margin:0 auto;
+  }
+
+  .scores-row{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+    margin-bottom:24px;
+  }
+  .score-box{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:20px 12px;
+    text-align:center;
+  }
+  .score-letter{font-size:24px;font-weight:800;margin-bottom:4px}
+  .score-val{font-size:28px;font-weight:800;margin-bottom:4px}
+  .score-bar{
+    height:6px;
+    border-radius:999px;
+    background:var(--surface2);
+    overflow:hidden;
+    margin-top:8px;
+  }
+  .score-fill{height:100%;border-radius:999px}
+  .score-D .score-letter,.score-D .score-val{color:var(--D)}
+  .score-D .score-fill{background:var(--D)}
+  .score-I .score-letter,.score-I .score-val{color:var(--I)}
+  .score-I .score-fill{background:var(--I)}
+  .score-S .score-letter,.score-S .score-val{color:var(--S)}
+  .score-S .score-fill{background:var(--S)}
+  .score-C .score-letter,.score-C .score-val{color:var(--C)}
+  .score-C .score-fill{background:var(--C)}
+
+  .sent-msg{
+    background:rgba(16,185,129,.1);
+    border:1px solid rgba(16,185,129,.3);
+    border-radius:16px;
+    padding:20px 24px;
+    color:#6ee7b7;
+    font-size:14px;
+    font-weight:600;
+    text-align:center;
+    margin-top:16px;
+  }
+
+  @media(max-width:600px){
+    .scores-row{grid-template-columns:repeat(2,1fr)}
+    .header h1{font-size:28px}
+  }
+</style>
+</head>
+<body>
+
+<div style="padding:32px 24px 8px;text-align:center">
+  <div style="font-size:13px;color:#8b92b8;margin-bottom:6px">Polaris · Анкета сотрудника</div>
+  <div style="font-size:22px;font-weight:700;color:#e8eaf6">Опросник поведенческого стиля</div>
+  <div style="font-size:14px;color:#8b92b8;margin-top:8px">Нет правильных и неправильных ответов — выбирайте то, что ближе всего к вам</div>
+</div>
+
+<div class="main">
+
+  <!-- ФОРМА -->
+  <div id="form-section">
+    <div class="name-block">
+      <label>Ваше имя и фамилия</label>
+      <input type="text" id="userName" placeholder="Например: Карина Веселкова">
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-bar-outer">
+        <div class="progress-bar-inner" id="progressBar" style="width: 0%;"></div>
+      </div>
+      <div class="progress-label" id="progressLabel">0 / 20</div>
+    </div>
+
+    <div id="questions"><div class="question-card" id="card-0">
+      <div class="q-num">Вопрос 1 из 20</div>
+      <div class="q-text">Тебе дали свободный час на работе. Что сделаешь первым?</div>
+      <div class="options">
+        
+          <div class="option" id="opt-0-0" onclick="selectOption(0,0)">
+            <div class="opt-letter">А</div>
+            <div class="opt-text">Закрою задачу, которая давно висит.</div>
+          </div>
+        
+          <div class="option" id="opt-0-1" onclick="selectOption(0,1)">
+            <div class="opt-letter">Б</div>
+            <div class="opt-text">Поговорю с кем-то из команды — давно не общались.</div>
+          </div>
+        
+          <div class="option" id="opt-0-2" onclick="selectOption(0,2)">
+            <div class="opt-letter">В</div>
+            <div class="opt-text">Разберу накопившиеся дела в спокойном темпе.</div>
+          </div>
+        
+          <div class="option" id="opt-0-3" onclick="selectOption(0,3)">
+            <div class="opt-letter">Г</div>
+            <div class="opt-text">Проанализирую, почему прошлая неделя пошла не по плану.</div>
+          </div>
+        
+      </div>
+    </div><div class="question-card" id="card-1">
+      <div class="q-num">Вопрос 2 из 20</div>
+      <div class="q-text">На совещании коллега предлагает идею, которая тебе не нравится. Ты:</div>
+      <div class="options">
+        
+          <div class="option" id="opt-1-0" onclick="selectOption(1,0)">
+            <div class="opt-letter">А</div>
+            <div class="opt-text">Скажу прямо, что не согласен, и объясню почему.</div>
+          </div>
+        
+          <div class="option" id="opt-1-1" onclick="selectOption(1,1)">
+            <div class="opt-letter">Б</div>
+            <div class="opt-text">Предложу свою идею мягко, чтобы никого не задеть.</div>
+          </div>
+        
+          <div class="option" id="opt-1-2" onclick="selectOption(1,2)">
+            <div class="opt-letter">В</div>
+            <div class="opt-text">Не стану спорить, если большинство поддерживает идею.</div>
+          </div>
+        
+          <div class="option" id="opt-1-3" onclick="selectOption(1,3)">
+            <div class="opt-letter">Г</div>
+            <div class="opt-text">Попрошу больше фактов перед тем, как делать вывод.</div>
+          </div>
+        
+      </div>
+    </div><div class="question-card" id="card-2">
+      <div class="q-num">Вопрос 3 из 20</div>
+      <div class="q-text">Тебе поставили амбициозную цель. Первая мысль?</div>
+      <div class="options">
+        
+          <div class="option" id="opt-2-0" onclick="selectOption(2,0)">
+            <div class="opt-letter">А</div>
+            <div class="opt-text">Отлично, люблю вызовы.</div>
+          </div>
+        
+          <div class="option" id="opt-2-1" onclick="selectOption(2,1)">
+            <div class="opt-letter">Б</div>
+            <div class="opt-text">Главное, чтобы команда поверила в цель.</div>
+          </div>
+        
+          <div class="option" id="opt-2-2" onclick="selectOption(2,2)">
+            <div class="opt-letter">В</div>
+            <div class="opt-text">Нужно убедиться, что есть все необходимые ресурсы.</div>
+          </div>
+        
+          <div class="option" id="opt-2-3" onclick="selectOption(2,3)">
+            <div class="opt-letter">Г</div>
+            <div class="opt-text">Сначала оценю, насколько цель реалистична.</div>
+          </div>
+        
+      </div>
+    </div><div class="question-card" id="card-3">
+      <div class="q-num">Вопрос 4 из 20</div>
+      <div class="q-text">Что больше всего раздражает в работе?</div>
+      <div class="options">
+        
+          <div class="option" id="opt-3-0" onclick="selectOption(3,0)">
+            <div class="opt-letter">А</div>
+            <div class="opt-text">Когда всё тормозится и нет движения.</div>
+          </div>
+        
+          <div class="option" id="opt-3-1" onclick="selectOption(3,1)">
+            <div class="opt-letter">Б</div>
+            <div class="opt-text">Когда в коллективе напряжённая атмосфера.</div>
+          </div>
+        
+          <div class="option" id="opt-3-2" onclick="selectOption(3,2)">
+            <div class="opt-letter">В</div>
+            <div class="opt-text">Когда правила постоянно меняются.</div>
+          </div>
+        
+          <div class="option" id="opt-3-3" onclick="selectOption(3,3)">
+            <div class="opt-letter">Г</div>
+            <div class="opt-text">Когда решения принимают без логики и фактов.</div>
+          </div>
+        
+      </div>
+    </div><div class="question-card" id="card-4">
+      <div class="q-num">Вопрос 5 из 20</div>
+      <div class="q-text">Как ты обычно объясняешь задачу сотруднику?</div>
+      <div class="options">
+        
+          <div class="option" id="opt-4-0" onclick="selectOption(4,0)">
+            <div class="opt-letter">А</div>
+            <div class="opt-text">Коротко: что сделать и к какому сроку.</div>
+          </div>
+        
+          <div class="option" id="opt-4-1" onclick="selectOption(4,1)">
+            <div class="opt-letter">Б</div>
+            <div class="opt-text">Объясняю, зачем это важно.</div>
+          </div>
+        
+          <div class="option" id="opt-4-2" onclick="selectOption(4,2)">
+            <div class="opt-letter">В</div>
+            <div class="opt-text">Подробно разбираю и убеждаюсь, что всё понятно.</div>
+          </div>
+        
+          <div class="option" id="opt-4-3" onclick="selectOption(4,3)">
+            <div class="opt-letter">Г</div>
+            <div class="opt-text">Даю алгоритм и критерии результата.</div>
+          </div>
+        
+      </div>
+    </div><div class="question-card" id="card-5">
+      <div class="q-num">Вопрос 6 из 20</div>
+      <div class="q-text">Руководитель критикует твою работу. Что делаешь?</div>
+      <div class="options">
+        
+          <div class="option" id="opt-5-0" onclick="selectOption(5,0)">
+            <div class="opt-letter">А</div>
+            <div class="opt-text">Если не согласен — скажу об этом.</div>
+          </div>
+        
+          <div class="option" id="opt-5-1" onclick="selectOption(5,1)">
+            <div class="opt-letter">Б</div>
+            <div class="opt-text">Спокойно выслушаю, если разговор уважительный.</div>
+          </div>
+        
+          <div class="option" id="opt-5-2" onclick="selectOption(5,2)">
+            <div class="opt-letter">В</div>
+            <div class="opt-text">Приму замечания без спора.</div>
+          </div>
+        
+          <div class="option" id="opt-5-3" onclick="selectOption(5,3)">
+            <div class="opt-letter">Г</div>
+            <div class="opt-text">Проанализирую, насколько критика обоснована.</div>
+          </div>
+        
+      </div>
+    </div><div class="question-card" id="card-6">
+      <div class="q-num">Вопрос 7 из 20</div>
+      <div class="q-text">Сотрудник явно работает слабее обычного. Первый шаг?</div>
+      <div class="options">
+        
+          <div class="option" id="opt-6-0" onclick="selectOption(6,0)">
+            <div class="opt-letter">А</div>
+            <div class="opt-text">Сразу поговорю напрямую.</div>
+          </div>
+        
+          <div class="option" id="opt-6-1" onclick="selectOption(6,1)">
+            <div class="opt-letter">Б</div>
+            <div class="opt-text">Выясню, что у него произошло.</div>
+          </div>
+        
+          <div class="option" id="opt-6-2" onclick="selectOption(6,2)">
+            <div class="opt-letter">В</div>
+            <div class="opt-text">Немного понаблюдаю — возможно, это временно.</div>
+          </div>
+        
+          <div class="option" id="opt-6-3" onclick="selectOption(6,3)">
+            <div class="opt-letter">Г</div>
+            <div class="opt-text">Сначала посмотрю цифры и факты.</div>
+          </div>
+        
+      </div>
+    </div><div class="question-card" id="card-7">
+      <div class="q-num">Вопрос 8 из 20</div>
+      <div class="q-text">Тебе предлагают новую должность. Первая реакция?</div>
+      <div class="options">
+        
+          <div class="option" id="opt-7-0" onclick="selectOption(7,0)">
+            <div class="opt-letter">А</div>
+            <div class="opt-text">Когда начинаем?</div>
+          </div>
+        
+          <div class="option" id="opt-7-1" onclick="selectOption(7,1)">
+            <div class="opt-letter">Б</div>
+            <div class="opt-text">Кто будет в команде?</div>
+          </div>
+        
+          <div class="option" id="opt-7-2" onclick="selectOption(7,2)">
+            <div class="opt-letter">В</div>
+            <div class="opt-text">Хочу всё спокойно обдумать.</div>
+          </div>
+        
+          <div class="option" id="opt-7-3" onclick="selectOption(7,3)">
+            <div class="opt-letter">Г</div>
+            <div class="opt-text">Покажите ожидания и обязанности.</div>
+          </div>
+        
+      </div>
+    </div><div class="question-card" id="card-8">
+      <div class="q-num">Вопрос 9 из 20</div>
+      <div class="q-text">В коллективе конфликт. Ты:</div>
+      <div class="options">
+        
+          <div class="option" id="opt-8-0" onclick="selectOption(8,0)">
+            <div class="opt-letter">А</div>
+            <div class="opt-text">Быстро принимаю решение.</div>
+          </div>
+        
+          <div class="option" id="opt-8-1" onclick="selectOption(8,1)">
+            <div class="opt-letter">Б</div>
+            <div class="opt-text">Выслушиваю обе стороны.</div>
+          </div>
+        
+          <div class="option" id="opt-8-2" onclick="selectOption(8,2)">
+            <div class="opt-letter">В</div>
+            <div class="opt-text">Даю людям немного остыть.</div>
+          </div>
+        
+          <div class="option" id="opt-8-3" onclick="selectOption(8,3)">
+            <div class="opt-letter">Г</div>
+            <div class="opt-text">Ищу корневую причину конфликта.</div>
+          </div>
+        
+      </div>
+    </div><div class="question-card" id="card-9">
+      <div class="q-num">Вопрос 10 из 20</div>
+      <div class="q-text">Как планируешь рабочую неделю?</div>
+      <div class="options">
+        
+          <div class="option" id="opt-9-0" onclick="selectOption(9,0)">
+            <div class="opt-letter">А</div>
+            <div class="opt-text">Держу приоритеты в голове.</div>
+          </div>
+        
+          <div class="option" id="opt-9-1" onclick="selectOption(9,1)">
+            <div class="opt-letter">Б</div>
+            <div class="opt-text">Оставляю время для общения с людьми.</div>
+          </div>
+        
+          <div class="option" id="opt-9-2" onclick="selectOption(9,2)">
+            <div class="opt-letter">В</div>
+            <div class="opt-text">Стараюсь придерживаться стабильного плана.</div>
+          </div>
+        
+          <div class="option" id="opt-9-3" onclick="selectOption(9,3)">
+            <div class="opt-letter">Г</div>
+            <div class="opt-text">Подробно расписываю задачи и сроки.</div>
+          </div>
+        
+      </div>
+    </div><div class="question-card" id="card-10">
+      <div class="q-num">Вопрос 11 из 20</div>
+      <div class="q-text">Как убеждаешь руководителя?</div>
+      <div class="options">
+        
+          <div class="option" id="opt-10-0" onclick="selectOption(10,0)">
+            <div class="opt-letter">А</div>
+            <div class="opt-text">Говорю прямо и уверенно.</div>
+          </div>
+        
+          <div class="option" id="opt-10-1" onclick="selectOption(10,1)">
+            <div class="opt-letter">Б</div>
+            <div class="opt-text">Сначала выстраиваю контакт.</div>
+          </div>
+        
+          <div class="option" id="opt-10-2" onclick="selectOption(10,2)">
+            <div class="opt-letter">В</div>
+            <div class="opt-text">Готовлюсь, чтобы разговор прошёл спокойно.</div>
+          </div>
+        
+          <div class="option" id="opt-10-3" onclick="selectOption(10,3)">
+            <div class="opt-letter">Г</div>
+            <div class="opt-text">Использую цифры и аргументы.</div>
+          </div>
+        
+      </div>
+    </div><div class="question-card" id="card-11">
+      <div class="q-num">Вопрос 12 из 20</div>
+      <div class="q-text">Как ведёшь себя в стрессовой ситуации?</div>
+      <div class="options">
+        
+          <div class="option" id="opt-11-0" onclick="selectOption(11,0)">
+            <div class="opt-letter">А</div>
+            <div class="opt-text">Беру управление на себя.</div>
+          </div>
+        
+          <div class="option" id="opt-11-1" onclick="selectOption(11,1)">
+            <div class="opt-letter">Б</div>
+            <div class="opt-text">Ищу поддержку у людей.</div>
+          </div>
+        
+          <div class="option" id="opt-11-2" onclick="selectOption(11,2)">
+            <div class="opt-letter">В</div>
+            <div class="opt-text">Сохраняю спокойствие.</div>
+          </div>
+        
+          <div class="option" id="opt-11-3" onclick="selectOption(11,3)">
+            <div class="opt-letter">Г</div>
+            <div class="opt-text">Сначала анализирую ситуацию.</div>
+          </div>
+        
+      </div>
+    </div><div class="question-card" id="card-12">
+      <div class="q-num">Вопрос 13 из 20</div>
+      <div class="q-text">Коллега просит помощи, когда ты занят.</div>
+      <div class="options">
+        
+          <div class="option" id="opt-12-0" onclick="selectOption(12,0)">
+            <div class="opt-letter">А</div>
+            <div class="opt-text">Попрошу подождать.</div>
+          </div>
+        
+          <div class="option" id="opt-12-1" onclick="selectOption(12,1)">
+            <div class="opt-letter">Б</div>
+            <div class="opt-text">Постараюсь помочь сразу.</div>
+          </div>
+        
+          <div class="option" id="opt-12-2" onclick="selectOption(12,2)">
+            <div class="opt-letter">В</div>
+            <div class="opt-text">Помогу, чтобы не подвести.</div>
+          </div>
+        
+          <div class="option" id="opt-12-3" onclick="selectOption(12,3)">
+            <div class="opt-letter">Г</div>
+            <div class="opt-text">Уточню срочность и расставлю приоритеты.</div>
+          </div>
+        
+      </div>
+    </div><div class="question-card" id="card-13">
+      <div class="q-num">Вопрос 14 из 20</div>
+      <div class="q-text">Что важнее при найме сотрудника?</div>
+      <div class="options">
+        
+          <div class="option" id="opt-13-0" onclick="selectOption(13,0)">
+            <div class="opt-letter">А</div>
+            <div class="opt-text">Амбиции и нацеленность на результат.</div>
+          </div>
+        
+          <div class="option" id="opt-13-1" onclick="selectOption(13,1)">
+            <div class="opt-letter">Б</div>
+            <div class="opt-text">Командность и открытость.</div>
+          </div>
+        
+          <div class="option" id="opt-13-2" onclick="selectOption(13,2)">
+            <div class="opt-letter">В</div>
+            <div class="opt-text">Надёжность и стабильность.</div>
+          </div>
+        
+          <div class="option" id="opt-13-3" onclick="selectOption(13,3)">
+            <div class="opt-letter">Г</div>
+            <div class="opt-text">Профессионализм и внимание к деталям.</div>
+          </div>
+        
+      </div>
+    </div><div class="question-card" id="card-14">
+      <div class="q-num">Вопрос 15 из 20</div>
+      <div class="q-text">Получил задачу без объяснения цели.</div>
+      <div class="options">
+        
+          <div class="option" id="opt-14-0" onclick="selectOption(14,0)">
+            <div class="opt-letter">А</div>
+            <div class="opt-text">Начну выполнять.</div>
+          </div>
+        
+          <div class="option" id="opt-14-1" onclick="selectOption(14,1)">
+            <div class="opt-letter">Б</div>
+            <div class="opt-text">Уточню общий смысл.</div>
+          </div>
+        
+          <div class="option" id="opt-14-2" onclick="selectOption(14,2)">
+            <div class="opt-letter">В</div>
+            <div class="opt-text">Уточню детали выполнения.</div>
+          </div>
+        
+          <div class="option" id="opt-14-3" onclick="selectOption(14,3)">
+            <div class="opt-letter">Г</div>
+            <div class="opt-text">Пока не пойму цель — не начну.</div>
+          </div>
+        
+      </div>
+    </div><div class="question-card" id="card-15">
+      <div class="q-num">Вопрос 16 из 20</div>
+      <div class="q-text">Как понимаешь, что работа выполнена хорошо?</div>
+      <div class="options">
+        
+          <div class="option" id="opt-15-0" onclick="selectOption(15,0)">
+            <div class="opt-letter">А</div>
+            <div class="opt-text">Есть конкретный результат в цифрах.</div>
+          </div>
+        
+          <div class="option" id="opt-15-1" onclick="selectOption(15,1)">
+            <div class="opt-letter">Б</div>
+            <div class="opt-text">Люди довольны и говорят об этом.</div>
+          </div>
+        
+          <div class="option" id="opt-15-2" onclick="selectOption(15,2)">
+            <div class="opt-letter">В</div>
+            <div class="opt-text">Всё прошло без сбоев и в срок.</div>
+          </div>
+        
+          <div class="option" id="opt-15-3" onclick="selectOption(15,3)">
+            <div class="opt-letter">Г</div>
+            <div class="opt-text">Всё сделано точно по плану.</div>
+          </div>
+        
+      </div>
+    </div><div class="question-card" id="card-16">
+      <div class="q-num">Вопрос 17 из 20</div>
+      <div class="q-text">На тебя давят, требуя быстрого решения.</div>
+      <div class="options">
+        
+          <div class="option" id="opt-16-0" onclick="selectOption(16,0)">
+            <div class="opt-letter">А</div>
+            <div class="opt-text">Решаю быстро.</div>
+          </div>
+        
+          <div class="option" id="opt-16-1" onclick="selectOption(16,1)">
+            <div class="opt-letter">Б</div>
+            <div class="opt-text">Советуюсь с тем, кому доверяю.</div>
+          </div>
+        
+          <div class="option" id="opt-16-2" onclick="selectOption(16,2)">
+            <div class="opt-letter">В</div>
+            <div class="opt-text">Прошу немного времени.</div>
+          </div>
+        
+          <div class="option" id="opt-16-3" onclick="selectOption(16,3)">
+            <div class="opt-letter">Г</div>
+            <div class="opt-text">Без данных не тороплюсь.</div>
+          </div>
+        
+      </div>
+    </div><div class="question-card" id="card-17">
+      <div class="q-num">Вопрос 18 из 20</div>
+      <div class="q-text">Какой стиль общения тебе ближе?</div>
+      <div class="options">
+        
+          <div class="option" id="opt-17-0" onclick="selectOption(17,0)">
+            <div class="opt-letter">А</div>
+            <div class="opt-text">Прямой и конкретный.</div>
+          </div>
+        
+          <div class="option" id="opt-17-1" onclick="selectOption(17,1)">
+            <div class="opt-letter">Б</div>
+            <div class="opt-text">Открытый и тёплый.</div>
+          </div>
+        
+          <div class="option" id="opt-17-2" onclick="selectOption(17,2)">
+            <div class="opt-letter">В</div>
+            <div class="opt-text">Спокойный и внимательный.</div>
+          </div>
+        
+          <div class="option" id="opt-17-3" onclick="selectOption(17,3)">
+            <div class="opt-letter">Г</div>
+            <div class="opt-text">Точный и продуманный.</div>
+          </div>
+        
+      </div>
+    </div><div class="question-card" id="card-18">
+      <div class="q-num">Вопрос 19 из 20</div>
+      <div class="q-text">Узнал, что коллега плохо отзывался о тебе.</div>
+      <div class="options">
+        
+          <div class="option" id="opt-18-0" onclick="selectOption(18,0)">
+            <div class="opt-letter">А</div>
+            <div class="opt-text">Поговорю напрямую.</div>
+          </div>
+        
+          <div class="option" id="opt-18-1" onclick="selectOption(18,1)">
+            <div class="opt-letter">Б</div>
+            <div class="opt-text">Постараюсь не портить отношения.</div>
+          </div>
+        
+          <div class="option" id="opt-18-2" onclick="selectOption(18,2)">
+            <div class="opt-letter">В</div>
+            <div class="opt-text">Подожду, возможно всё уляжется.</div>
+          </div>
+        
+          <div class="option" id="opt-18-3" onclick="selectOption(18,3)">
+            <div class="opt-letter">Г</div>
+            <div class="opt-text">Сначала выясню, что именно произошло.</div>
+          </div>
+        
+      </div>
+    </div><div class="question-card" id="card-19">
+      <div class="q-num">Вопрос 20 из 20</div>
+      <div class="q-text">Какая фраза лучше всего тебя описывает?</div>
+      <div class="options">
+        
+          <div class="option" id="opt-19-0" onclick="selectOption(19,0)">
+            <div class="opt-letter">А</div>
+            <div class="opt-text">Я иду к цели несмотря ни на что.</div>
+          </div>
+        
+          <div class="option" id="opt-19-1" onclick="selectOption(19,1)">
+            <div class="opt-letter">Б</div>
+            <div class="opt-text">Для меня люди важнее процессов.</div>
+          </div>
+        
+          <div class="option" id="opt-19-2" onclick="selectOption(19,2)">
+            <div class="opt-letter">В</div>
+            <div class="opt-text">На меня всегда можно положиться.</div>
+          </div>
+        
+          <div class="option" id="opt-19-3" onclick="selectOption(19,3)">
+            <div class="opt-letter">Г</div>
+            <div class="opt-text">Я всегда докапываюсь до сути проблемы.</div>
+          </div>
+        
+      </div>
+    </div></div>
+
+    <div class="submit-wrap">
+      <button class="btn-submit" id="btnSubmit" onclick="submitTest()" disabled="">
+        Завершить тест
+      </button>
+      <p class="submit-note">Ответьте на все 20 вопросов чтобы отправить результат</p>
+    </div>
+  </div>
+
+  <!-- РЕЗУЛЬТАТ -->
+  <div id="result">
+    <div style="
+      text-align:center;
+      padding:60px 30px;
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:24px;
+    ">
+      <div style="font-size:64px;margin-bottom:24px">✅</div>
+      <div style="font-size:26px;font-weight:800;color:var(--text);margin-bottom:12px">
+        Спасибо!
+      </div>
+      <div style="font-size:16px;color:var(--muted);line-height:1.7;max-width:400px;margin:0 auto">
+        Ответы приняты и отправлены руководителю.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const QUESTIONS = [
+  {q:"Тебе дали свободный час на работе. Что сделаешь первым?",opts:["Закрою задачу, которая давно висит.","Поговорю с кем-то из команды — давно не общались.","Разберу накопившиеся дела в спокойном темпе.","Проанализирую, почему прошлая неделя пошла не по плану."]},
+  {q:"На совещании коллега предлагает идею, которая тебе не нравится. Ты:",opts:["Скажу прямо, что не согласен, и объясню почему.","Предложу свою идею мягко, чтобы никого не задеть.","Не стану спорить, если большинство поддерживает идею.","Попрошу больше фактов перед тем, как делать вывод."]},
+  {q:"Тебе поставили амбициозную цель. Первая мысль?",opts:["Отлично, люблю вызовы.","Главное, чтобы команда поверила в цель.","Нужно убедиться, что есть все необходимые ресурсы.","Сначала оценю, насколько цель реалистична."]},
+  {q:"Что больше всего раздражает в работе?",opts:["Когда всё тормозится и нет движения.","Когда в коллективе напряжённая атмосфера.","Когда правила постоянно меняются.","Когда решения принимают без логики и фактов."]},
+  {q:"Как ты обычно объясняешь задачу сотруднику?",opts:["Коротко: что сделать и к какому сроку.","Объясняю, зачем это важно.","Подробно разбираю и убеждаюсь, что всё понятно.","Даю алгоритм и критерии результата."]},
+  {q:"Руководитель критикует твою работу. Что делаешь?",opts:["Если не согласен — скажу об этом.","Спокойно выслушаю, если разговор уважительный.","Приму замечания без спора.","Проанализирую, насколько критика обоснована."]},
+  {q:"Сотрудник явно работает слабее обычного. Первый шаг?",opts:["Сразу поговорю напрямую.","Выясню, что у него произошло.","Немного понаблюдаю — возможно, это временно.","Сначала посмотрю цифры и факты."]},
+  {q:"Тебе предлагают новую должность. Первая реакция?",opts:["Когда начинаем?","Кто будет в команде?","Хочу всё спокойно обдумать.","Покажите ожидания и обязанности."]},
+  {q:"В коллективе конфликт. Ты:",opts:["Быстро принимаю решение.","Выслушиваю обе стороны.","Даю людям немного остыть.","Ищу корневую причину конфликта."]},
+  {q:"Как планируешь рабочую неделю?",opts:["Держу приоритеты в голове.","Оставляю время для общения с людьми.","Стараюсь придерживаться стабильного плана.","Подробно расписываю задачи и сроки."]},
+  {q:"Как убеждаешь руководителя?",opts:["Говорю прямо и уверенно.","Сначала выстраиваю контакт.","Готовлюсь, чтобы разговор прошёл спокойно.","Использую цифры и аргументы."]},
+  {q:"Как ведёшь себя в стрессовой ситуации?",opts:["Беру управление на себя.","Ищу поддержку у людей.","Сохраняю спокойствие.","Сначала анализирую ситуацию."]},
+  {q:"Коллега просит помощи, когда ты занят.",opts:["Попрошу подождать.","Постараюсь помочь сразу.","Помогу, чтобы не подвести.","Уточню срочность и расставлю приоритеты."]},
+  {q:"Что важнее при найме сотрудника?",opts:["Амбиции и нацеленность на результат.","Командность и открытость.","Надёжность и стабильность.","Профессионализм и внимание к деталям."]},
+  {q:"Получил задачу без объяснения цели.",opts:["Начну выполнять.","Уточню общий смысл.","Уточню детали выполнения.","Пока не пойму цель — не начну."]},
+  {q:"Как понимаешь, что работа выполнена хорошо?",opts:["Есть конкретный результат в цифрах.","Люди довольны и говорят об этом.","Всё прошло без сбоев и в срок.","Всё сделано точно по плану."]},
+  {q:"На тебя давят, требуя быстрого решения.",opts:["Решаю быстро.","Советуюсь с тем, кому доверяю.","Прошу немного времени.","Без данных не тороплюсь."]},
+  {q:"Какой стиль общения тебе ближе?",opts:["Прямой и конкретный.","Открытый и тёплый.","Спокойный и внимательный.","Точный и продуманный."]},
+  {q:"Узнал, что коллега плохо отзывался о тебе.",opts:["Поговорю напрямую.","Постараюсь не портить отношения.","Подожду, возможно всё уляжется.","Сначала выясню, что именно произошло."]},
+  {q:"Какая фраза лучше всего тебя описывает?",opts:["Я иду к цели несмотря ни на что.","Для меня люди важнее процессов.","На меня всегда можно положиться.","Я всегда докапываюсь до сути проблемы."]}
+];
+
+const TYPES = {
+  D:{name:"Командир",emoji:"⚡",color:"#ef4444",
+    desc:"Нацелен на результат, действует быстро, принимает решения уверенно. В работе ценит скорость и контроль. Говорит прямо, не любит лишних слов."},
+  I:{name:"Вдохновитель",emoji:"🔥",color:"#f59e0b",
+    desc:"Заряжает людей вокруг, умеет вдохновлять и убеждать. Ему важен контакт и признание. Работает лучше когда чувствует поддержку и видит смысл."},
+  S:{name:"Надёжный",emoji:"🛡️",color:"#10b981",
+    desc:"Стабильный и терпеливый. На него можно положиться. Работает методично, не любит резких перемен. Ценит доверие и стабильные условия."},
+  C:{name:"Аналитик",emoji:"🔬",color:"#6c63ff",
+    desc:"Думает прежде чем действовать. Хочет понять логику и факты. Делает всё точно и качественно. Ценит конкретику и чёткие ожидания."}
+};
+
+// GOOGLE APPS SCRIPT URL — вставить после создания скрипта
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz648_MmDj0e351aH5XlL1kSUSVsNlSmEkubUkkwt7i_F5MabB5tnn1CMT6brY0Nn7-/exec";
+
+let answers = new Array(20).fill(null);
+
+function buildQuestions(){
+  const container = document.getElementById('questions');
+  QUESTIONS.forEach((q,i)=>{
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    card.id = `card-${i}`;
+    card.innerHTML = `
+      <div class="q-num">Вопрос ${i+1} из 20</div>
+      <div class="q-text">${q.q}</div>
+      <div class="options">
+        ${q.opts.map((opt,j)=>`
+          <div class="option" id="opt-${i}-${j}" onclick="selectOption(${i},${j})">
+            <div class="opt-letter">${['А','Б','В','Г'][j]}</div>
+            <div class="opt-text">${opt}</div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function selectOption(qIdx, optIdx){
+  answers[qIdx] = optIdx;
+  // Снять выделение
+  for(let j=0;j<4;j++){
+    const el = document.getElementById(`opt-${qIdx}-${j}`);
+    if(el) el.classList.remove('selected');
+  }
+  // Поставить выделение
+  const selected = document.getElementById(`opt-${qIdx}-${optIdx}`);
+  if(selected) selected.classList.add('selected');
+  // Карточка отвечена
+  const card = document.getElementById(`card-${qIdx}`);
+  if(card) card.classList.add('answered');
+  // Обновить прогресс
+  updateProgress();
+}
+
+function updateProgress(){
+  const done = answers.filter(a=>a!==null).length;
+  const pct = (done/20)*100;
+  document.getElementById('progressBar').style.width = pct+'%';
+  document.getElementById('progressLabel').textContent = `${done} / 20`;
+  document.getElementById('btnSubmit').disabled = done < 20;
+}
+
+function calcScores(){
+  let D=0,I=0,S=0,C=0;
+  answers.forEach(a=>{
+    if(a===0) D++;
+    else if(a===1) I++;
+    else if(a===2) S++;
+    else if(a===3) C++;
+  });
+  return {D,I,S,C};
+}
+
+function getMainType(scores){
+  const entries = Object.entries(scores);
+  entries.sort((a,b)=>b[1]-a[1]);
+  // Главный + второй если ≥4
+  const main = entries[0][0];
+  const second = entries[1][1] >= 4 ? entries[1][0] : null;
+  return {main, second, combo: second ? main+second : main};
+}
+
+function submitTest(){
+  const name = document.getElementById('userName').value.trim();
+  if(!name){
+    document.getElementById('userName').focus();
+    document.getElementById('userName').style.borderColor='#ef4444';
+    return;
+  }
+  if(answers.includes(null)) return;
+
+  const scores = calcScores();
+  const {main, second, combo} = getMainType(scores);
+  const type = TYPES[main];
+  const max = Math.max(scores.D,scores.I,scores.S,scores.C);
+
+  // Показать результат
+  document.getElementById('form-section').style.display='none';
+  document.getElementById('result').style.display='block';
+
+  // Отправка в Google таблицу
+  sendToSheet(name, scores, combo);
+}
+
+function sendToSheet(name, scores, combo){
+  const date = new Date().toLocaleString('ru-RU');
+  const data = {name, date, combo,
+    D:scores.D, I:scores.I, S:scores.S, C:scores.C,
+    answers: answers.map(a=>['А','Б','В','Г'][a]).join(',')
+  };
+  fetch(SCRIPT_URL, {
+    method:'POST',
+    mode:'no-cors',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify(data)
+  }).catch(()=>{});
+}
+
+buildQuestions();
+updateProgress();
+</script>
+
+
+</body></html>
