@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<!-- saved from url=(0113)file:///C:/Users/vasil/Downloads/%D0%93%D0%B5%D1%80%D1%87%D0%B8%D0%BA%D0%BE%D0%B2_%D1%82%D0%B5%D1%81%D1%82_2.html -->
+<html lang="ru"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Опросник мотивации · Polaris</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;
+  --border:#2e3250;--accent:#6c63ff;--accent2:#a78bfa;
+  --text:#e8eaf6;--muted:#8b92b8;
+}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh}
+
+.top{padding:28px 24px 8px;text-align:center}
+.top-label{font-size:12px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
+.top-title{font-size:20px;font-weight:700;color:var(--text)}
+.top-desc{font-size:13px;color:var(--muted);margin-top:6px}
+
+.main{max-width:720px;margin:0 auto;padding:24px 20px 80px}
+
+/* ИМЯ */
+.name-block{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:24px;margin-bottom:20px}
+.name-block label{display:block;font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.name-block input, .name-block select{
+  width:100%;background:var(--surface2);border:1px solid var(--border);
+  border-radius:10px;padding:13px 16px;font-size:15px;color:var(--text);
+  font-family:'Inter',sans-serif;outline:none;transition:border-color .2s
+}
+.name-block input:focus, .name-block select:focus{border-color:var(--accent)}
+.name-block select option{background:#1a1d27;color:#e8eaf6}
+
+/* ПРОГРЕСС */
+.progress-wrap{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:14px}
+.progress-bar-outer{flex:1;height:6px;background:var(--surface2);border-radius:999px;overflow:hidden}
+.progress-bar-inner{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:999px;width:0%;transition:width .4s}
+.progress-label{font-size:12px;font-weight:700;color:var(--accent2);white-space:nowrap}
+
+/* ВОПРОС */
+.question-card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:24px;margin-bottom:14px;transition:border-color .2s}
+.question-card.answered{border-color:rgba(108,99,255,.4)}
+.q-num{font-size:10px;font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px}
+.q-text{font-size:15px;font-weight:600;color:var(--text);line-height:1.5;margin-bottom:6px}
+.q-hint{font-size:12px;color:var(--muted);margin-bottom:16px;font-style:italic}
+.options{display:flex;flex-direction:column;gap:8px}
+.option{display:flex;align-items:center;gap:12px;background:var(--surface2);border:1.5px solid var(--border);border-radius:12px;padding:12px 16px;cursor:pointer;transition:all .18s;user-select:none}
+.option:hover{border-color:var(--accent);background:rgba(108,99,255,.08)}
+.option.selected{border-color:var(--accent);background:rgba(108,99,255,.15)}
+.option.selected .opt-letter{background:var(--accent);color:#fff}
+.opt-letter{width:28px;height:28px;border-radius:7px;background:var(--border);color:var(--muted);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .18s}
+.opt-text{font-size:13px;color:var(--text);line-height:1.4}
+
+/* Вопрос 10 - таблица */
+.table-q{width:100%;border-collapse:separate;border-spacing:0;margin-top:8px}
+.table-q th{background:var(--surface2);color:var(--muted);font-size:11px;font-weight:600;padding:8px 10px;text-align:center;border-bottom:1px solid var(--border)}
+.table-q th:first-child{text-align:left}
+.table-q td{padding:8px 10px;border-bottom:1px solid rgba(46,50,80,.5);font-size:13px;color:var(--text)}
+.table-q td:not(:first-child){text-align:center}
+.radio-btn{width:18px;height:18px;cursor:pointer;accent-color:var(--accent)}
+
+/* КНОПКА */
+.submit-wrap{text-align:center;margin-top:28px}
+.btn-submit{background:linear-gradient(135deg,var(--accent),#8b5cf6);color:#fff;border:none;border-radius:14px;padding:16px 40px;font-size:15px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s;box-shadow:0 8px 32px rgba(108,99,255,.3)}
+.btn-submit:hover{transform:translateY(-2px)}
+.btn-submit:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.submit-note{margin-top:12px;font-size:12px;color:var(--muted)}
+
+/* ФИНАЛ */
+#result{display:none}
+.done-card{text-align:center;padding:60px 30px;background:var(--surface);border:1px solid var(--border);border-radius:24px}
+.done-icon{font-size:64px;margin-bottom:20px}
+.done-title{font-size:24px;font-weight:800;color:var(--text);margin-bottom:10px}
+.done-desc{font-size:15px;color:var(--muted);line-height:1.7;max-width:380px;margin:0 auto}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="top-label">Polaris · МБТ</div>
+  <div class="top-title">Опросник трудовой мотивации</div>
+  <div class="top-desc">Нет правильных и неправильных ответов — отвечайте честно</div>
+</div>
+
+<div class="main">
+  <div id="form-section">
+
+    <!-- ИМЯ И РОЛЬ -->
+    <div class="name-block">
+      <label>Ваше имя и фамилия</label>
+      <input type="text" id="userName" placeholder="Например: Иванов Иван" style="margin-bottom:14px">
+      <label>Ваша должность</label>
+      <select id="userRole">
+        <option value="">— выберите —</option>
+        <option value="promoter">Промоутер / Эксперт</option>
+        <option value="supervisor">Супервайзер / Руководитель</option>
+      </select>
+    </div>
+
+    <!-- ПРОГРЕСС -->
+    <div class="progress-wrap">
+      <div class="progress-bar-outer"><div class="progress-bar-inner" id="progressBar"></div></div>
+      <div class="progress-label" id="progressLabel">0 / 17</div>
+    </div>
+
+    <div id="questions"></div>
+
+    <div class="submit-wrap">
+      <button class="btn-submit" id="btnSubmit" onclick="submitTest()" disabled="">Отправить ответы</button>
+      <p class="submit-note">Ответьте на все вопросы чтобы отправить</p>
+    </div>
+  </div>
+
+  <div id="result">
+    <div class="done-card">
+      <div class="done-icon">✅</div>
+      <div class="done-title">Спасибо!</div>
+      <div class="done-desc">Ответы приняты и отправлены руководителю. Хорошего дня!</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz648_MmDj0e351aH5XlL1kSUSVsNlSmEkubUkkwt7i_F5MabB5tnn1CMT6brY0Nn7-/exec";
+
+// КЛЮЧ ГЕРЧИКОВА: {вопрос: {ответ: тип}} 
+// ИН=инструментальный, ПР=профессиональный, ПА=патриотический, ХО=хозяйский, ЛЮ=люмпенизированный
+const KEY = {
+  5:  {1:'ХО', 2:'ПР', 3:'ПА', 4:'ИН', 5:'ЛЮ'},
+  6:  {1:'ИН', 2:'ХО', 3:'ПР', 4:'ПА', 5:'ЛЮ'},
+  7:  {1:'ЛЮ', 2:'ПР', 3:'ИН', 4:'ХО', 5:'ПА'},
+  8:  {1:'ИН', 2:'ПР', 3:'ХО', 4:'ПА', 6:'ЛЮ'},
+  9:  {1:'ИН', 2:'ПР', 3:'ПА', 4:'ХО', 5:'ЛЮ'},
+  // Вопрос 10 считается отдельно через таблицу
+  11: {1:'ПА', 2:'ИН', 3:'ПР', 4:'ЛЮ'},
+  12: {1:'ПА', 2:'ПР', 3:'ИН', 4:'ЛЮ', 5:'ИН'},
+  13: {1:'ПА', 2:'ПР', 3:'ХО', 4:'ИН', 5:'ПА'},
+  14: {1:'ХО', 2:'ИН', 3:'ПА', 4:'ЛЮ', 5:'ЛЮ'},
+  15: {1:'ПР', 2:'ХО', 3:'ИН', 4:'ЛЮ', 5:'ПА'},
+  16: {1:'ИН', 2:'ПР', 3:'ЛЮ', 4:'ПА', 5:'ХО'},
+  17: {1:'ПР', 2:'ИН', 3:'ЛЮ', 4:'ПА', 5:'ЛЮ', 6:'ХО'},
+  // 18.1 для руководителей
+  '18r': {1:'ХО', 2:'ПА', 3:'ИН', 4:'ХО', 5:'ПР', 7:'ЛЮ'},
+  // 18.2 для не-руководителей
+  '18n': {1:'ХО', 2:'ПА', 3:'ПР', 4:'ИН', 5:'ПР', 6:'ИН', 7:'ЛЮ', 8:'ЛЮ'},
+};
+
+// Вопрос 10 — ключ по источникам дохода
+const KEY10 = {
+  1: {1:'ИН', 2:null, 3:null},      // зарплата: очень важно=ИН
+  2: {1:'ПР', 2:null, 3:null},      // доплаты за квалификацию: оч важно=ПР
+  3: {1:'ИН', 2:null, 3:null},      // доплаты за вредность: оч важно=ИН
+  4: {1:'ПА', 2:null, 3:null},      // соцвыплаты: оч важно=ПА
+  5: {1:'ХО', 2:null, 3:null},      // доходы от капитала: оч важно=ХО
+  6: {1:'ИН', 2:null, 3:null},      // любые приработки: оч важно=ИН
+  7: {1:'ПР', 2:null, 3:null},      // приработки по специальности: оч важно=ПР
+  8: {1:'ХО', 2:null, 3:null},      // личное хозяйство: оч важно=ХО
+  9: {1:'ЛЮ', 2:null, 3:null},      // лотерея: оч важно=ЛЮ
+};
+
+const QUESTIONS = [
+  {
+    id: 5, num: '5',
+    text: 'Что Вы больше всего цените в своей работе?',
+    hint: 'Дайте один или два ответа',
+    multi: true,
+    opts: [
+      'Что я в основном сам решаю, что и как мне делать.',
+      'Что она даёт мне возможность проявить то, что я знаю и умею.',
+      'Что я чувствую себя полезным и нужным.',
+      'Что мне за неё относительно неплохо платят.',
+      'Особенно ничего не ценю, но эта работа мне хорошо знакома и привычна.'
+    ]
+  },
+  {
+    id: 6, num: '6',
+    text: 'Какое выражение из перечисленных Вам подходит более всего?',
+    hint: 'Дайте только один ответ',
+    multi: false,
+    opts: [
+      'Я могу обеспечить своим трудом себе и своей семье приличный доход.',
+      'В своей работе я — полный хозяин.',
+      'У меня достаточно знаний и опыта, чтобы справиться с любыми трудностями в моей работе.',
+      'Я — ценный, незаменимый для организации работник.',
+      'Я всегда выполняю то, что от меня требуют.'
+    ]
+  },
+  {
+    id: 7, num: '7',
+    text: 'Как Вы предпочитаете работать?',
+    hint: 'Дайте один или два ответа',
+    multi: true,
+    opts: [
+      'Предпочитаю делать то, что знакомо, привычно.',
+      'Нужно, чтобы в работе постоянно появлялось что-то новое, чтобы не стоять на месте.',
+      'Чтобы было точно известно, что нужно сделать и что я за это получу.',
+      'Предпочитаю работать под полную личную ответственность.',
+      'Готов(а) делать всё, что нужно для организации.'
+    ]
+  },
+  {
+    id: 8, num: '8',
+    text: 'Допустим, Вам предлагают другую работу в Вашей организации. При каких условиях Вы бы на это согласились?',
+    hint: 'Дайте один или два ответа',
+    multi: true,
+    opts: [
+      'Если предложат намного более высокую зарплату.',
+      'Если другая работа будет более творческой и интересной.',
+      'Если новая работа даст мне больше самостоятельности.',
+      'Если это очень нужно для организации.',
+      'При всех случаях я бы предпочёл(а) остаться на той работе, к которой привык(ла).'
+    ]
+  },
+  {
+    id: 9, num: '9',
+    text: 'Что для Вас означает Ваш заработок?',
+    hint: 'Дайте один или два ответа',
+    multi: true,
+    opts: [
+      'Плата за время и усилия, потраченные на выполнение работы.',
+      'Это прежде всего плата за мои знания, квалификацию.',
+      'Оплата за мой трудовой вклад в общие результаты деятельности организации.',
+      'Мне нужен гарантированный заработок — пусть небольшой, но чтобы он был.',
+      'Какой бы он ни был, я его заработал(а) сам(а).'
+    ]
+  },
+  {
+    id: 10, num: '10',
+    text: 'Как Вы относитесь к перечисленным источникам дохода?',
+    hint: 'Дайте ответ по каждой строке',
+    type: 'table',
+    rows: [
+      'Заработная плата и премии, пенсии, стипендии',
+      'Доплаты за квалификацию',
+      'Доплаты за тяжёлые и вредные условия',
+      'Социальные выплаты и льготы, пособия',
+      'Доходы от капитала, акций',
+      'Любые дополнительные приработки',
+      'Приработки, но не любые, а только по своей специальности',
+      'Доходы от личного хозяйства, дачного хозяйства',
+      'Выигрыш в лотерею, казино и пр.'
+    ],
+    cols: ['Очень важно', 'Не очень важно', 'Совсем не важно']
+  },
+  {
+    id: 11, num: '11',
+    text: 'На каких принципах должны строиться отношения между работником и организацией?',
+    hint: 'Дайте только один ответ',
+    multi: false,
+    opts: [
+      'Работник должен относиться к организации как к своему дому, отдавать ей всё и вместе переживать трудности и подъёмы.',
+      'Работник продаёт организации свой труд, и если ему не дают хорошую цену, он вправе найти другого покупателя.',
+      'Работник приходит в организацию для самореализации и относится к ней как к месту реализации своих способностей.',
+      'Работник тратит на организацию свои силы, а организация должна взамен гарантировать ему зарплату и социальные блага.'
+    ]
+  },
+  {
+    id: 12, num: '12',
+    text: 'Почему в процессе работы люди проявляют инициативу, вносят различные предложения?',
+    hint: 'Дайте один или два ответа',
+    multi: true,
+    opts: [
+      'Чувствуют особую ответственность за свою работу.',
+      'Из-за стремления реализовать свои знания и опыт, выйти за установленные работой рамки.',
+      'Чаще всего из-за желания улучшить работу своей организации.',
+      'Просто хотят «выделиться» или завоевать расположение начальства.',
+      'Хотят заработать, поскольку всякая полезная инициатива должна вознаграждаться.'
+    ]
+  },
+  {
+    id: 13, num: '13',
+    text: 'Какое суждение о коллективной работе Вам ближе?',
+    hint: 'Дайте один или два ответа',
+    multi: true,
+    opts: [
+      'Коллектив для меня очень важен, одному хороших результатов не добиться.',
+      'Предпочитаю работать автономно, но чувствую себя хорошо, когда работаю вместе с интересными людьми.',
+      'Мне нужна свобода действий, а коллектив чаще всего эту свободу ограничивает.',
+      'Можно работать и в коллективе, но платить должны по личным результатам.',
+      'Мне нравится работать в коллективе, так как там я — среди своих.'
+    ]
+  },
+  {
+    id: 14, num: '14',
+    text: 'Представьте, что у вас появился шанс стать владельцем организации. Воспользуетесь ли Вы этой возможностью?',
+    hint: 'Дайте один или два ответа',
+    multi: true,
+    opts: [
+      'Да, так как я смогу участвовать в управлении организацией.',
+      'Да, потому что это может увеличить мой доход.',
+      'Да, так как настоящий работник должен быть совладельцем.',
+      'Вряд ли: на заработке это не скажется, участие в управлении меня не интересует, а работе это помешает.',
+      'Нет, не нужны мне лишние заботы.'
+    ]
+  },
+  {
+    id: 15, num: '15',
+    text: 'Представьте, что Вы сейчас ищете работу. Какую из них Вы выберете?',
+    hint: 'Дайте один или два ответа',
+    multi: true,
+    opts: [
+      'Наиболее интересную, творческую.',
+      'Наиболее самостоятельную, независимую.',
+      'За которую больше платят.',
+      'Чтобы за не слишком большие деньги не требовалось особенно «надрываться».',
+      'Не могу представить, что я уйду из нашей организации.'
+    ]
+  },
+  {
+    id: 16, num: '16',
+    text: 'Что Вы прежде всего учитываете, когда оцениваете успехи другого работника?',
+    hint: 'Дайте один или два ответа',
+    multi: true,
+    opts: [
+      'Его зарплату, доходы, материальное положение.',
+      'Уровень его профессионализма, квалификации.',
+      'Насколько хорошо он «устроился».',
+      'Насколько его уважают в организации.',
+      'Насколько он самостоятелен, независим.'
+    ]
+  },
+  {
+    id: 17, num: '17',
+    text: 'Если положение в организации ухудшится, на какие перемены Вы согласитесь ради того, чтобы остаться на работе?',
+    hint: 'Можете дать любое число ответов',
+    multi: true,
+    opts: [
+      'Освоить новую профессию.',
+      'Работать неполный рабочий день или перейти на менее квалифицированную работу и меньше получать.',
+      'Перейти на менее удобный режим работы.',
+      'Работать более интенсивно.',
+      'Соглашусь просто терпеть, потому что деваться некуда.',
+      'Скорее всего, я просто уйду из организации.'
+    ]
+  }
+];
+
+// Вопрос 18 для руководителей
+const Q18R = {
+  id: '18r', num: '18',
+  text: 'Что Вас привлекает в Вашей должности руководителя больше всего?',
+  hint: 'Дайте один или два ответа',
+  multi: true,
+  opts: [
+    'Возможность принимать самостоятельные, ответственные решения.',
+    'Возможность принести наибольшую пользу организации.',
+    'Высокий уровень оплаты.',
+    'Возможность организовывать работу других людей.',
+    'Возможность наилучшим образом применить свои знания и умения.',
+    'Ничего особенно не привлекает, за положение руководителя не держусь.'
+  ]
+};
+
+// Вопрос 18 для не-руководителей
+const Q18N = {
+  id: '18n', num: '18',
+  text: 'Хотели бы Вы стать руководителем?',
+  hint: 'Дайте один или два ответа',
+  multi: true,
+  opts: [
+    'Да, поскольку это даст возможность принимать самостоятельные, ответственные решения.',
+    'Не против, если нужно для пользы дела.',
+    'Да, так как при этом я смогу лучше применить свои знания и умения.',
+    'Да, если это будет должным образом оплачиваться.',
+    'Нет, профессионал может отвечать только за самого себя.',
+    'Нет, руководство меня не привлекает, а хорошо заработать я могу и на своём месте.',
+    'Да, чем я хуже других?',
+    'Нет, это слишком большая нагрузка для меня.'
+  ]
+};
+
+let answers = {};    // {id: [выбранные индексы]}
+let answers10 = {};  // {строка: колонка}
+let totalQ = 0;
+
+function buildQuestions(){
+  const role = document.getElementById('userRole').value;
+  const container = document.getElementById('questions');
+  container.innerHTML = '';
+
+  const allQ = [...QUESTIONS];
+  if(role === 'supervisor') allQ.push(Q18R);
+  else if(role === 'promoter') allQ.push(Q18N);
+
+  totalQ = allQ.length;
+  const hasTable = allQ.find(q=>q.type==='table');
+  // таблица всегда одна (вопрос 10)
+  document.getElementById('progressLabel').textContent = `0 / ${totalQ}`;
+
+  allQ.forEach((q,idx)=>{
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    card.id = 'card-'+q.id;
+
+    if(q.type === 'table'){
+      card.innerHTML = `
+        <div class="q-num">Вопрос ${q.num}</div>
+        <div class="q-text">${q.text}</div>
+        <div class="q-hint">${q.hint}</div>
+        <table class="table-q">
+          <thead>
+            <tr>
+              <th>Источник дохода</th>
+              <th>Очень важно</th>
+              <th>Не очень важно</th>
+              <th>Совсем не важно</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${q.rows.map((row,ri)=>`
+              <tr>
+                <td>${ri+1}. ${row}</td>
+                <td><input type="radio" class="radio-btn" name="r10_${ri}" value="1" onchange="selectTable(${ri},1)"></td>
+                <td><input type="radio" class="radio-btn" name="r10_${ri}" value="2" onchange="selectTable(${ri},2)"></td>
+                <td><input type="radio" class="radio-btn" name="r10_${ri}" value="3" onchange="selectTable(${ri},3)"></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+    } else {
+      const letters = ['А','Б','В','Г','Д','Е','Ж','З'];
+      card.innerHTML = `
+        <div class="q-num">Вопрос ${q.num}</div>
+        <div class="q-text">${q.text}</div>
+        <div class="q-hint">${q.hint}</div>
+        <div class="options">
+          ${q.opts.map((opt,oi)=>`
+            <div class="option" id="opt-${q.id}-${oi}" onclick="selectOption('${q.id}',${oi},${q.multi})">
+              <div class="opt-letter">${letters[oi]}</div>
+              <div class="opt-text">${opt}</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+    container.appendChild(card);
+  });
+
+  // Сбросить ответы
+  answers = {};
+  answers10 = {};
+  updateProgress();
+}
+
+function selectOption(qId, optIdx, multi){
+  if(!answers[qId]) answers[qId] = [];
+
+  if(!multi){
+    answers[qId] = [optIdx];
+    // Снять все
+    document.querySelectorAll(`[id^="opt-${qId}-"]`).forEach(el=>el.classList.remove('selected'));
+    document.getElementById(`opt-${qId}-${optIdx}`).classList.add('selected');
+  } else {
+    const pos = answers[qId].indexOf(optIdx);
+    if(pos === -1){
+      if(answers[qId].length < 2) answers[qId].push(optIdx);
+      else return; // максимум 2
+    } else {
+      answers[qId].splice(pos,1);
+    }
+    document.getElementById(`opt-${qId}-${optIdx}`).classList.toggle('selected', answers[qId].includes(optIdx));
+  }
+
+  const card = document.getElementById('card-'+qId);
+  if(card) card.classList.toggle('answered', answers[qId].length > 0);
+  updateProgress();
+}
+
+function selectTable(rowIdx, colVal){
+  answers10[rowIdx] = colVal;
+  const card = document.getElementById('card-10');
+  if(card) card.classList.toggle('answered', Object.keys(answers10).length === 9);
+  updateProgress();
+}
+
+function updateProgress(){
+  const role = document.getElementById('userRole').value;
+  let done = 0;
+
+  // Проверяем обычные вопросы
+  QUESTIONS.forEach(q=>{
+    if(q.type === 'table'){
+      if(Object.keys(answers10).length === 9) done++;
+    } else {
+      if(answers[q.id] && answers[q.id].length > 0) done++;
+    }
+  });
+
+  // Вопрос 18
+  if(role){
+    const q18id = role === 'supervisor' ? '18r' : '18n';
+    if(answers[q18id] && answers[q18id].length > 0) done++;
+  }
+
+  const pct = totalQ > 0 ? (done/totalQ*100) : 0;
+  document.getElementById('progressBar').style.width = pct+'%';
+  document.getElementById('progressLabel').textContent = `${done} / ${totalQ}`;
+
+  const allDone = done === totalQ && totalQ > 0;
+  document.getElementById('btnSubmit').disabled = !allDone;
+}
+
+function calcScores(){
+  const scores = {ИН:0, ПР:0, ПА:0, ХО:0, ЛЮ:0};
+
+  // Вопросы 5-9, 11-17
+  Object.entries(answers).forEach(([qId, selected])=>{
+    const key = KEY[qId] || KEY[parseInt(qId)];
+    if(!key) return;
+    selected.forEach(optIdx=>{
+      const type = key[optIdx+1]; // ответы с 1
+      if(type && scores[type] !== undefined) scores[type]++;
+    });
+  });
+
+  // Вопрос 10
+  Object.entries(answers10).forEach(([rowIdx, col])=>{
+    if(col === 1){ // только "очень важно" даёт очко
+      const type = KEY10[parseInt(rowIdx)+1]?.[1];
+      if(type && scores[type] !== undefined) scores[type]++;
+    }
+  });
+
+  // Вопрос 18
+  const role = document.getElementById('userRole').value;
+  const q18id = role === 'supervisor' ? '18r' : '18n';
+  const q18key = KEY['18r'] || {};
+  const q18nkey = KEY['18n'] || {};
+  const activeKey = role === 'supervisor' ? KEY['18r'] : KEY['18n'];
+  if(answers[q18id]){
+    answers[q18id].forEach(optIdx=>{
+      const type = activeKey[optIdx+1];
+      if(type && scores[type] !== undefined) scores[type]++;
+    });
+  }
+
+  return scores;
+}
+
+function getMainType(scores){
+  const sorted = Object.entries(scores).sort((a,b)=>b[1]-a[1]);
+  return sorted[0][0];
+}
+
+const TYPE_NAMES = {
+  ИН: 'Инструментальный',
+  ПР: 'Профессиональный',
+  ПА: 'Патриотический',
+  ХО: 'Хозяйский',
+  ЛЮ: 'Люмпенизированный'
+};
+
+function submitTest(){
+  const name = document.getElementById('userName').value.trim();
+  const role = document.getElementById('userRole').value;
+  if(!name || !role) return;
+
+  document.getElementById('form-section').style.display='none';
+  document.getElementById('result').style.display='block';
+
+  const scores = calcScores();
+  const main = getMainType(scores);
+  const total = Object.values(scores).reduce((a,b)=>a+b,0);
+
+  const pctStr = Object.entries(scores)
+    .sort((a,b)=>b[1]-a[1])
+    .map(([t,v])=> t+' '+Math.round(v/(total||1)*100)+'%')
+    .join(' · ');
+
+  const roleStr = role === 'supervisor' ? 'Супервайзер' : 'Промоутер/Эксперт';
+
+  fetch(SCRIPT_URL,{
+    method:'POST', mode:'no-cors',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({
+      test: 'Герчиков',
+      name, role: roleStr,
+      mainType: TYPE_NAMES[main],
+      typeCode: main,
+      percents: pctStr,
+      ИН: scores.ИН, ПР: scores.ПР, ПА: scores.ПА, ХО: scores.ХО, ЛЮ: scores.ЛЮ,
+      date: new Date().toLocaleString('ru-RU')
+    })
+  }).catch(()=>{});
+}
+
+// Инициализация — перестраивать вопросы при смене роли
+document.getElementById('userRole').addEventListener('change', buildQuestions);
+</script>
+
+
+</body></html>
