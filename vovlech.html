@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<!-- saved from url=(0045)file:///C:/Users/vasil/Downloads/aktiv_2.html -->
+<html lang="ru"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Опросник активности · Polaris</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;
+  --border:#2e3250;--accent:#f59e0b;--accent2:#fbbf24;
+  --text:#e8eaf6;--muted:#8b92b8;
+}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh}
+.top{padding:28px 24px 8px;text-align:center}
+.top-label{font-size:12px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
+.top-title{font-size:22px;font-weight:800;color:var(--text)}
+.top-desc{font-size:13px;color:var(--muted);margin-top:6px;max-width:480px;margin-left:auto;margin-right:auto}
+.main{max-width:720px;margin:0 auto;padding:24px 20px 80px}
+.name-block{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:24px;margin-bottom:20px}
+.name-block label{display:block;font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.name-block input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:13px 16px;font-size:15px;color:var(--text);font-family:'Inter',sans-serif;outline:none;transition:border-color .2s}
+.name-block input:focus{border-color:var(--accent)}
+.name-block input::placeholder{color:var(--muted)}
+.progress-wrap{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:14px}
+.progress-bar-outer{flex:1;height:6px;background:var(--surface2);border-radius:999px;overflow:hidden}
+.progress-bar-inner{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:999px;width:0%;transition:width .4s}
+.progress-label{font-size:12px;font-weight:700;color:var(--accent2);white-space:nowrap}
+.section-title{font-size:11px;font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:2px;margin:24px 0 12px;padding-left:4px}
+.question-card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:12px;transition:border-color .2s}
+.question-card.answered{border-color:rgba(245,158,11,.4)}
+.q-num{font-size:10px;font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px}
+.q-text{font-size:15px;font-weight:600;color:var(--text);line-height:1.5;margin-bottom:16px}
+.scale{display:flex;gap:8px;justify-content:space-between}
+.scale-item{flex:1;text-align:center;cursor:pointer}
+.scale-btn{width:100%;padding:10px 4px;background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;font-size:18px;transition:all .18s;cursor:pointer}
+.scale-item:hover .scale-btn{border-color:var(--accent);background:rgba(245,158,11,.08)}
+.scale-item.selected .scale-btn{border-color:var(--accent);background:rgba(245,158,11,.2)}
+.scale-label{font-size:10px;color:var(--muted);margin-top:5px;line-height:1.3}
+.submit-wrap{text-align:center;margin-top:28px}
+.btn-submit{background:linear-gradient(135deg,var(--accent),#d97706);color:#fff;border:none;border-radius:14px;padding:16px 40px;font-size:15px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s;box-shadow:0 8px 32px rgba(245,158,11,.3)}
+.btn-submit:hover{transform:translateY(-2px)}
+.btn-submit:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.submit-note{margin-top:12px;font-size:12px;color:var(--muted)}
+#result{display:none}
+.done-card{text-align:center;padding:60px 30px;background:var(--surface);border:1px solid var(--border);border-radius:24px}
+.done-icon{font-size:64px;margin-bottom:20px}
+.done-title{font-size:24px;font-weight:800;color:var(--text);margin-bottom:10px}
+.done-desc{font-size:15px;color:var(--muted);line-height:1.7;max-width:380px;margin:0 auto}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="top-label">Polaris · МБТ</div>
+  <div class="top-title">Опросник активности и вовлечённости</div>
+  <div class="top-desc">Нет правильных и неправильных ответов — отвечайте честно. Выберите насколько каждое утверждение соответствует вам.</div>
+</div>
+
+<div class="main">
+  <div id="form-section">
+    <div class="name-block">
+      <label>Ваше имя и фамилия</label>
+      <input type="text" id="userName" placeholder="Например: Иванов Иван">
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-bar-outer"><div class="progress-bar-inner" id="progressBar"></div></div>
+      <div class="progress-label" id="progressLabel">0 / 12</div>
+    </div>
+
+    <div class="section-title">⚡ Блок 1 — Инициатива и активность</div>
+
+    <div class="question-card" id="card-0">
+      <div class="q-num">Вопрос 1 из 12</div>
+      <div class="q-text">Когда в торговом зале нет покупателей — что делаешь?</div>
+      <div class="scale">
+        <div class="scale-item" onclick="selectScale(0,1)"><div class="scale-btn">😴</div><div class="scale-label">Жду стою</div></div>
+        <div class="scale-item" onclick="selectScale(0,2)"><div class="scale-btn">📱</div><div class="scale-label">Телефон</div></div>
+        <div class="scale-item" onclick="selectScale(0,3)"><div class="scale-btn">🧹</div><div class="scale-label">Порядок, выкладка</div></div>
+        <div class="scale-item" onclick="selectScale(0,4)"><div class="scale-btn">📚</div><div class="scale-label">Учу товар</div></div>
+        <div class="scale-item" onclick="selectScale(0,5)"><div class="scale-btn">🎯</div><div class="scale-label">Ищу способы привлечь</div></div>
+      </div>
+    </div>
+
+    <div class="question-card" id="card-1">
+      <div class="q-num">Вопрос 2 из 12</div>
+      <div class="q-text">Как часто ты сам предлагаешь идеи или улучшения — без просьбы руководителя?</div>
+      <div class="scale">
+        <div class="scale-item" onclick="selectScale(1,1)"><div class="scale-btn">1️⃣</div><div class="scale-label">Никогда</div></div>
+        <div class="scale-item" onclick="selectScale(1,2)"><div class="scale-btn">2️⃣</div><div class="scale-label">Очень редко</div></div>
+        <div class="scale-item" onclick="selectScale(1,3)"><div class="scale-btn">3️⃣</div><div class="scale-label">Иногда</div></div>
+        <div class="scale-item" onclick="selectScale(1,4)"><div class="scale-btn">4️⃣</div><div class="scale-label">Часто</div></div>
+        <div class="scale-item" onclick="selectScale(1,5)"><div class="scale-btn">5️⃣</div><div class="scale-label">Постоянно</div></div>
+      </div>
+    </div>
+
+    <div class="question-card" id="card-2">
+      <div class="q-num">Вопрос 3 из 12</div>
+      <div class="q-text">Клиент уходит без покупки. Что делаешь?</div>
+      <div class="scale">
+        <div class="scale-item" onclick="selectScale(2,1)"><div class="scale-btn">🤷</div><div class="scale-label">Отпускаю</div></div>
+        <div class="scale-item" onclick="selectScale(2,2)"><div class="scale-btn">😕</div><div class="scale-label">Расстраиваюсь но молчу</div></div>
+        <div class="scale-item" onclick="selectScale(2,3)"><div class="scale-btn">💬</div><div class="scale-label">Предлагаю альтернативу</div></div>
+        <div class="scale-item" onclick="selectScale(2,4)"><div class="scale-btn">🔄</div><div class="scale-label">Анализирую что пошло не так</div></div>
+        <div class="scale-item" onclick="selectScale(2,5)"><div class="scale-btn">🏆</div><div class="scale-label">Делаю всё чтобы удержать</div></div>
+      </div>
+    </div>
+
+    <div class="question-card" id="card-3">
+      <div class="q-num">Вопрос 4 из 12</div>
+      <div class="q-text">Если план горит — что делаешь без команды руководителя?</div>
+      <div class="scale">
+        <div class="scale-item" onclick="selectScale(3,1)"><div class="scale-btn">😶</div><div class="scale-label">Жду указаний</div></div>
+        <div class="scale-item" onclick="selectScale(3,2)"><div class="scale-btn">😟</div><div class="scale-label">Переживаю но жду</div></div>
+        <div class="scale-item" onclick="selectScale(3,3)"><div class="scale-btn">📊</div><div class="scale-label">Считаю сколько осталось</div></div>
+        <div class="scale-item" onclick="selectScale(3,4)"><div class="scale-btn">💪</div><div class="scale-label">Сам меняю подход</div></div>
+        <div class="scale-item" onclick="selectScale(3,5)"><div class="scale-btn">🚀</div><div class="scale-label">Включаюсь на максимум</div></div>
+      </div>
+    </div>
+
+    <div class="question-card" id="card-4">
+      <div class="q-num">Вопрос 5 из 12</div>
+      <div class="q-text">Насколько ты знаешь товар на своей точке?</div>
+      <div class="scale">
+        <div class="scale-item" onclick="selectScale(4,1)"><div class="scale-btn">1️⃣</div><div class="scale-label">Базово</div></div>
+        <div class="scale-item" onclick="selectScale(4,2)"><div class="scale-btn">2️⃣</div><div class="scale-label">Знаю основное</div></div>
+        <div class="scale-item" onclick="selectScale(4,3)"><div class="scale-btn">3️⃣</div><div class="scale-label">Хорошо знаю</div></div>
+        <div class="scale-item" onclick="selectScale(4,4)"><div class="scale-btn">4️⃣</div><div class="scale-label">Знаю детально</div></div>
+        <div class="scale-item" onclick="selectScale(4,5)"><div class="scale-btn">5️⃣</div><div class="scale-label">Эксперт — знаю всё</div></div>
+      </div>
+    </div>
+
+    <div class="question-card" id="card-5">
+      <div class="q-num">Вопрос 6 из 12</div>
+      <div class="q-text">Ты сам выходишь к клиенту первым или ждёшь когда он обратится?</div>
+      <div class="scale">
+        <div class="scale-item" onclick="selectScale(5,1)"><div class="scale-btn">1️⃣</div><div class="scale-label">Всегда жду</div></div>
+        <div class="scale-item" onclick="selectScale(5,2)"><div class="scale-btn">2️⃣</div><div class="scale-label">Редко выхожу сам</div></div>
+        <div class="scale-item" onclick="selectScale(5,3)"><div class="scale-btn">3️⃣</div><div class="scale-label">По-разному</div></div>
+        <div class="scale-item" onclick="selectScale(5,4)"><div class="scale-btn">4️⃣</div><div class="scale-label">Чаще выхожу сам</div></div>
+        <div class="scale-item" onclick="selectScale(5,5)"><div class="scale-btn">5️⃣</div><div class="scale-label">Всегда первым</div></div>
+      </div>
+    </div>
+
+    <div class="section-title">🔥 Блок 2 — Вовлечённость и драйв</div>
+
+    <div class="question-card" id="card-6">
+      <div class="q-num">Вопрос 7 из 12</div>
+      <div class="q-text">Думаешь ли ты о работе после смены — как улучшить, что попробовать?</div>
+      <div class="scale">
+        <div class="scale-item" onclick="selectScale(6,1)"><div class="scale-btn">1️⃣</div><div class="scale-label">Никогда</div></div>
+        <div class="scale-item" onclick="selectScale(6,2)"><div class="scale-btn">2️⃣</div><div class="scale-label">Очень редко</div></div>
+        <div class="scale-item" onclick="selectScale(6,3)"><div class="scale-btn">3️⃣</div><div class="scale-label">Иногда</div></div>
+        <div class="scale-item" onclick="selectScale(6,4)"><div class="scale-btn">4️⃣</div><div class="scale-label">Часто</div></div>
+        <div class="scale-item" onclick="selectScale(6,5)"><div class="scale-btn">5️⃣</div><div class="scale-label">Постоянно</div></div>
+      </div>
+    </div>
+
+    <div class="question-card" id="card-7">
+      <div class="q-num">Вопрос 8 из 12</div>
+      <div class="q-text">Расстраиваешься ли когда план не выполняется?</div>
+      <div class="scale">
+        <div class="scale-item" onclick="selectScale(7,1)"><div class="scale-btn">1️⃣</div><div class="scale-label">Нет — работа и работа</div></div>
+        <div class="scale-item" onclick="selectScale(7,2)"><div class="scale-btn">2️⃣</div><div class="scale-label">Чуть-чуть</div></div>
+        <div class="scale-item" onclick="selectScale(7,3)"><div class="scale-btn">3️⃣</div><div class="scale-label">Умеренно</div></div>
+        <div class="scale-item" onclick="selectScale(7,4)"><div class="scale-btn">4️⃣</div><div class="scale-label">Да, переживаю</div></div>
+        <div class="scale-item" onclick="selectScale(7,5)"><div class="scale-btn">5️⃣</div><div class="scale-label">Очень — не могу отпустить</div></div>
+      </div>
+    </div>
+
+    <div class="question-card" id="card-8">
+      <div class="q-num">Вопрос 9 из 12</div>
+      <div class="q-text">Хочешь ли ты быть лучшим продавцом в своей команде?</div>
+      <div class="scale">
+        <div class="scale-item" onclick="selectScale(8,1)"><div class="scale-btn">1️⃣</div><div class="scale-label">Не особо</div></div>
+        <div class="scale-item" onclick="selectScale(8,2)"><div class="scale-btn">2️⃣</div><div class="scale-label">Было бы неплохо</div></div>
+        <div class="scale-item" onclick="selectScale(8,3)"><div class="scale-btn">3️⃣</div><div class="scale-label">Да, хочу</div></div>
+        <div class="scale-item" onclick="selectScale(8,4)"><div class="scale-btn">4️⃣</div><div class="scale-label">Очень хочу</div></div>
+        <div class="scale-item" onclick="selectScale(8,5)"><div class="scale-btn">5️⃣</div><div class="scale-label">Это моя цель</div></div>
+      </div>
+    </div>
+
+    <div class="question-card" id="card-9">
+      <div class="q-num">Вопрос 10 из 12</div>
+      <div class="q-text">Когда ты делаешь продажу — что чувствуешь?</div>
+      <div class="scale">
+        <div class="scale-item" onclick="selectScale(9,1)"><div class="scale-btn">😐</div><div class="scale-label">Ничего особенного</div></div>
+        <div class="scale-item" onclick="selectScale(9,2)"><div class="scale-btn">🙂</div><div class="scale-label">Приятно</div></div>
+        <div class="scale-item" onclick="selectScale(9,3)"><div class="scale-btn">😊</div><div class="scale-label">Доволен</div></div>
+        <div class="scale-item" onclick="selectScale(9,4)"><div class="scale-btn">😄</div><div class="scale-label">Радуюсь</div></div>
+        <div class="scale-item" onclick="selectScale(9,5)"><div class="scale-btn">🔥</div><div class="scale-label">Кайф — хочу ещё</div></div>
+      </div>
+    </div>
+
+    <div class="question-card" id="card-10">
+      <div class="q-num">Вопрос 11 из 12</div>
+      <div class="q-text">Как ты относишься к обратной связи от руководителя?</div>
+      <div class="scale">
+        <div class="scale-item" onclick="selectScale(10,1)"><div class="scale-btn">😒</div><div class="scale-label">Раздражает</div></div>
+        <div class="scale-item" onclick="selectScale(10,2)"><div class="scale-btn">😑</div><div class="scale-label">Терплю</div></div>
+        <div class="scale-item" onclick="selectScale(10,3)"><div class="scale-btn">🙂</div><div class="scale-label">Нормально</div></div>
+        <div class="scale-item" onclick="selectScale(10,4)"><div class="scale-btn">👍</div><div class="scale-label">Полезно</div></div>
+        <div class="scale-item" onclick="selectScale(10,5)"><div class="scale-btn">🙏</div><div class="scale-label">Жду и ценю</div></div>
+      </div>
+    </div>
+
+    <div class="question-card" id="card-11">
+      <div class="q-num">Вопрос 12 из 12</div>
+      <div class="q-text">Представь что тебе предложили взять дополнительную ответственность без доп оплаты. Твоя реакция?</div>
+      <div class="scale">
+        <div class="scale-item" onclick="selectScale(11,1)"><div class="scale-btn">❌</div><div class="scale-label">Откажусь</div></div>
+        <div class="scale-item" onclick="selectScale(11,2)"><div class="scale-btn">😕</div><div class="scale-label">Не хочу но соглашусь</div></div>
+        <div class="scale-item" onclick="selectScale(11,3)"><div class="scale-btn">🤔</div><div class="scale-label">Подумаю</div></div>
+        <div class="scale-item" onclick="selectScale(11,4)"><div class="scale-btn">✅</div><div class="scale-label">Соглашусь</div></div>
+        <div class="scale-item" onclick="selectScale(11,5)"><div class="scale-btn">🚀</div><div class="scale-label">С удовольствием</div></div>
+      </div>
+    </div>
+
+    <div class="submit-wrap">
+      <button class="btn-submit" id="btnSubmit" onclick="submitTest()" disabled="">Отправить ответы</button>
+      <p class="submit-note">Ответьте на все 12 вопросов чтобы отправить</p>
+    </div>
+  </div>
+
+  <div id="result">
+    <div class="done-card">
+      <div class="done-icon">✅</div>
+      <div class="done-title">Спасибо!</div>
+      <div class="done-desc">Ответы приняты и отправлены руководителю. Хорошего дня!</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz648_MmDj0e351aH5XlL1kSUSVsNlSmEkubUkkwt7i_F5MabB5tnn1CMT6brY0Nn7-/exec";
+
+let answers = new Array(12).fill(null);
+
+function selectScale(qIdx, val){
+  answers[qIdx] = val;
+  const card = document.getElementById('card-'+qIdx);
+  card.querySelectorAll('.scale-item').forEach((el,i)=>{
+    el.classList.toggle('selected', i+1 === val);
+  });
+  card.classList.add('answered');
+  updateProgress();
+}
+
+function updateProgress(){
+  const done = answers.filter(a=>a!==null).length;
+  document.getElementById('progressBar').style.width=(done/12*100)+'%';
+  document.getElementById('progressLabel').textContent=done+' / 12';
+  document.getElementById('btnSubmit').disabled=done<12;
+}
+
+function submitTest(){
+  const name = document.getElementById('userName').value.trim();
+  if(!name){document.getElementById('userName').focus();return;}
+
+  document.getElementById('form-section').style.display='none';
+  document.getElementById('result').style.display='block';
+
+  const activityScore = Math.round(answers.slice(0,6).reduce((a,b)=>a+b,0)/6*10)/10;
+  const engagementScore = Math.round(answers.slice(6,12).reduce((a,b)=>a+b,0)/6*10)/10;
+  const total = Math.round((activityScore+engagementScore)/2*10)/10;
+
+  const getLevel = (score) => {
+    if(score <= 1.5) return 'Критически низкий';
+    if(score <= 2.5) return 'Низкий';
+    if(score <= 3.5) return 'Средний';
+    if(score <= 4.5) return 'Высокий';
+    return 'Очень высокий';
+  };
+
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      test: 'Активность',
+      name: name,
+      date: new Date().toLocaleString('ru-RU'),
+      activityScore: activityScore,
+      engagementScore: engagementScore,
+      totalScore: total,
+      activityLevel: getLevel(activityScore),
+      engagementLevel: getLevel(engagementScore),
+      answers: answers.join(',')
+    })
+  }).catch(()=>{});
+}
+</script>
+
+
+
+</body></html>
