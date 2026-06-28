@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<!-- saved from url=(0049)file:///C:/Users/vasil/Downloads/dashboard_2.html -->
+<html lang="ru"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Васильковский · Рабочий центр</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #0f1117;
+    color: #e8eaf0;
+    min-height: 100vh;
+    padding: 24px 16px 48px;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+
+  .header-badge {
+    display: inline-block;
+    background: rgba(99,102,241,0.15);
+    border: 1px solid rgba(99,102,241,0.3);
+    color: #a5b4fc;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+  }
+
+  .header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.5px;
+  }
+
+  .header p {
+    color: #6b7280;
+    font-size: 14px;
+    margin-top: 6px;
+  }
+
+  .section-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #4b5563;
+    margin: 28px 0 12px;
+    padding-left: 4px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .card {
+    background: #1a1d27;
+    border: 1px solid #252836;
+    border-radius: 14px;
+    padding: 16px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: all 0.18s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--accent, #6366f1);
+    opacity: 0;
+    transition: opacity 0.18s;
+  }
+
+  .card:hover {
+    border-color: var(--accent, #6366f1);
+    background: #1e2133;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  }
+
+  .card:hover::before { opacity: 1; }
+
+  .card-icon {
+    font-size: 26px;
+    line-height: 1;
+  }
+
+  .card-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #e8eaf0;
+    line-height: 1.3;
+  }
+
+  .card-desc {
+    font-size: 11px;
+    color: #6b7280;
+    line-height: 1.4;
+  }
+
+  .card-big {
+    grid-column: span 2;
+    flex-direction: row;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 20px;
+  }
+
+  .card-big .card-icon { font-size: 32px; }
+  .card-big .card-name { font-size: 15px; }
+  .card-big .card-desc { font-size: 12px; }
+
+  .card-big .card-text { flex: 1; }
+
+  .arrow {
+    color: #374151;
+    font-size: 18px;
+    flex-shrink: 0;
+    transition: color 0.18s;
+  }
+
+  .card:hover .arrow { color: var(--accent, #6366f1); }
+
+  /* accent colors */
+  .c-purple { --accent: #8b5cf6; }
+  .c-blue   { --accent: #3b82f6; }
+  .c-green  { --accent: #10b981; }
+  .c-orange { --accent: #f59e0b; }
+  .c-red    { --accent: #ef4444; }
+  .c-pink   { --accent: #ec4899; }
+  .c-cyan   { --accent: #06b6d4; }
+  .c-indigo { --accent: #6366f1; }
+
+  .divider {
+    height: 1px;
+    background: #1f2937;
+    margin: 8px 0;
+  }
+
+  .tests-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .test-card {
+    background: #1a1d27;
+    border: 1px solid #252836;
+    border-radius: 14px;
+    padding: 14px 12px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    text-align: center;
+    transition: all 0.18s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .test-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--accent, #6366f1);
+    opacity: 0;
+    transition: opacity 0.18s;
+  }
+
+  .test-card:hover {
+    border-color: var(--accent, #6366f1);
+    background: #1e2133;
+    transform: translateY(-2px);
+  }
+
+  .test-card:hover::before { opacity: 1; }
+
+  .test-card .card-icon { font-size: 28px; }
+  .test-card .card-name { font-size: 12px; font-weight: 600; }
+  .test-card .card-desc { font-size: 10px; color: #6b7280; }
+
+  @media (max-width: 420px) {
+    .grid-3 { grid-template-columns: repeat(2, 1fr); }
+    .tests-grid { grid-template-columns: repeat(2, 1fr); }
+    .card-big { grid-column: span 1; flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-badge">МБТ Polaris · СПБ LOVE</div>
+  <h1>Рабочий центр</h1>
+  <p>Васильковский Роман · Supvr</p>
+</div>
+
+<!-- ГЛАВНЫЕ ИНСТРУМЕНТЫ -->
+<div class="section-title">Главные инструменты</div>
+<div class="grid">
+
+  <a href="https://vasilkovskiiroman-tech.github.io/tools/index.html" target="_blank" class="card card-big c-indigo">
+    <div class="card-icon">🎯</div>
+    <div class="card-text">
+      <div class="card-name">6 секторов · Визит</div>
+      <div class="card-desc">Подготовка, 4 вопроса, дневник, домашка</div>
+    </div>
+    <div class="arrow">›</div>
+  </a>
+
+  <a href="https://docs.google.com/spreadsheets/d/1d4FP98rENF3j2tCeuIoHZtCGJvWQGyWFlBHdYe_2xIc/edit?gid=1626314144#gid=1626314144" target="_blank" class="card c-purple">
+    <div class="card-icon">📊</div>
+    <div class="card-name">Матрица Эйзенхауэра</div>
+    <div class="card-desc">Приоритеты и задачи</div>
+  </a>
+
+  <a href="https://docs.google.com/spreadsheets/d/1w8G55BF-KkkSOkAKFZWjvsxJMu2Z0FLmsvxpIwFjVIs/edit?gid=0#gid=0" target="_blank" class="card c-blue">
+    <div class="card-icon">📋</div>
+    <div class="card-name">Управление Роман</div>
+    <div class="card-desc">Задачи, контроль, визиты</div>
+  </a>
+
+  <a href="https://docs.google.com/spreadsheets/d/1wSzPIGf1yy6lk0yX0-ARGq_TNpNtdDumnCih7Qnzhro/edit?gid=64142655#gid=64142655" target="_blank" class="card c-green">
+    <div class="card-icon">🏆</div>
+    <div class="card-name">Win-Win · Журнал</div>
+    <div class="card-desc">График прихода/ухода, селфи</div>
+  </a>
+
+</div>
+
+<!-- ФОКУСЫ -->
+<div class="section-title">Фокусы магазинов</div>
+<div class="grid">
+
+  <a href="https://docs.google.com/spreadsheets/d/1UE0K7tQ9Nyuw0DYqYcLJkNGviPR7rcCYlhxyTMlNmPc/edit?gid=793610481#gid=793610481" target="_blank" class="card c-cyan">
+    <div class="card-icon">🔵</div>
+    <div class="card-name">Фокусы ДНС</div>
+    <div class="card-desc">Задачи и приоритеты ДНС</div>
+  </a>
+
+  <a href="https://docs.google.com/spreadsheets/d/1n7tgJrNKS-k_bUZfY0-9k9lr_l9f7IKdR-82HHE_M1M/edit?gid=1409762091#gid=1409762091" target="_blank" class="card c-orange">
+    <div class="card-icon">🟠</div>
+    <div class="card-name">Фокусы Максидом</div>
+    <div class="card-desc">Задачи и приоритеты Максидом</div>
+  </a>
+
+</div>
+
+<!-- РАЗВИТИЕ КОМАНДЫ -->
+<div class="section-title">Развитие команды</div>
+<div class="grid">
+
+  <a href="https://docs.google.com/spreadsheets/d/1ew-kAJzEEHm9bp1M7wco3j3_0LIkEQNnyFldQmKnhR0/edit?gid=546654592#gid=546654592" target="_blank" class="card c-pink">
+    <div class="card-icon">🧑‍🏫</div>
+    <div class="card-name">Наставник</div>
+    <div class="card-desc">Развитие и обучение сотрудников</div>
+  </a>
+
+  <a href="https://docs.google.com/spreadsheets/d/1qtPW_m5I4KlcRmuYWGdi32dkpFTKKaGvfv58s5xGgyw/edit?resourcekey=&amp;gid=0#gid=0" target="_blank" class="card c-indigo">
+    <div class="card-icon">🗺️</div>
+    <div class="card-name">6 секторов · Таблица</div>
+    <div class="card-desc">Google Sheets версия</div>
+  </a>
+
+  <a href="https://vasilkovskiiroman-tech.github.io/tools/CRM_v3.html" target="_blank" class="card c-red">
+    <div class="card-icon">🤝</div>
+    <div class="card-name">CRM найма</div>
+    <div class="card-desc">Скрипт собеседования, кандидаты</div>
+  </a>
+
+</div>
+
+<!-- ТЕСТЫ -->
+<div class="section-title">Тесты · DISC + Герчиков + Активность</div>
+<div class="tests-grid">
+
+  <a href="https://vasilkovskiiroman-tech.github.io/tools/Disktest.html" target="_blank" class="test-card c-red">
+    <div class="card-icon">⚡</div>
+    <div class="card-name">DISC тест</div>
+    <div class="card-desc">Тип поведения</div>
+  </a>
+
+  <a href="https://vasilkovskiiroman-tech.github.io/tools/Gerchikov2.html" target="_blank" class="test-card c-green">
+    <div class="card-icon">💰</div>
+    <div class="card-name">Герчиков</div>
+    <div class="card-desc">Тип мотивации</div>
+  </a>
+
+  <a href="https://vasilkovskiiroman-tech.github.io/tools/aktiv.html" target="_blank" class="test-card c-orange">
+    <div class="card-icon">🔥</div>
+    <div class="card-name">Активность</div>
+    <div class="card-desc">Инициатива и вовлечённость</div>
+  </a>
+
+</div>
+
+<div class="section-title">Результаты тестов</div>
+<div class="grid">
+  <a href="https://docs.google.com/spreadsheets/d/1_KRt0hGgdGIDMZfsQ0wEplt8tC8wKqIt3HRWLnQ_fPI/edit?gid=2068947874#gid=2068947874" target="_blank" class="card card-big c-purple">
+    <div class="card-icon">📈</div>
+    <div class="card-text">
+      <div class="card-name">Таблица DISC · Сводная по команде</div>
+      <div class="card-desc">Все результаты, портреты, аналитика по 3 тестам</div>
+    </div>
+    <div class="arrow">›</div>
+  </a>
+</div>
+
+
+
+
+
+</body></html>
