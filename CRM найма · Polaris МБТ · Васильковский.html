@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<!-- saved from url=(0044)file:///C:/Users/vasil/Downloads/CRM_v3.html -->
+<html lang="ru"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRM найма · Polaris МБТ</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+:root{
+  --bg:#0d0f14;--s1:#13161e;--s2:#1a1e28;--s3:#1f2435;
+  --border:rgba(255,255,255,0.07);--text:#e8eaf2;--muted:#5a6080;
+  --blue:#4d8ef0;--green:#34d399;--yellow:#fbbf24;
+  --orange:#fb923c;--red:#f87171;--purple:#a78bfa;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Manrope',sans-serif;font-size:14px;line-height:1.7;padding:20px 16px 80px;max-width:860px;margin:0 auto;}
+.hero{text-align:center;padding:24px 0 20px;border-bottom:1px solid var(--border);margin-bottom:20px;}
+.hero h1{font-size:22px;font-weight:800;margin-bottom:4px;}
+.hero p{color:var(--muted);font-size:12px;}
+.bgs{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin-bottom:12px;}
+.bg{font-size:11px;font-weight:700;padding:3px 11px;border-radius:20px;}
+.b1{background:rgba(77,142,240,0.12);color:var(--blue);border:1px solid rgba(77,142,240,0.2);}
+.b2{background:rgba(52,211,153,0.12);color:var(--green);border:1px solid rgba(52,211,153,0.2);}
+.b3{background:rgba(251,191,36,0.12);color:var(--yellow);border:1px solid rgba(251,191,36,0.2);}
+.b4{background:rgba(167,139,250,0.12);color:var(--purple);border:1px solid rgba(167,139,250,0.2);}
+/* TABS */
+.tabs{display:flex;gap:7px;margin-bottom:16px;flex-wrap:wrap;}
+.tb{padding:7px 15px;border-radius:9px;border:1.5px solid var(--border);background:var(--s1);color:var(--muted);font-size:12px;font-weight:700;cursor:pointer;font-family:'Manrope',sans-serif;transition:all .15s;}
+.tb:hover{border-color:var(--blue);color:var(--blue);}
+.tb.active{background:rgba(77,142,240,0.12);border-color:var(--blue);color:var(--blue);}
+.tb.add{background:rgba(52,211,153,0.08);border-color:rgba(52,211,153,0.2);color:var(--green);}
+.tb.add:hover{background:rgba(52,211,153,0.15);}
+/* PANELS */
+.panel{display:none;}.panel.active{display:block;}
+/* CARD */
+.card{background:var(--s1);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:11px;}
+.ct{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:12px;}
+/* GRID */
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+.gf{grid-column:1/-1;}
+@media(max-width:560px){.g3,.g2{grid-template-columns:1fr;}}
+/* FIELDS */
+.fl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:4px;}
+.fi{background:var(--s2);border:1px solid var(--border);border-radius:7px;padding:7px 11px;font-size:13px;color:var(--text);font-family:'Manrope',sans-serif;width:100%;outline:none;transition:border-color .2s;}
+.fi:focus{border-color:var(--blue);}
+.ta{background:var(--s2);border:1px solid var(--border);border-radius:7px;padding:7px 11px;font-size:12px;color:var(--text);font-family:'Manrope',sans-serif;width:100%;outline:none;resize:vertical;min-height:60px;transition:border-color .2s;}
+.ta:focus{border-color:var(--blue);}
+/* GERCHIKOV */
+.grow{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;}
+.gb{padding:5px 11px;border-radius:7px;border:1.5px solid var(--border);background:var(--s2);color:var(--muted);font-size:11px;font-weight:700;cursor:pointer;font-family:'Manrope',sans-serif;transition:all .15s;}
+.gp{background:rgba(77,142,240,0.15);border-color:var(--blue);color:var(--blue);}
+.gh{background:rgba(167,139,250,0.15);border-color:var(--purple);color:var(--purple);}
+.gpa{background:rgba(52,211,153,0.15);border-color:var(--green);color:var(--green);}
+.ga{background:rgba(248,113,113,0.15);border-color:var(--red);color:var(--red);}
+.gl{background:rgba(251,191,36,0.15);border-color:var(--yellow);color:var(--yellow);}
+/* SCORE BAR */
+.sbar{background:var(--s1);border:1px solid var(--border);border-radius:11px;padding:13px 16px;margin-bottom:11px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.stot{font-size:28px;font-weight:800;min-width:48px;text-align:center;}
+.stot.sg{color:var(--green);}.stot.sm{color:var(--yellow);}.stot.sb{color:var(--red);}.stot.sn{color:var(--muted);}
+.sinf{flex:1;}.svd{font-size:13px;font-weight:700;margin-bottom:2px;}.ssu{font-size:11px;color:var(--muted);}
+.spr{flex:2;min-width:120px;}
+.pt{height:5px;background:var(--s2);border-radius:5px;overflow:hidden;margin-bottom:3px;}
+.pf{height:100%;background:var(--green);border-radius:5px;transition:width .4s;}
+.plb{font-size:10px;color:var(--muted);display:flex;justify-content:space-between;}
+/* QUESTION */
+.qc{background:var(--s1);border:1px solid var(--border);border-radius:10px;margin-bottom:7px;overflow:hidden;}
+.qc.hi{border-left:3px solid var(--green);}.qc.mi{border-left:3px solid var(--yellow);}.qc.lo{border-left:3px solid var(--red);}
+.qh{padding:11px 14px;display:flex;align-items:center;gap:9px;cursor:pointer;}
+.qh:hover{background:rgba(255,255,255,0.02);}
+.qn{width:23px;height:23px;border-radius:6px;background:var(--s2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--muted);flex-shrink:0;}
+.qnm{flex:1;font-size:13px;font-weight:700;}
+.qsc{font-size:17px;font-weight:800;min-width:28px;text-align:center;}
+.qsc.s0{color:var(--muted);}.qsc.s1,.qsc.s2{color:var(--red);}.qsc.s3{color:var(--yellow);}.qsc.s4,.qsc.s5{color:var(--green);}
+.qarr{color:var(--muted);font-size:10px;transition:transform .2s;}
+.qc.open .qarr{transform:rotate(180deg);}
+.qb{padding:0 14px 14px;display:none;}.qc.open .qb{display:block;}
+.qtx{background:rgba(77,142,240,0.06);border:1px solid rgba(77,142,240,0.1);border-radius:8px;padding:9px 12px;font-size:12px;color:#9ba3bb;font-style:italic;margin-bottom:10px;}
+/* STAR */
+.sg4{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px;}
+@media(max-width:500px){.sg4{grid-template-columns:1fr;}}
+.sc{background:var(--s2);border-radius:7px;padding:8px 10px;border:1px solid var(--border);}
+.sct{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px;}
+.sc.ss .sct{color:var(--blue);}.sc.st .sct{color:var(--purple);}.sc.sa .sct{color:var(--yellow);}.sc.sr .sct{color:var(--green);}
+.sch{display:flex;align-items:flex-start;gap:6px;margin-bottom:4px;cursor:pointer;font-size:11px;color:#8a93b0;}
+.sch input{display:none;}
+.schb{width:13px;height:13px;border:1.5px solid var(--border);border-radius:3px;flex-shrink:0;margin-top:2px;background:var(--s3);display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.sch input:checked+.schb{background:var(--green);border-color:var(--green);}
+.sch input:checked+.schb::after{content:'✓';font-size:8px;color:#000;font-weight:800;}
+.sch input:checked~span{color:var(--text);}
+/* FLAGS */
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px;}
+@media(max-width:500px){.fg{grid-template-columns:1fr;}}
+.fl2{border-radius:7px;padding:8px 10px;}
+.fl2.g{background:rgba(52,211,153,0.06);border:1px solid rgba(52,211,153,0.15);}
+.fl2.r{background:rgba(248,113,113,0.06);border:1px solid rgba(248,113,113,0.15);}
+.flt{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:5px;}
+.fl2.g .flt{color:var(--green);}.fl2.r .flt{color:var(--red);}
+.fli{font-size:11px;color:#9ba3bb;padding:2px 0;}
+.fl2.g .fli::before{content:'✅ ';font-size:10px;}
+.fl2.r .fli::before{content:'🚩 ';font-size:10px;}
+/* SCORE BUTTONS */
+.sbr{display:flex;gap:5px;margin-bottom:9px;}
+.sbt{width:35px;height:35px;border-radius:7px;border:1.5px solid var(--border);background:var(--s2);color:var(--muted);font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;font-family:'Manrope',sans-serif;}
+.sbt:hover{border-color:var(--yellow);color:var(--yellow);}
+.sbt.a1,.sbt.a2{background:rgba(248,113,113,0.15);border-color:var(--red);color:var(--red);}
+.sbt.a3{background:rgba(251,191,36,0.15);border-color:var(--yellow);color:var(--yellow);}
+.sbt.a4,.sbt.a5{background:rgba(52,211,153,0.15);border-color:var(--green);color:var(--green);}
+/* NEXT */
+.nxt{background:rgba(251,191,36,0.05);border:1px solid rgba(251,191,36,0.15);border-radius:10px;padding:13px 15px;margin-bottom:11px;}
+.nxt-t{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--yellow);margin-bottom:10px;}
+.nr{display:flex;align-items:flex-start;gap:7px;margin-bottom:5px;font-size:12px;color:#9ba3bb;}
+.ncb{width:15px;height:15px;border:1.5px solid var(--border);border-radius:4px;flex-shrink:0;margin-top:2px;background:var(--s2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.ncb.done{background:var(--green);border-color:var(--green);}
+.ncb.done::after{content:'✓';font-size:8px;color:#000;font-weight:800;}
+.nadd{background:none;border:1px dashed rgba(251,191,36,0.3);color:var(--yellow);border-radius:7px;padding:5px 11px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Manrope',sans-serif;margin-top:5px;transition:all .15s;display:block;}
+.nadd:hover{border-color:var(--yellow);}
+.nai{background:var(--s2);border:1px solid rgba(251,191,36,0.2);border-radius:7px;padding:7px 10px;font-size:12px;color:var(--text);font-family:'Manrope',sans-serif;width:100%;outline:none;margin-top:5px;display:none;}
+.nai.show{display:block;}
+/* VERDICT */
+.vrd{background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:11px;}
+.vrd-t{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:10px;}
+.vbs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:9px;}
+.vb{padding:7px 14px;border-radius:8px;border:1.5px solid var(--border);background:var(--s2);color:var(--muted);font-size:12px;font-weight:700;cursor:pointer;font-family:'Manrope',sans-serif;transition:all .15s;}
+.vb:hover{border-color:var(--blue);color:var(--blue);}
+.vb.vh{background:rgba(52,211,153,0.12);border-color:var(--green);color:var(--green);}
+.vb.vt{background:rgba(251,191,36,0.12);border-color:var(--yellow);color:var(--yellow);}
+.vb.vn{background:rgba(248,113,113,0.12);border-color:var(--red);color:var(--red);}
+/* HISTORY */
+.hst{background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:11px;}
+.hst-t{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:12px;}
+.tl{position:relative;padding-left:20px;}
+.tl::before{content:'';position:absolute;left:5px;top:0;bottom:0;width:2px;background:var(--border);}
+.te{position:relative;margin-bottom:12px;}
+.te::before{content:'';position:absolute;left:-17px;top:5px;width:9px;height:9px;border-radius:50%;background:var(--s2);border:2px solid var(--border);}
+.te.done::before{background:var(--green);border-color:var(--green);}
+.te.pending::before{background:var(--yellow);border-color:var(--yellow);}
+.te.no::before{background:var(--red);border-color:var(--red);}
+.td{font-size:10px;color:var(--muted);margin-bottom:3px;}
+.tt{font-size:12px;color:#b0b7cc;background:var(--s2);border-radius:7px;padding:7px 10px;border:1px solid var(--border);}
+.hadd{display:inline-flex;align-items:center;gap:5px;background:rgba(77,142,240,0.08);border:1px solid rgba(77,142,240,0.15);color:var(--blue);border-radius:7px;padding:6px 11px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Manrope',sans-serif;margin-top:4px;transition:all .15s;}
+.hadd:hover{background:rgba(77,142,240,0.15);}
+.hfrm{background:var(--s2);border:1px solid var(--border);border-radius:9px;padding:10px;margin-top:8px;display:none;}
+.hfrm.show{display:block;}
+.hfr{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:7px;}
+.hfbs{display:flex;gap:6px;margin-top:6px;}
+.hfs{padding:6px 13px;border-radius:7px;border:none;background:var(--green);color:#000;font-family:'Manrope',sans-serif;font-size:11px;font-weight:700;cursor:pointer;}
+.hfc{padding:6px 13px;border-radius:7px;border:none;background:var(--s3);color:var(--muted);font-family:'Manrope',sans-serif;font-size:11px;font-weight:700;cursor:pointer;}
+.slb{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin:14px 0 8px;display:flex;align-items:center;gap:7px;}
+.slb::after{content:'';flex:1;height:1px;background:var(--border);}
+.footer{text-align:center;margin-top:36px;padding-top:14px;border-top:1px solid var(--border);color:var(--muted);font-size:11px;}
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="bgs">
+    <span class="bg b1">CRM найма · Polaris МБТ</span>
+    <span class="bg b2">STAR · 8 критериев</span>
+    <span class="bg b3">История · Герчиков</span>
+    <span class="bg b4">Все кандидаты</span>
+  </div>
+  <h1>CRM найма · Мерчендайзер МБТ</h1>
+  <p>Супервайзер: Васильковский Роман · Тренер: Смирнов Павел</p>
+</div>
+<div class="tabs" id="tabs">
+  <button class="tb" id="tabt-c0">👤 Екатерина</button><button class="tb active" id="tabt-c1">👤 Дима</button><button class="tb add" onclick="addCand()">+ Новый кандидат</button>
+</div>
+<div id="panels"><div class="panel" id="panel-c0">
+  <div class="card">
+    <div class="ct">👤 Кандидат</div>
+    <div class="g3" style="margin-bottom:9px;">
+      <div><div class="fl">Имя</div><input class="fi" id="fn-c0" value="Екатерина" placeholder="Имя кандидата" oninput="updateTabName(&#39;c0&#39;,this.value)"></div>
+      <div><div class="fl">Возраст</div><input class="fi" value="35" placeholder="Возраст"></div>
+      <div><div class="fl">Источник</div><input class="fi" value="Сарафанное радио (друзья)" placeholder="Авито / Hh / Сарафан"></div>
+      <div><div class="fl">Опыт</div><input class="fi" value="МБТ вся карьера — ДНС, Максидом и др." placeholder="Где работал раньше"></div>
+      <div><div class="fl">Желаемый магазин</div><input class="fi" value="Рядом с домом — уточнить" placeholder="Магазин / район"></div>
+      <div><div class="fl">Дата</div><input class="fi" type="date" value="2026-06-09"></div>
+      <div class="gf"><div class="fl">Статус</div>
+        <select class="fi">
+          <option value="new">⏳ Новый</option>
+          <option value="think" selected="">🤔 Думаем · второй звонок</option>
+          <option value="hire">✅ Берём</option>
+          <option value="no">❌ Отказ</option>
+        </select>
+      </div>
+      <div class="gf"><div class="fl">Тип по Герчикову</div>
+        <div class="grow">
+          <button class="gb gp" onclick="tg(this,&#39;gp&#39;)">💼 Профессионал</button>
+          <button class="gb gh" onclick="tg(this,&#39;gh&#39;)">👑 Хозяин</button>
+          <button class="gb" onclick="tg(this,&#39;gpa&#39;)">❤️ Патриот</button>
+          <button class="gb" onclick="tg(this,&#39;ga&#39;)">🛡️ Избегательный</button>
+          <button class="gb" onclick="tg(this,&#39;gl&#39;)">💰 Люмпен</button>
+        </div>
+      </div>
+    </div>
+    <div class="fl">Первое впечатление</div>
+    <textarea class="ta" placeholder="Тон разговора, кто вёл диалог, что насторожило, что понравилось...">Опытная — знает все сети МБТ. Конкуренция на прошлой точке — ноль эмоций. Вела диалог сама — знает себе цену. Не ответила на вопрос о ЗП. Реакция на фокусную систему — «ох». Тип: Профессионал + Хозяин.</textarea>
+  </div>
+
+  <div class="sbar">
+    <div class="stot sm" id="st-c0">3.3</div>
+    <div class="sinf"><div class="svd" id="sv-c0">🤔 Средний — второй звонок</div><div class="ssu" id="sf-c0">3 / 8 заполнено</div></div>
+    <div class="spr"><div class="pt"><div class="pf" id="pf-c0" style="width: 57.5%;"></div></div><div class="plb"><span>1</span><span>5</span></div></div>
+  </div>
+
+  <div class="slb">8 критериев STAR</div>
+  <div class="qc" id="qc-c0-1">
+  <div class="qh" onclick="tQ(&#39;qc-c0-1&#39;)">
+    <div class="qn">1</div><div class="qnm">Самостоятельность</div>
+    <div class="qsc s0" id="sc-c0-1">—</div><div class="qarr">▼</div>
+  </div>
+  <div class="qb">
+    <div class="qtx">«Вспомни случай на прошлой работе, когда на точке возник форс-мажор, а супервайзер был недоступен. Что именно ты сделал и к чему это привело?»</div>
+    <div class="sg4">
+      <div class="sc ss"><div class="sct">S · Ситуация</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Описал конкретную ситуацию</span></label></div>
+      <div class="sc st"><div class="sct">T · Задача</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Понимал что нужно решить без СВ</span></label></div>
+      <div class="sc sa"><div class="sct">A · Действие</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Сам заговорил с администрацией ТТ</span></label><label class="sch"><input type="checkbox"><div class="schb"></div><span>Не ждал звонка СВ</span></label></div>
+      <div class="sc sr"><div class="sct">R · Результат</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Доложил факты вечером</span></label></div>
+    </div>
+    <div class="fg">
+      <div class="fl2 g"><div class="flt">✅ Зелёный флаг</div><div class="fli">Сам решил и доложил факты</div><div class="fli">Действовал без указаний</div></div>
+      <div class="fl2 r"><div class="flt">🚩 Красный флаг</div><div class="fli">«Я ничего не делал»</div><div class="fli">«Ждал пока СВ ответит»</div></div>
+    </div>
+    <div class="sbr" id="sbr-c0-1">
+      <button class="sbt" onclick="setScore(&#39;c0&#39;,1,1)">1</button><button class="sbt" onclick="setScore(&#39;c0&#39;,1,2)">2</button><button class="sbt" onclick="setScore(&#39;c0&#39;,1,3)">3</button><button class="sbt" onclick="setScore(&#39;c0&#39;,1,4)">4</button><button class="sbt" onclick="setScore(&#39;c0&#39;,1,5)">5</button>
+    </div>
+    <div class="fl">Заметки / Ответ кандидата</div>
+    <textarea class="ta" placeholder="Запиши ключевые слова из ответа..."></textarea>
+  </div></div><div class="qc hi open" id="qc-c0-2">
+  <div class="qh" onclick="tQ(&#39;qc-c0-2&#39;)">
+    <div class="qn">2</div><div class="qnm">Знание стандартов (БТ)</div>
+    <div class="qsc s4" id="sc-c0-2">4</div><div class="qarr">▼</div>
+  </div>
+  <div class="qb">
+    <div class="qtx">«Расскажи о ситуации, когда при аудите твоей точки руководство нашло грубую ошибку в ротации или планограмме. Как ты её исправлял?»</div>
+    <div class="sg4">
+      <div class="sc ss"><div class="sct">S · Ситуация</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Описал конкретный аудит</span></label></div>
+      <div class="sc st"><div class="sct">T · Задача</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Понимал что нужно исправить</span></label></div>
+      <div class="sc sa"><div class="sct">A · Действие</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Описал процесс перевыкладки FIFO</span></label><label class="sch"><input type="checkbox"><div class="schb"></div><span>Спокойно принял критику</span></label></div>
+      <div class="sc sr"><div class="sct">R · Результат</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Ошибка устранена без штрафа</span></label></div>
+    </div>
+    <div class="fg">
+      <div class="fl2 g"><div class="flt">✅ Зелёный флаг</div><div class="fli">Спокойно признаёт ошибку</div><div class="fli">Описывает ротацию FIFO</div></div>
+      <div class="fl2 r"><div class="flt">🚩 Красный флаг</div><div class="fli">«Они сами всё переставили»</div><div class="fli">Обижается на критику</div></div>
+    </div>
+    <div class="sbr" id="sbr-c0-2">
+      <button class="sbt a4" onclick="setScore(&#39;c0&#39;,2,1)">1</button><button class="sbt a4" onclick="setScore(&#39;c0&#39;,2,2)">2</button><button class="sbt a4" onclick="setScore(&#39;c0&#39;,2,3)">3</button><button class="sbt a4" onclick="setScore(&#39;c0&#39;,2,4)">4</button><button class="sbt" onclick="setScore(&#39;c0&#39;,2,5)">5</button>
+    </div>
+    <div class="fl">Заметки / Ответ кандидата</div>
+    <textarea class="ta" placeholder="Запиши ключевые слова из ответа..."></textarea>
+  </div></div><div class="qc mi" id="qc-c0-3">
+  <div class="qh" onclick="tQ(&#39;qc-c0-3&#39;)">
+    <div class="qn">3</div><div class="qnm">Переговоры в ТТ</div>
+    <div class="qsc s3" id="sc-c0-3">3</div><div class="qarr">▼</div>
+  </div>
+  <div class="qb">
+    <div class="qtx">«Опиши случай, когда тебе нужно было договориться со сложным товароведом о расширении нашей полки. С чего начал разговор?»</div>
+    <div class="sg4">
+      <div class="sc ss"><div class="sct">S · Ситуация</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Описал конкретного товароведа</span></label></div>
+      <div class="sc st"><div class="sct">T · Задача</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Цель — расширить или удержать полку</span></label></div>
+      <div class="sc sa"><div class="sct">A · Действие</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Приводил аргументы (цифры, остатки)</span></label><label class="sch"><input type="checkbox"><div class="schb"></div><span>Искал личный подход</span></label></div>
+      <div class="sc sr"><div class="sct">R · Результат</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Договорился — полка сохранена</span></label></div>
+    </div>
+    <div class="fg">
+      <div class="fl2 g"><div class="flt">✅ Зелёный флаг</div><div class="fli">Использовал цифры</div><div class="fli">Искал подход к товароведу</div></div>
+      <div class="fl2 r"><div class="flt">🚩 Красный флаг</div><div class="fli">«Я не должен с ними общаться»</div><div class="fli">«Пусть СВ сам идёт»</div></div>
+    </div>
+    <div class="sbr" id="sbr-c0-3">
+      <button class="sbt a3" onclick="setScore(&#39;c0&#39;,3,1)">1</button><button class="sbt a3" onclick="setScore(&#39;c0&#39;,3,2)">2</button><button class="sbt a3" onclick="setScore(&#39;c0&#39;,3,3)">3</button><button class="sbt" onclick="setScore(&#39;c0&#39;,3,4)">4</button><button class="sbt" onclick="setScore(&#39;c0&#39;,3,5)">5</button>
+    </div>
+    <div class="fl">Заметки / Ответ кандидата</div>
+    <textarea class="ta" placeholder="Запиши ключевые слова из ответа..."></textarea>
+  </div></div><div class="qc mi" id="qc-c0-4">
+  <div class="qh" onclick="tQ(&#39;qc-c0-4&#39;)">
+    <div class="qn">4</div><div class="qnm">Работа на KPI</div>
+    <div class="qsc s3" id="sc-c0-4">3</div><div class="qarr">▼</div>
+  </div>
+  <div class="qb">
+    <div class="qtx">«Вспомни период, когда перед тобой поставили очень тяжёлый план по выкладке на неделю. Как спланировал работу?»</div>
+    <div class="sg4">
+      <div class="sc ss"><div class="sct">S · Ситуация</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Назвал конкретный период</span></label></div>
+      <div class="sc st"><div class="sct">T · Задача</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Понимал объём и сроки</span></label></div>
+      <div class="sc sa"><div class="sct">A · Действие</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Разбил задачу на шаги по дням</span></label><label class="sch"><input type="checkbox"><div class="schb"></div><span>Расставил приоритеты по ключевым ТТ</span></label></div>
+      <div class="sc sr"><div class="sct">R · Результат</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Выполнил план или объяснил почему нет</span></label></div>
+    </div>
+    <div class="fg">
+      <div class="fl2 g"><div class="flt">✅ Зелёный флаг</div><div class="fli">Разбил на шаги по дням</div><div class="fli">Работал на результат</div></div>
+      <div class="fl2 r"><div class="flt">🚩 Красный флаг</div><div class="fli">«Это нереально выполнить»</div><div class="fli">«Работал как обычно»</div></div>
+    </div>
+    <div class="sbr" id="sbr-c0-4">
+      <button class="sbt a3" onclick="setScore(&#39;c0&#39;,4,1)">1</button><button class="sbt a3" onclick="setScore(&#39;c0&#39;,4,2)">2</button><button class="sbt a3" onclick="setScore(&#39;c0&#39;,4,3)">3</button><button class="sbt" onclick="setScore(&#39;c0&#39;,4,4)">4</button><button class="sbt" onclick="setScore(&#39;c0&#39;,4,5)">5</button>
+    </div>
+    <div class="fl">Заметки / Ответ кандидата</div>
+    <textarea class="ta" placeholder="Запиши ключевые слова из ответа..."></textarea>
+  </div></div><div class="qc" id="qc-c0-5">
+  <div class="qh" onclick="tQ(&#39;qc-c0-5&#39;)">
+    <div class="qn">5</div><div class="qnm">Выносливость</div>
+    <div class="qsc s0" id="sc-c0-5">—</div><div class="qarr">▼</div>
+  </div>
+  <div class="qb">
+    <div class="qtx">«Опиши свой самый тяжёлый день в полях, когда физически всё валилось из рук. За счёт чего удержал качество работы до конца смены?»</div>
+    <div class="sg4">
+      <div class="sc ss"><div class="sct">S · Ситуация</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Описал конкретный тяжёлый день</span></label></div>
+      <div class="sc st"><div class="sct">T · Задача</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Понимал что нужно доделать</span></label></div>
+      <div class="sc sa"><div class="sct">A · Действие</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Собрался и доделал</span></label></div>
+      <div class="sc sr"><div class="sct">R · Результат</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Качество сохранено до конца</span></label></div>
+    </div>
+    <div class="fg">
+      <div class="fl2 g"><div class="flt">✅ Зелёный флаг</div><div class="fli">«Устал, но собрался и доделал»</div><div class="fli">Фокус на деле</div></div>
+      <div class="fl2 r"><div class="flt">🚩 Красный флаг</div><div class="fli">«Бросил точку и ушёл домой»</div><div class="fli">Жалуется без решения</div></div>
+    </div>
+    <div class="sbr" id="sbr-c0-5">
+      <button class="sbt" onclick="setScore(&#39;c0&#39;,5,1)">1</button><button class="sbt" onclick="setScore(&#39;c0&#39;,5,2)">2</button><button class="sbt" onclick="setScore(&#39;c0&#39;,5,3)">3</button><button class="sbt" onclick="setScore(&#39;c0&#39;,5,4)">4</button><button class="sbt" onclick="setScore(&#39;c0&#39;,5,5)">5</button>
+    </div>
+    <div class="fl">Заметки / Ответ кандидата</div>
+    <textarea class="ta" placeholder="Запиши ключевые слова из ответа..."></textarea>
+  </div></div><div class="qc" id="qc-c0-6">
+  <div class="qh" onclick="tQ(&#39;qc-c0-6&#39;)">
+    <div class="qn">6</div><div class="qnm">Стрессоустойчивость</div>
+    <div class="qsc s0" id="sc-c0-6">—</div><div class="qarr">▼</div>
+  </div>
+  <div class="qb">
+    <div class="qtx">«Вспомни ситуацию, когда сотрудник магазина открыто хамил тебе или мешал работать. Что конкретно ты ему сказал?»</div>
+    <div class="sg4">
+      <div class="sc ss"><div class="sct">S · Ситуация</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Описал конкретного человека</span></label></div>
+      <div class="sc st"><div class="sct">T · Задача</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Погасить конфликт</span></label></div>
+      <div class="sc sa"><div class="sct">A · Действие</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Не переходил на личности</span></label><label class="sch"><input type="checkbox"><div class="schb"></div><span>Сослался на инструкции</span></label></div>
+      <div class="sc sr"><div class="sct">R · Результат</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Конфликт погашен, работа продолжена</span></label></div>
+    </div>
+    <div class="fg">
+      <div class="fl2 g"><div class="flt">✅ Зелёный флаг</div><div class="fli">Не переходил на личности</div><div class="fli">Погасил вежливостью</div></div>
+      <div class="fl2 r"><div class="flt">🚩 Красный флаг</div><div class="fli">Накричал, ушёл в агрессию</div><div class="fli">Хамил персоналу</div></div>
+    </div>
+    <div class="sbr" id="sbr-c0-6">
+      <button class="sbt" onclick="setScore(&#39;c0&#39;,6,1)">1</button><button class="sbt" onclick="setScore(&#39;c0&#39;,6,2)">2</button><button class="sbt" onclick="setScore(&#39;c0&#39;,6,3)">3</button><button class="sbt" onclick="setScore(&#39;c0&#39;,6,4)">4</button><button class="sbt" onclick="setScore(&#39;c0&#39;,6,5)">5</button>
+    </div>
+    <div class="fl">Заметки / Ответ кандидата</div>
+    <textarea class="ta" placeholder="Запиши ключевые слова из ответа..."></textarea>
+  </div></div><div class="qc" id="qc-c0-7">
+  <div class="qh" onclick="tQ(&#39;qc-c0-7&#39;)">
+    <div class="qn">7</div><div class="qnm">Ориентация на качество</div>
+    <div class="qsc s0" id="sc-c0-7">—</div><div class="qarr">▼</div>
+  </div>
+  <div class="qb">
+    <div class="qtx">«Расскажи, как ты обычно проверял свою работу перед уходом с точки? Был ли случай, когда проверка спасла от штрафа?»</div>
+    <div class="sg4">
+      <div class="sc ss"><div class="sct">S · Ситуация</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Описал рутину на точке</span></label></div>
+      <div class="sc st"><div class="sct">T · Задача</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Понимал что проверять</span></label></div>
+      <div class="sc sa"><div class="sct">A · Действие</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Есть чек-лист (ротация, ценники)</span></label><label class="sch"><input type="checkbox"><div class="schb"></div><span>Проверяет системно</span></label></div>
+      <div class="sc sr"><div class="sct">R · Результат</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Привёл пример когда проверка спасла</span></label></div>
+    </div>
+    <div class="fg">
+      <div class="fl2 g"><div class="flt">✅ Зелёный флаг</div><div class="fli">Есть чек-лист самопроверки</div><div class="fli">Проверяет системно</div></div>
+      <div class="fl2 r"><div class="flt">🚩 Красный флаг</div><div class="fli">«Зачем проверять, я и так вижу»</div><div class="fli">Нет системы</div></div>
+    </div>
+    <div class="sbr" id="sbr-c0-7">
+      <button class="sbt" onclick="setScore(&#39;c0&#39;,7,1)">1</button><button class="sbt" onclick="setScore(&#39;c0&#39;,7,2)">2</button><button class="sbt" onclick="setScore(&#39;c0&#39;,7,3)">3</button><button class="sbt" onclick="setScore(&#39;c0&#39;,7,4)">4</button><button class="sbt" onclick="setScore(&#39;c0&#39;,7,5)">5</button>
+    </div>
+    <div class="fl">Заметки / Ответ кандидата</div>
+    <textarea class="ta" placeholder="Запиши ключевые слова из ответа..."></textarea>
+  </div></div><div class="qc" id="qc-c0-8">
+  <div class="qh" onclick="tQ(&#39;qc-c0-8&#39;)">
+    <div class="qn">8</div><div class="qnm">Дисциплина</div>
+    <div class="qsc s0" id="sc-c0-8">—</div><div class="qarr">▼</div>
+  </div>
+  <div class="qb">
+    <div class="qtx">«Был ли случай когда ты понимал что физически не успеваешь на последнюю точку в маршруте? Что ты сделал?»</div>
+    <div class="sg4">
+      <div class="sc ss"><div class="sct">S · Ситуация</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Описал конкретный случай</span></label></div>
+      <div class="sc st"><div class="sct">T · Задача</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Понимал что нужно предупредить</span></label></div>
+      <div class="sc sa"><div class="sct">A · Действие</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Заранее набрал СВ, объяснил причину</span></label><label class="sch"><input type="checkbox"><div class="schb"></div><span>Согласовал перенос</span></label></div>
+      <div class="sc sr"><div class="sct">R · Результат</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Ситуация решена без штрафа</span></label></div>
+    </div>
+    <div class="fg">
+      <div class="fl2 g"><div class="flt">✅ Зелёный флаг</div><div class="fli">Заранее набрал СВ, согласовал перенос</div><div class="fli">Предупредил заранее</div></div>
+      <div class="fl2 r"><div class="flt">🚩 Красный флаг</div><div class="fli">«Поехал домой, скинул старые фотки»</div><div class="fli">Не предупредил</div></div>
+    </div>
+    <div class="sbr" id="sbr-c0-8">
+      <button class="sbt" onclick="setScore(&#39;c0&#39;,8,1)">1</button><button class="sbt" onclick="setScore(&#39;c0&#39;,8,2)">2</button><button class="sbt" onclick="setScore(&#39;c0&#39;,8,3)">3</button><button class="sbt" onclick="setScore(&#39;c0&#39;,8,4)">4</button><button class="sbt" onclick="setScore(&#39;c0&#39;,8,5)">5</button>
+    </div>
+    <div class="fl">Заметки / Ответ кандидата</div>
+    <textarea class="ta" placeholder="Запиши ключевые слова из ответа..."></textarea>
+  </div></div>
+
+  <div class="nxt" id="nxt-c0">
+    <div class="nxt-t">📌 Следующие шаги</div>
+    <div class="nr"><div class="ncb" onclick="tncb(this)"></div><span>Задать все незаполненные STAR вопросы</span></div><div class="nr"><div class="ncb" onclick="tncb(this)"></div><span>Уточнить позицию по фокусной системе</span></div><div class="nr"><div class="ncb" onclick="tncb(this)"></div><span>Назвать конкретный магазин с оборотами</span></div><div class="nr"><div class="ncb" onclick="tncb(this)"></div><span>Уточнить ближайшую дату выхода на работу</span></div>
+    <input class="nai" id="nai-c0" placeholder="Добавить шаг... (Enter)" onkeydown="addStep(&#39;c0&#39;,event)">
+    <button class="nadd" onclick="showNadd(&#39;c0&#39;)">+ Добавить шаг</button>
+  </div>
+
+  <div class="vrd">
+    <div class="vrd-t">🏆 Итоговое решение</div>
+    <div class="vbs">
+      <button class="vb" id="vb-c0-h" onclick="setV(&#39;c0&#39;,&#39;hire&#39;)">✅ Берём</button>
+      <button class="vb vt" id="vb-c0-t" onclick="setV(&#39;c0&#39;,&#39;think&#39;)">🤔 Второй звонок</button>
+      <button class="vb" id="vb-c0-n" onclick="setV(&#39;c0&#39;,&#39;no&#39;)">❌ Не подходит</button>
+    </div>
+    <div class="fl">Итоговый комментарий</div>
+    <textarea class="ta" style="min-height:75px;" placeholder="Почему взяли / не взяли...">Профессионал + Хозяин. Опытная, знает себе цену, ведёт диалог сама. 5 критериев STAR не проверены. Реакция на фокусную систему требует уточнения. Решение после второго звонка.</textarea>
+  </div>
+
+  <div class="hst">
+    <div class="hst-t">📅 История контактов</div>
+    <div class="tl" id="tl-c0"><div class="te done"><div class="td">09.06.2026 · Первый звонок</div><div class="tt">Первый контакт. Опыт МБТ везде. Конкуренция — ноль эмоций. Реакция на фокусную систему — «ох». Не ответила на ЗП. Источник: сарафанное радио. Закрыл: «Узнаю обороты, через 2 дня отвечу». Есть другие предложения.</div></div><div class="te pending"><div class="td">11.06.2026 · Второй звонок · запланирован</div><div class="tt">Начать с «Вы». Зайти через автономию. Задать STAR по 1,5,6,7,8. Прояснить фокусную систему. Назвать конкретный магазин с оборотами.</div></div></div>
+    <button class="hadd" onclick="showHF(&#39;c0&#39;)">+ Добавить контакт</button>
+    <div class="hfrm" id="hf-c0">
+      <div class="hfr">
+        <div><div class="fl">Дата</div><input class="fi" type="date" id="hd-c0" value="2026-06-09"></div>
+        <div><div class="fl">Тип</div>
+          <select class="fi" id="ht-c0">
+            <option value="done">✅ Состоялся</option>
+            <option value="pending">⏳ Запланирован</option>
+            <option value="no">❌ Отказ</option>
+          </select>
+        </div>
+      </div>
+      <div class="fl">Что обсудили</div>
+      <textarea class="ta" id="htx-c0" placeholder="Ключевые моменты, договорённости, следующий шаг..."></textarea>
+      <div class="hfbs">
+        <button class="hfs" onclick="saveH(&#39;c0&#39;)">Сохранить</button>
+        <button class="hfc" onclick="hideHF(&#39;c0&#39;)">Отмена</button>
+      </div>
+    </div>
+  </div></div><div class="panel active" id="panel-c1">
+  <div class="card">
+    <div class="ct">👤 Кандидат</div>
+    <div class="g3" style="margin-bottom:9px;">
+      <div><div class="fl">Имя</div><input class="fi" id="fn-c1" value="" placeholder="Имя кандидата" oninput="updateTabName(&#39;c1&#39;,this.value)"></div>
+      <div><div class="fl">Возраст</div><input class="fi" value="" placeholder="Возраст"></div>
+      <div><div class="fl">Источник</div><input class="fi" value="" placeholder="Авито / Hh / Сарафан"></div>
+      <div><div class="fl">Опыт</div><input class="fi" value="" placeholder="Где работал раньше"></div>
+      <div><div class="fl">Желаемый магазин</div><input class="fi" value="" placeholder="Магазин / район"></div>
+      <div><div class="fl">Дата</div><input class="fi" type="date" value="2026-06-09"></div>
+      <div class="gf"><div class="fl">Статус</div>
+        <select class="fi">
+          <option value="new">⏳ Новый</option>
+          <option value="think">🤔 Думаем · второй звонок</option>
+          <option value="hire">✅ Берём</option>
+          <option value="no">❌ Отказ</option>
+        </select>
+      </div>
+      <div class="gf"><div class="fl">Тип по Герчикову</div>
+        <div class="grow">
+          <button class="gb " onclick="tg(this,&#39;gp&#39;)">💼 Профессионал</button>
+          <button class="gb " onclick="tg(this,&#39;gh&#39;)">👑 Хозяин</button>
+          <button class="gb" onclick="tg(this,&#39;gpa&#39;)">❤️ Патриот</button>
+          <button class="gb" onclick="tg(this,&#39;ga&#39;)">🛡️ Избегательный</button>
+          <button class="gb" onclick="tg(this,&#39;gl&#39;)">💰 Люмпен</button>
+        </div>
+      </div>
+    </div>
+    <div class="fl">Первое впечатление</div>
+    <textarea class="ta" placeholder="Тон разговора, кто вёл диалог, что насторожило, что понравилось..."></textarea>
+  </div>
+
+  <div class="sbar">
+    <div class="stot sn" id="st-c1">—</div>
+    <div class="sinf"><div class="svd" id="sv-c1">Начни оценивать</div><div class="ssu" id="sf-c1">0 / 8 заполнено</div></div>
+    <div class="spr"><div class="pt"><div class="pf" id="pf-c1" style="width:0%"></div></div><div class="plb"><span>1</span><span>5</span></div></div>
+  </div>
+
+  <div class="slb">8 критериев STAR</div>
+  <div class="qc" id="qc-c1-1">
+  <div class="qh" onclick="tQ(&#39;qc-c1-1&#39;)">
+    <div class="qn">1</div><div class="qnm">Самостоятельность</div>
+    <div class="qsc s0" id="sc-c1-1">—</div><div class="qarr">▼</div>
+  </div>
+  <div class="qb">
+    <div class="qtx">«Вспомни случай на прошлой работе, когда на точке возник форс-мажор, а супервайзер был недоступен. Что именно ты сделал и к чему это привело?»</div>
+    <div class="sg4">
+      <div class="sc ss"><div class="sct">S · Ситуация</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Описал конкретную ситуацию</span></label></div>
+      <div class="sc st"><div class="sct">T · Задача</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Понимал что нужно решить без СВ</span></label></div>
+      <div class="sc sa"><div class="sct">A · Действие</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Сам заговорил с администрацией ТТ</span></label><label class="sch"><input type="checkbox"><div class="schb"></div><span>Не ждал звонка СВ</span></label></div>
+      <div class="sc sr"><div class="sct">R · Результат</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Доложил факты вечером</span></label></div>
+    </div>
+    <div class="fg">
+      <div class="fl2 g"><div class="flt">✅ Зелёный флаг</div><div class="fli">Сам решил и доложил факты</div><div class="fli">Действовал без указаний</div></div>
+      <div class="fl2 r"><div class="flt">🚩 Красный флаг</div><div class="fli">«Я ничего не делал»</div><div class="fli">«Ждал пока СВ ответит»</div></div>
+    </div>
+    <div class="sbr" id="sbr-c1-1">
+      <button class="sbt" onclick="setScore(&#39;c1&#39;,1,1)">1</button><button class="sbt" onclick="setScore(&#39;c1&#39;,1,2)">2</button><button class="sbt" onclick="setScore(&#39;c1&#39;,1,3)">3</button><button class="sbt" onclick="setScore(&#39;c1&#39;,1,4)">4</button><button class="sbt" onclick="setScore(&#39;c1&#39;,1,5)">5</button>
+    </div>
+    <div class="fl">Заметки / Ответ кандидата</div>
+    <textarea class="ta" placeholder="Запиши ключевые слова из ответа..."></textarea>
+  </div></div><div class="qc" id="qc-c1-2">
+  <div class="qh" onclick="tQ(&#39;qc-c1-2&#39;)">
+    <div class="qn">2</div><div class="qnm">Знание стандартов (БТ)</div>
+    <div class="qsc s0" id="sc-c1-2">—</div><div class="qarr">▼</div>
+  </div>
+  <div class="qb">
+    <div class="qtx">«Расскажи о ситуации, когда при аудите твоей точки руководство нашло грубую ошибку в ротации или планограмме. Как ты её исправлял?»</div>
+    <div class="sg4">
+      <div class="sc ss"><div class="sct">S · Ситуация</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Описал конкретный аудит</span></label></div>
+      <div class="sc st"><div class="sct">T · Задача</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Понимал что нужно исправить</span></label></div>
+      <div class="sc sa"><div class="sct">A · Действие</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Описал процесс перевыкладки FIFO</span></label><label class="sch"><input type="checkbox"><div class="schb"></div><span>Спокойно принял критику</span></label></div>
+      <div class="sc sr"><div class="sct">R · Результат</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Ошибка устранена без штрафа</span></label></div>
+    </div>
+    <div class="fg">
+      <div class="fl2 g"><div class="flt">✅ Зелёный флаг</div><div class="fli">Спокойно признаёт ошибку</div><div class="fli">Описывает ротацию FIFO</div></div>
+      <div class="fl2 r"><div class="flt">🚩 Красный флаг</div><div class="fli">«Они сами всё переставили»</div><div class="fli">Обижается на критику</div></div>
+    </div>
+    <div class="sbr" id="sbr-c1-2">
+      <button class="sbt" onclick="setScore(&#39;c1&#39;,2,1)">1</button><button class="sbt" onclick="setScore(&#39;c1&#39;,2,2)">2</button><button class="sbt" onclick="setScore(&#39;c1&#39;,2,3)">3</button><button class="sbt" onclick="setScore(&#39;c1&#39;,2,4)">4</button><button class="sbt" onclick="setScore(&#39;c1&#39;,2,5)">5</button>
+    </div>
+    <div class="fl">Заметки / Ответ кандидата</div>
+    <textarea class="ta" placeholder="Запиши ключевые слова из ответа..."></textarea>
+  </div></div><div class="qc" id="qc-c1-3">
+  <div class="qh" onclick="tQ(&#39;qc-c1-3&#39;)">
+    <div class="qn">3</div><div class="qnm">Переговоры в ТТ</div>
+    <div class="qsc s0" id="sc-c1-3">—</div><div class="qarr">▼</div>
+  </div>
+  <div class="qb">
+    <div class="qtx">«Опиши случай, когда тебе нужно было договориться со сложным товароведом о расширении нашей полки. С чего начал разговор?»</div>
+    <div class="sg4">
+      <div class="sc ss"><div class="sct">S · Ситуация</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Описал конкретного товароведа</span></label></div>
+      <div class="sc st"><div class="sct">T · Задача</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Цель — расширить или удержать полку</span></label></div>
+      <div class="sc sa"><div class="sct">A · Действие</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Приводил аргументы (цифры, остатки)</span></label><label class="sch"><input type="checkbox"><div class="schb"></div><span>Искал личный подход</span></label></div>
+      <div class="sc sr"><div class="sct">R · Результат</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Договорился — полка сохранена</span></label></div>
+    </div>
+    <div class="fg">
+      <div class="fl2 g"><div class="flt">✅ Зелёный флаг</div><div class="fli">Использовал цифры</div><div class="fli">Искал подход к товароведу</div></div>
+      <div class="fl2 r"><div class="flt">🚩 Красный флаг</div><div class="fli">«Я не должен с ними общаться»</div><div class="fli">«Пусть СВ сам идёт»</div></div>
+    </div>
+    <div class="sbr" id="sbr-c1-3">
+      <button class="sbt" onclick="setScore(&#39;c1&#39;,3,1)">1</button><button class="sbt" onclick="setScore(&#39;c1&#39;,3,2)">2</button><button class="sbt" onclick="setScore(&#39;c1&#39;,3,3)">3</button><button class="sbt" onclick="setScore(&#39;c1&#39;,3,4)">4</button><button class="sbt" onclick="setScore(&#39;c1&#39;,3,5)">5</button>
+    </div>
+    <div class="fl">Заметки / Ответ кандидата</div>
+    <textarea class="ta" placeholder="Запиши ключевые слова из ответа..."></textarea>
+  </div></div><div class="qc" id="qc-c1-4">
+  <div class="qh" onclick="tQ(&#39;qc-c1-4&#39;)">
+    <div class="qn">4</div><div class="qnm">Работа на KPI</div>
+    <div class="qsc s0" id="sc-c1-4">—</div><div class="qarr">▼</div>
+  </div>
+  <div class="qb">
+    <div class="qtx">«Вспомни период, когда перед тобой поставили очень тяжёлый план по выкладке на неделю. Как спланировал работу?»</div>
+    <div class="sg4">
+      <div class="sc ss"><div class="sct">S · Ситуация</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Назвал конкретный период</span></label></div>
+      <div class="sc st"><div class="sct">T · Задача</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Понимал объём и сроки</span></label></div>
+      <div class="sc sa"><div class="sct">A · Действие</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Разбил задачу на шаги по дням</span></label><label class="sch"><input type="checkbox"><div class="schb"></div><span>Расставил приоритеты по ключевым ТТ</span></label></div>
+      <div class="sc sr"><div class="sct">R · Результат</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Выполнил план или объяснил почему нет</span></label></div>
+    </div>
+    <div class="fg">
+      <div class="fl2 g"><div class="flt">✅ Зелёный флаг</div><div class="fli">Разбил на шаги по дням</div><div class="fli">Работал на результат</div></div>
+      <div class="fl2 r"><div class="flt">🚩 Красный флаг</div><div class="fli">«Это нереально выполнить»</div><div class="fli">«Работал как обычно»</div></div>
+    </div>
+    <div class="sbr" id="sbr-c1-4">
+      <button class="sbt" onclick="setScore(&#39;c1&#39;,4,1)">1</button><button class="sbt" onclick="setScore(&#39;c1&#39;,4,2)">2</button><button class="sbt" onclick="setScore(&#39;c1&#39;,4,3)">3</button><button class="sbt" onclick="setScore(&#39;c1&#39;,4,4)">4</button><button class="sbt" onclick="setScore(&#39;c1&#39;,4,5)">5</button>
+    </div>
+    <div class="fl">Заметки / Ответ кандидата</div>
+    <textarea class="ta" placeholder="Запиши ключевые слова из ответа..."></textarea>
+  </div></div><div class="qc" id="qc-c1-5">
+  <div class="qh" onclick="tQ(&#39;qc-c1-5&#39;)">
+    <div class="qn">5</div><div class="qnm">Выносливость</div>
+    <div class="qsc s0" id="sc-c1-5">—</div><div class="qarr">▼</div>
+  </div>
+  <div class="qb">
+    <div class="qtx">«Опиши свой самый тяжёлый день в полях, когда физически всё валилось из рук. За счёт чего удержал качество работы до конца смены?»</div>
+    <div class="sg4">
+      <div class="sc ss"><div class="sct">S · Ситуация</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Описал конкретный тяжёлый день</span></label></div>
+      <div class="sc st"><div class="sct">T · Задача</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Понимал что нужно доделать</span></label></div>
+      <div class="sc sa"><div class="sct">A · Действие</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Собрался и доделал</span></label></div>
+      <div class="sc sr"><div class="sct">R · Результат</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Качество сохранено до конца</span></label></div>
+    </div>
+    <div class="fg">
+      <div class="fl2 g"><div class="flt">✅ Зелёный флаг</div><div class="fli">«Устал, но собрался и доделал»</div><div class="fli">Фокус на деле</div></div>
+      <div class="fl2 r"><div class="flt">🚩 Красный флаг</div><div class="fli">«Бросил точку и ушёл домой»</div><div class="fli">Жалуется без решения</div></div>
+    </div>
+    <div class="sbr" id="sbr-c1-5">
+      <button class="sbt" onclick="setScore(&#39;c1&#39;,5,1)">1</button><button class="sbt" onclick="setScore(&#39;c1&#39;,5,2)">2</button><button class="sbt" onclick="setScore(&#39;c1&#39;,5,3)">3</button><button class="sbt" onclick="setScore(&#39;c1&#39;,5,4)">4</button><button class="sbt" onclick="setScore(&#39;c1&#39;,5,5)">5</button>
+    </div>
+    <div class="fl">Заметки / Ответ кандидата</div>
+    <textarea class="ta" placeholder="Запиши ключевые слова из ответа..."></textarea>
+  </div></div><div class="qc" id="qc-c1-6">
+  <div class="qh" onclick="tQ(&#39;qc-c1-6&#39;)">
+    <div class="qn">6</div><div class="qnm">Стрессоустойчивость</div>
+    <div class="qsc s0" id="sc-c1-6">—</div><div class="qarr">▼</div>
+  </div>
+  <div class="qb">
+    <div class="qtx">«Вспомни ситуацию, когда сотрудник магазина открыто хамил тебе или мешал работать. Что конкретно ты ему сказал?»</div>
+    <div class="sg4">
+      <div class="sc ss"><div class="sct">S · Ситуация</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Описал конкретного человека</span></label></div>
+      <div class="sc st"><div class="sct">T · Задача</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Погасить конфликт</span></label></div>
+      <div class="sc sa"><div class="sct">A · Действие</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Не переходил на личности</span></label><label class="sch"><input type="checkbox"><div class="schb"></div><span>Сослался на инструкции</span></label></div>
+      <div class="sc sr"><div class="sct">R · Результат</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Конфликт погашен, работа продолжена</span></label></div>
+    </div>
+    <div class="fg">
+      <div class="fl2 g"><div class="flt">✅ Зелёный флаг</div><div class="fli">Не переходил на личности</div><div class="fli">Погасил вежливостью</div></div>
+      <div class="fl2 r"><div class="flt">🚩 Красный флаг</div><div class="fli">Накричал, ушёл в агрессию</div><div class="fli">Хамил персоналу</div></div>
+    </div>
+    <div class="sbr" id="sbr-c1-6">
+      <button class="sbt" onclick="setScore(&#39;c1&#39;,6,1)">1</button><button class="sbt" onclick="setScore(&#39;c1&#39;,6,2)">2</button><button class="sbt" onclick="setScore(&#39;c1&#39;,6,3)">3</button><button class="sbt" onclick="setScore(&#39;c1&#39;,6,4)">4</button><button class="sbt" onclick="setScore(&#39;c1&#39;,6,5)">5</button>
+    </div>
+    <div class="fl">Заметки / Ответ кандидата</div>
+    <textarea class="ta" placeholder="Запиши ключевые слова из ответа..."></textarea>
+  </div></div><div class="qc" id="qc-c1-7">
+  <div class="qh" onclick="tQ(&#39;qc-c1-7&#39;)">
+    <div class="qn">7</div><div class="qnm">Ориентация на качество</div>
+    <div class="qsc s0" id="sc-c1-7">—</div><div class="qarr">▼</div>
+  </div>
+  <div class="qb">
+    <div class="qtx">«Расскажи, как ты обычно проверял свою работу перед уходом с точки? Был ли случай, когда проверка спасла от штрафа?»</div>
+    <div class="sg4">
+      <div class="sc ss"><div class="sct">S · Ситуация</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Описал рутину на точке</span></label></div>
+      <div class="sc st"><div class="sct">T · Задача</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Понимал что проверять</span></label></div>
+      <div class="sc sa"><div class="sct">A · Действие</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Есть чек-лист (ротация, ценники)</span></label><label class="sch"><input type="checkbox"><div class="schb"></div><span>Проверяет системно</span></label></div>
+      <div class="sc sr"><div class="sct">R · Результат</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Привёл пример когда проверка спасла</span></label></div>
+    </div>
+    <div class="fg">
+      <div class="fl2 g"><div class="flt">✅ Зелёный флаг</div><div class="fli">Есть чек-лист самопроверки</div><div class="fli">Проверяет системно</div></div>
+      <div class="fl2 r"><div class="flt">🚩 Красный флаг</div><div class="fli">«Зачем проверять, я и так вижу»</div><div class="fli">Нет системы</div></div>
+    </div>
+    <div class="sbr" id="sbr-c1-7">
+      <button class="sbt" onclick="setScore(&#39;c1&#39;,7,1)">1</button><button class="sbt" onclick="setScore(&#39;c1&#39;,7,2)">2</button><button class="sbt" onclick="setScore(&#39;c1&#39;,7,3)">3</button><button class="sbt" onclick="setScore(&#39;c1&#39;,7,4)">4</button><button class="sbt" onclick="setScore(&#39;c1&#39;,7,5)">5</button>
+    </div>
+    <div class="fl">Заметки / Ответ кандидата</div>
+    <textarea class="ta" placeholder="Запиши ключевые слова из ответа..."></textarea>
+  </div></div><div class="qc" id="qc-c1-8">
+  <div class="qh" onclick="tQ(&#39;qc-c1-8&#39;)">
+    <div class="qn">8</div><div class="qnm">Дисциплина</div>
+    <div class="qsc s0" id="sc-c1-8">—</div><div class="qarr">▼</div>
+  </div>
+  <div class="qb">
+    <div class="qtx">«Был ли случай когда ты понимал что физически не успеваешь на последнюю точку в маршруте? Что ты сделал?»</div>
+    <div class="sg4">
+      <div class="sc ss"><div class="sct">S · Ситуация</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Описал конкретный случай</span></label></div>
+      <div class="sc st"><div class="sct">T · Задача</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Понимал что нужно предупредить</span></label></div>
+      <div class="sc sa"><div class="sct">A · Действие</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Заранее набрал СВ, объяснил причину</span></label><label class="sch"><input type="checkbox"><div class="schb"></div><span>Согласовал перенос</span></label></div>
+      <div class="sc sr"><div class="sct">R · Результат</div><label class="sch"><input type="checkbox"><div class="schb"></div><span>Ситуация решена без штрафа</span></label></div>
+    </div>
+    <div class="fg">
+      <div class="fl2 g"><div class="flt">✅ Зелёный флаг</div><div class="fli">Заранее набрал СВ, согласовал перенос</div><div class="fli">Предупредил заранее</div></div>
+      <div class="fl2 r"><div class="flt">🚩 Красный флаг</div><div class="fli">«Поехал домой, скинул старые фотки»</div><div class="fli">Не предупредил</div></div>
+    </div>
+    <div class="sbr" id="sbr-c1-8">
+      <button class="sbt" onclick="setScore(&#39;c1&#39;,8,1)">1</button><button class="sbt" onclick="setScore(&#39;c1&#39;,8,2)">2</button><button class="sbt" onclick="setScore(&#39;c1&#39;,8,3)">3</button><button class="sbt" onclick="setScore(&#39;c1&#39;,8,4)">4</button><button class="sbt" onclick="setScore(&#39;c1&#39;,8,5)">5</button>
+    </div>
+    <div class="fl">Заметки / Ответ кандидата</div>
+    <textarea class="ta" placeholder="Запиши ключевые слова из ответа..."></textarea>
+  </div></div>
+
+  <div class="nxt" id="nxt-c1">
+    <div class="nxt-t">📌 Следующие шаги</div>
+    <div class="nr"><div class="ncb" onclick="tncb(this)"></div><span>Задать все незаполненные STAR вопросы</span></div><div class="nr"><div class="ncb" onclick="tncb(this)"></div><span>Уточнить позицию по фокусной системе</span></div><div class="nr"><div class="ncb" onclick="tncb(this)"></div><span>Назвать конкретный магазин с оборотами</span></div><div class="nr"><div class="ncb" onclick="tncb(this)"></div><span>Уточнить ближайшую дату выхода на работу</span></div>
+    <input class="nai" id="nai-c1" placeholder="Добавить шаг... (Enter)" onkeydown="addStep(&#39;c1&#39;,event)">
+    <button class="nadd" onclick="showNadd(&#39;c1&#39;)">+ Добавить шаг</button>
+  </div>
+
+  <div class="vrd">
+    <div class="vrd-t">🏆 Итоговое решение</div>
+    <div class="vbs">
+      <button class="vb" id="vb-c1-h" onclick="setV(&#39;c1&#39;,&#39;hire&#39;)">✅ Берём</button>
+      <button class="vb" id="vb-c1-t" onclick="setV(&#39;c1&#39;,&#39;think&#39;)">🤔 Второй звонок</button>
+      <button class="vb" id="vb-c1-n" onclick="setV(&#39;c1&#39;,&#39;no&#39;)">❌ Не подходит</button>
+    </div>
+    <div class="fl">Итоговый комментарий</div>
+    <textarea class="ta" style="min-height:75px;" placeholder="Почему взяли / не взяли..."></textarea>
+  </div>
+
+  <div class="hst">
+    <div class="hst-t">📅 История контактов</div>
+    <div class="tl" id="tl-c1"></div>
+    <button class="hadd" onclick="showHF(&#39;c1&#39;)">+ Добавить контакт</button>
+    <div class="hfrm" id="hf-c1">
+      <div class="hfr">
+        <div><div class="fl">Дата</div><input class="fi" type="date" id="hd-c1" value="2026-06-09"></div>
+        <div><div class="fl">Тип</div>
+          <select class="fi" id="ht-c1">
+            <option value="done">✅ Состоялся</option>
+            <option value="pending">⏳ Запланирован</option>
+            <option value="no">❌ Отказ</option>
+          </select>
+        </div>
+      </div>
+      <div class="fl">Что обсудили</div>
+      <textarea class="ta" id="htx-c1" placeholder="Ключевые моменты, договорённости, следующий шаг..."></textarea>
+      <div class="hfbs">
+        <button class="hfs" onclick="saveH(&#39;c1&#39;)">Сохранить</button>
+        <button class="hfc" onclick="hideHF(&#39;c1&#39;)">Отмена</button>
+      </div>
+    </div>
+  </div></div></div>
+<div class="footer">CRM найма · Polaris МБТ · Васильковский Роман · Тренер: Смирнов Павел</div>
+<script>
+const QS=[
+  {nm:'Самостоятельность',q:'«Вспомни случай на прошлой работе, когда на точке возник форс-мажор, а супервайзер был недоступен. Что именно ты сделал и к чему это привело?»',s:['Описал конкретную ситуацию'],t:['Понимал что нужно решить без СВ'],a:['Сам заговорил с администрацией ТТ','Не ждал звонка СВ'],r:['Доложил факты вечером'],gf:['Сам решил и доложил факты','Действовал без указаний'],rf:['«Я ничего не делал»','«Ждал пока СВ ответит»']},
+  {nm:'Знание стандартов (БТ)',q:'«Расскажи о ситуации, когда при аудите твоей точки руководство нашло грубую ошибку в ротации или планограмме. Как ты её исправлял?»',s:['Описал конкретный аудит'],t:['Понимал что нужно исправить'],a:['Описал процесс перевыкладки FIFO','Спокойно принял критику'],r:['Ошибка устранена без штрафа'],gf:['Спокойно признаёт ошибку','Описывает ротацию FIFO'],rf:['«Они сами всё переставили»','Обижается на критику']},
+  {nm:'Переговоры в ТТ',q:'«Опиши случай, когда тебе нужно было договориться со сложным товароведом о расширении нашей полки. С чего начал разговор?»',s:['Описал конкретного товароведа'],t:['Цель — расширить или удержать полку'],a:['Приводил аргументы (цифры, остатки)','Искал личный подход'],r:['Договорился — полка сохранена'],gf:['Использовал цифры','Искал подход к товароведу'],rf:['«Я не должен с ними общаться»','«Пусть СВ сам идёт»']},
+  {nm:'Работа на KPI',q:'«Вспомни период, когда перед тобой поставили очень тяжёлый план по выкладке на неделю. Как спланировал работу?»',s:['Назвал конкретный период'],t:['Понимал объём и сроки'],a:['Разбил задачу на шаги по дням','Расставил приоритеты по ключевым ТТ'],r:['Выполнил план или объяснил почему нет'],gf:['Разбил на шаги по дням','Работал на результат'],rf:['«Это нереально выполнить»','«Работал как обычно»']},
+  {nm:'Выносливость',q:'«Опиши свой самый тяжёлый день в полях, когда физически всё валилось из рук. За счёт чего удержал качество работы до конца смены?»',s:['Описал конкретный тяжёлый день'],t:['Понимал что нужно доделать'],a:['Собрался и доделал'],r:['Качество сохранено до конца'],gf:['«Устал, но собрался и доделал»','Фокус на деле'],rf:['«Бросил точку и ушёл домой»','Жалуется без решения']},
+  {nm:'Стрессоустойчивость',q:'«Вспомни ситуацию, когда сотрудник магазина открыто хамил тебе или мешал работать. Что конкретно ты ему сказал?»',s:['Описал конкретного человека'],t:['Погасить конфликт'],a:['Не переходил на личности','Сослался на инструкции'],r:['Конфликт погашен, работа продолжена'],gf:['Не переходил на личности','Погасил вежливостью'],rf:['Накричал, ушёл в агрессию','Хамил персоналу']},
+  {nm:'Ориентация на качество',q:'«Расскажи, как ты обычно проверял свою работу перед уходом с точки? Был ли случай, когда проверка спасла от штрафа?»',s:['Описал рутину на точке'],t:['Понимал что проверять'],a:['Есть чек-лист (ротация, ценники)','Проверяет системно'],r:['Привёл пример когда проверка спасла'],gf:['Есть чек-лист самопроверки','Проверяет системно'],rf:['«Зачем проверять, я и так вижу»','Нет системы']},
+  {nm:'Дисциплина',q:'«Был ли случай когда ты понимал что физически не успеваешь на последнюю точку в маршруте? Что ты сделал?»',s:['Описал конкретный случай'],t:['Понимал что нужно предупредить'],a:['Заранее набрал СВ, объяснил причину','Согласовал перенос'],r:['Ситуация решена без штрафа'],gf:['Заранее набрал СВ, согласовал перенос','Предупредил заранее'],rf:['«Поехал домой, скинул старые фотки»','Не предупредил']}
+];
+
+const STEPS=['Задать все незаполненные STAR вопросы','Уточнить позицию по фокусной системе','Назвать конкретный магазин с оборотами','Уточнить ближайшую дату выхода на работу'];
+
+let idx=0;
+const scores={};
+
+function tQ(id){document.getElementById(id).classList.toggle('open');}
+
+function tg(el,cls){
+  el.parentElement.querySelectorAll('.gb').forEach(b=>{b.className='gb';});
+  el.classList.add(cls);
+}
+
+function setScore(cid,n,v){
+  if(!scores[cid])scores[cid]={};
+  scores[cid][n]=v;
+  document.querySelectorAll('#sbr-'+cid+'-'+n+' .sbt').forEach((b,i)=>{b.className='sbt';if(i<v)b.classList.add('a'+v);});
+  const sc=document.getElementById('sc-'+cid+'-'+n);
+  sc.textContent=v;sc.className='qsc s'+v;
+  const card=document.getElementById('qc-'+cid+'-'+n);
+  card.classList.remove('hi','mi','lo');
+  if(v>=4)card.classList.add('hi');else if(v===3)card.classList.add('mi');else card.classList.add('lo');
+  updateTotal(cid);
+}
+
+function updateTotal(cid){
+  const sc=scores[cid]||{};
+  const vals=Object.values(sc);
+  const n=vals.length;
+  document.getElementById('sf-'+cid).textContent=n+' / 8 заполнено';
+  if(!n){document.getElementById('st-'+cid).textContent='—';document.getElementById('pf-'+cid).style.width='0%';return;}
+  const avg=(vals.reduce((a,b)=>a+b,0)/n).toFixed(1);
+  const el=document.getElementById('st-'+cid);
+  el.textContent=avg;el.className='stot '+(avg>=4?'sg':avg>=3?'sm':'sb');
+  document.getElementById('sv-'+cid).textContent=avg>=4?'✅ Сильный кандидат — берём':avg>=3?'🤔 Средний — второй звонок':'❌ Слабый — не подходит';
+  document.getElementById('pf-'+cid).style.width=((avg-1)/4*100)+'%';
+}
+
+function setV(cid,v){
+  ['h','t','n'].forEach(x=>document.getElementById('vb-'+cid+'-'+x).className='vb');
+  const map={hire:'h vh',think:'t vt',no:'n vn'};
+  const parts=map[v].split(' ');
+  document.getElementById('vb-'+cid+'-'+parts[0]).className='vb '+parts[1];
+}
+
+function tncb(el){el.classList.toggle('done');}
+
+function showNadd(cid){
+  const i=document.getElementById('nai-'+cid);
+  i.classList.toggle('show');
+  if(i.classList.contains('show'))i.focus();
+}
+function addStep(cid,e){
+  if(e&&e.key!=='Enter')return;
+  const i=document.getElementById('nai-'+cid);
+  const txt=i.value.trim();if(!txt)return;
+  const nxt=document.getElementById('nxt-'+cid);
+  const row=document.createElement('div');row.className='nr';
+  row.innerHTML='<div class="ncb" onclick="tncb(this)"></div><span>'+txt+'</span>';
+  nxt.insertBefore(row,i.previousElementSibling);
+  i.value='';i.classList.remove('show');
+}
+
+function showHF(cid){document.getElementById('hf-'+cid).classList.add('show');}
+function hideHF(cid){document.getElementById('hf-'+cid).classList.remove('show');}
+function saveH(cid){
+  const date=document.getElementById('hd-'+cid).value||'Дата не указана';
+  const type=document.getElementById('ht-'+cid).value;
+  const txt=document.getElementById('htx-'+cid).value.trim();
+  if(!txt)return;
+  const tl=document.getElementById('tl-'+cid);
+  const e=document.createElement('div');e.className='te '+type;
+  e.innerHTML='<div class="td">'+date+'</div><div class="tt">'+txt+'</div>';
+  tl.appendChild(e);
+  document.getElementById('htx-'+cid).value='';
+  hideHF(cid);
+}
+
+function updateTabName(cid,val){
+  const t=document.getElementById('tabt-'+cid);
+  if(t)t.textContent='👤 '+(val.trim()||'Кандидат');
+}
+
+function showTab(cid,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tb').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+cid).classList.add('active');
+  btn.classList.add('active');
+}
+
+function makeQ(cid,i){
+  const q=QS[i],n=i+1,id='qc-'+cid+'-'+n;
+  return `<div class="qc" id="${id}">
+  <div class="qh" onclick="tQ('${id}')">
+    <div class="qn">${n}</div><div class="qnm">${q.nm}</div>
+    <div class="qsc s0" id="sc-${cid}-${n}">—</div><div class="qarr">▼</div>
+  </div>
+  <div class="qb">
+    <div class="qtx">${q.q}</div>
+    <div class="sg4">
+      <div class="sc ss"><div class="sct">S · Ситуация</div>${q.s.map(x=>`<label class="sch"><input type="checkbox"><div class="schb"></div><span>${x}</span></label>`).join('')}</div>
+      <div class="sc st"><div class="sct">T · Задача</div>${q.t.map(x=>`<label class="sch"><input type="checkbox"><div class="schb"></div><span>${x}</span></label>`).join('')}</div>
+      <div class="sc sa"><div class="sct">A · Действие</div>${q.a.map(x=>`<label class="sch"><input type="checkbox"><div class="schb"></div><span>${x}</span></label>`).join('')}</div>
+      <div class="sc sr"><div class="sct">R · Результат</div>${q.r.map(x=>`<label class="sch"><input type="checkbox"><div class="schb"></div><span>${x}</span></label>`).join('')}</div>
+    </div>
+    <div class="fg">
+      <div class="fl2 g"><div class="flt">✅ Зелёный флаг</div>${q.gf.map(x=>`<div class="fli">${x}</div>`).join('')}</div>
+      <div class="fl2 r"><div class="flt">🚩 Красный флаг</div>${q.rf.map(x=>`<div class="fli">${x}</div>`).join('')}</div>
+    </div>
+    <div class="sbr" id="sbr-${cid}-${n}">
+      ${[1,2,3,4,5].map(v=>`<button class="sbt" onclick="setScore('${cid}',${n},${v})">${v}</button>`).join('')}
+    </div>
+    <div class="fl">Заметки / Ответ кандидата</div>
+    <textarea class="ta" placeholder="Запиши ключевые слова из ответа..."></textarea>
+  </div></div>`;
+}
+
+function addCand(prefill){
+  const cid='c'+idx++;
+  const p=prefill||{};
+  const name=p.name||'';
+
+  // TAB
+  const tabs=document.getElementById('tabs');
+  const addBtn=tabs.querySelector('.add');
+  const tab=document.createElement('button');
+  tab.className='tb';tab.id='tabt-'+cid;
+  tab.textContent='👤 '+(name||'Новый кандидат');
+  tab.onclick=function(){showTab(cid,this);};
+  tabs.insertBefore(tab,addBtn);
+
+  // PANEL
+  const today=new Date().toISOString().split('T')[0];
+  const panel=document.createElement('div');
+  panel.className='panel';panel.id='panel-'+cid;
+  panel.innerHTML=`
+  <div class="card">
+    <div class="ct">👤 Кандидат</div>
+    <div class="g3" style="margin-bottom:9px;">
+      <div><div class="fl">Имя</div><input class="fi" id="fn-${cid}" value="${p.name||''}" placeholder="Имя кандидата" oninput="updateTabName('${cid}',this.value)"></div>
+      <div><div class="fl">Возраст</div><input class="fi" value="${p.age||''}" placeholder="Возраст"></div>
+      <div><div class="fl">Источник</div><input class="fi" value="${p.src||''}" placeholder="Авито / Hh / Сарафан"></div>
+      <div><div class="fl">Опыт</div><input class="fi" value="${p.exp||''}" placeholder="Где работал раньше"></div>
+      <div><div class="fl">Желаемый магазин</div><input class="fi" value="${p.store||''}" placeholder="Магазин / район"></div>
+      <div><div class="fl">Дата</div><input class="fi" type="date" value="${today}"></div>
+      <div class="gf"><div class="fl">Статус</div>
+        <select class="fi">
+          <option value="new">⏳ Новый</option>
+          <option value="think" ${p.status==='think'?'selected':''}>🤔 Думаем · второй звонок</option>
+          <option value="hire">✅ Берём</option>
+          <option value="no">❌ Отказ</option>
+        </select>
+      </div>
+      <div class="gf"><div class="fl">Тип по Герчикову</div>
+        <div class="grow">
+          <button class="gb ${p.gp?'gp':''}" onclick="tg(this,'gp')">💼 Профессионал</button>
+          <button class="gb ${p.gh?'gh':''}" onclick="tg(this,'gh')">👑 Хозяин</button>
+          <button class="gb" onclick="tg(this,'gpa')">❤️ Патриот</button>
+          <button class="gb" onclick="tg(this,'ga')">🛡️ Избегательный</button>
+          <button class="gb" onclick="tg(this,'gl')">💰 Люмпен</button>
+        </div>
+      </div>
+    </div>
+    <div class="fl">Первое впечатление</div>
+    <textarea class="ta" placeholder="Тон разговора, кто вёл диалог, что насторожило, что понравилось...">${p.imp||''}</textarea>
+  </div>
+
+  <div class="sbar">
+    <div class="stot sn" id="st-${cid}">—</div>
+    <div class="sinf"><div class="svd" id="sv-${cid}">Начни оценивать</div><div class="ssu" id="sf-${cid}">0 / 8 заполнено</div></div>
+    <div class="spr"><div class="pt"><div class="pf" id="pf-${cid}" style="width:0%"></div></div><div class="plb"><span>1</span><span>5</span></div></div>
+  </div>
+
+  <div class="slb">8 критериев STAR</div>
+  ${QS.map((_,i)=>makeQ(cid,i)).join('')}
+
+  <div class="nxt" id="nxt-${cid}">
+    <div class="nxt-t">📌 Следующие шаги</div>
+    ${STEPS.map(s=>`<div class="nr"><div class="ncb" onclick="tncb(this)"></div><span>${s}</span></div>`).join('')}
+    <input class="nai" id="nai-${cid}" placeholder="Добавить шаг... (Enter)" onkeydown="addStep('${cid}',event)">
+    <button class="nadd" onclick="showNadd('${cid}')">+ Добавить шаг</button>
+  </div>
+
+  <div class="vrd">
+    <div class="vrd-t">🏆 Итоговое решение</div>
+    <div class="vbs">
+      <button class="vb" id="vb-${cid}-h" onclick="setV('${cid}','hire')">✅ Берём</button>
+      <button class="vb" id="vb-${cid}-t" onclick="setV('${cid}','think')">🤔 Второй звонок</button>
+      <button class="vb" id="vb-${cid}-n" onclick="setV('${cid}','no')">❌ Не подходит</button>
+    </div>
+    <div class="fl">Итоговый комментарий</div>
+    <textarea class="ta" style="min-height:75px;" placeholder="Почему взяли / не взяли...">${p.vcomment||''}</textarea>
+  </div>
+
+  <div class="hst">
+    <div class="hst-t">📅 История контактов</div>
+    <div class="tl" id="tl-${cid}">${p.history||''}</div>
+    <button class="hadd" onclick="showHF('${cid}')">+ Добавить контакт</button>
+    <div class="hfrm" id="hf-${cid}">
+      <div class="hfr">
+        <div><div class="fl">Дата</div><input class="fi" type="date" id="hd-${cid}" value="${today}"></div>
+        <div><div class="fl">Тип</div>
+          <select class="fi" id="ht-${cid}">
+            <option value="done">✅ Состоялся</option>
+            <option value="pending">⏳ Запланирован</option>
+            <option value="no">❌ Отказ</option>
+          </select>
+        </div>
+      </div>
+      <div class="fl">Что обсудили</div>
+      <textarea class="ta" id="htx-${cid}" placeholder="Ключевые моменты, договорённости, следующий шаг..."></textarea>
+      <div class="hfbs">
+        <button class="hfs" onclick="saveH('${cid}')">Сохранить</button>
+        <button class="hfc" onclick="hideHF('${cid}')">Отмена</button>
+      </div>
+    </div>
+  </div>`;
+
+  document.getElementById('panels').appendChild(panel);
+  showTab(cid,tab);
+
+  // Pre-fill scores if provided
+  if(p.scores){
+    setTimeout(()=>{
+      Object.entries(p.scores).forEach(([n,v])=>setScore(cid,parseInt(n),v));
+      if(p.openQ) document.getElementById('qc-'+cid+'-'+p.openQ).classList.add('open');
+      if(p.verdict) setV(cid,p.verdict);
+    },50);
+  }
+  return cid;
+}
+
+// Init Ekaterina once on page load
+addCand({
+  name:'Екатерина', age:'35', src:'Сарафанное радио (друзья)',
+  exp:'МБТ вся карьера — ДНС, Максидом и др.',
+  store:'Рядом с домом — уточнить',
+  status:'think', gp:true, gh:true,
+  imp:'Опытная — знает все сети МБТ. Конкуренция на прошлой точке — ноль эмоций. Вела диалог сама — знает себе цену. Не ответила на вопрос о ЗП. Реакция на фокусную систему — «ох». Тип: Профессионал + Хозяин.',
+  vcomment:'Профессионал + Хозяин. Опытная, знает себе цену, ведёт диалог сама. 5 критериев STAR не проверены. Реакция на фокусную систему требует уточнения. Решение после второго звонка.',
+  scores:{2:4,3:3,4:3}, openQ:2, verdict:'think',
+  history:'<div class="te done"><div class="td">09.06.2026 · Первый звонок</div><div class="tt">Первый контакт. Опыт МБТ везде. Конкуренция — ноль эмоций. Реакция на фокусную систему — «ох». Не ответила на ЗП. Источник: сарафанное радио. Закрыл: «Узнаю обороты, через 2 дня отвечу». Есть другие предложения.</div></div><div class="te pending"><div class="td">11.06.2026 · Второй звонок · запланирован</div><div class="tt">Начать с «Вы». Зайти через автономию. Задать STAR по 1,5,6,7,8. Прояснить фокусную систему. Назвать конкретный магазин с оборотами.</div></div>'
+});
+</script>
+
+
+</body></html>
