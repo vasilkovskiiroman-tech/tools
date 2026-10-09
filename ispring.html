@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Тренажёр продаж · Polaris</title>
+<style>
+  :root{
+    --bg:#f4f2ee; --card:#ffffff; --ink:#1d1d1f; --muted:#6b6b70; --line:#e3e0da;
+    --accent:#1b3a5c; --accent-ink:#ffffff; --cust:#ece8e1; --seller:#1b3a5c; --seller-ink:#fff;
+    --ok:#2e7d4f; --bad:#b3402e;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --bg:#16171a; --card:#202226; --ink:#ececee; --muted:#9a9aa2; --line:#33353b;
+      --accent:#7fb0e0; --accent-ink:#0f1720; --cust:#2a2c31; --seller:#3a5f87; --seller-ink:#fff; }
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;}
+  .wrap{max-width:640px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;padding:16px}
+  h1{font-size:20px;margin:4px 0 12px}
+  .muted{color:var(--muted);font-size:14px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
+  label{display:block;font-size:14px;color:var(--muted);margin:8px 0 4px}
+  input,textarea{width:100%;font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+  textarea{resize:none}
+  button{font:inherit;border:0;border-radius:10px;padding:12px 16px;cursor:pointer}
+  .primary{background:var(--accent);color:var(--accent-ink);font-weight:600;width:100%}
+  .ghost{background:transparent;color:var(--accent);border:1px solid var(--line)}
+  button:disabled{opacity:.5;cursor:default}
+  .persona{display:block;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:8px;color:var(--ink)}
+  .persona b{display:block}
+  .hidden{display:none!important}
+  #chat{flex:1;display:flex;flex-direction:column}
+  #log{flex:1;overflow-y:auto;padding:4px 0 8px}
+  .msg{max-width:85%;padding:9px 12px;border-radius:14px;margin:6px 0;white-space:pre-wrap;word-wrap:break-word}
+  .cust{background:var(--cust);align-self:flex-start;border-bottom-left-radius:4px}
+  .seller{background:var(--seller);color:var(--seller-ink);margin-left:auto;border-bottom-right-radius:4px}
+  .who{font-size:12px;color:var(--muted);margin-top:8px}
+  .seller-who{text-align:right}
+  .bar{display:flex;gap:8px;align-items:flex-end;position:sticky;bottom:0;background:var(--bg);padding-top:8px}
+  .bar textarea{flex:1;min-height:46px;max-height:140px}
+  .mic{width:48px;height:46px;padding:0;background:var(--card);border:1px solid var(--line);color:var(--ink);font-size:20px}
+  .mic.on{background:var(--bad);color:#fff;border-color:var(--bad)}
+  .send{width:56px;height:46px;padding:0;background:var(--accent);color:var(--accent-ink);font-size:18px}
+  .top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
+  .typing{font-size:14px;color:var(--muted);margin:4px 0}
+  .check{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line)}
+  .check:last-child{border-bottom:0}
+  .check input{width:22px;height:22px;margin-top:2px;flex:none}
+  .err{color:var(--bad);font-size:14px;margin-top:8px}
+  .score{font-size:36px;font-weight:700}
+  .pass{color:var(--ok)} .fail{color:var(--bad)}
+  pre{white-space:pre-wrap;font:inherit;margin:0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- Экран 1: вход -->
+  <section id="s-start">
+    <h1>Тренажёр продаж</h1>
+    <p class="muted">Покупатель — искусственный интеллект. Продавайте как в зале: голосом или текстом. В конце отметьте, что сделали, и получите разбор.</p>
+    <div class="card">
+      <label for="name">Ваше имя и магазин</label>
+      <input id="name" placeholder="Например: Данил, 7703" autocomplete="name">
+      <label for="code">Код доступа</label>
+      <input id="code" placeholder="Код от супервайзера">
+      <div style="height:12px"></div>
+      <button class="primary" id="btn-load">Начать — к вам подходит покупатель</button>
+      <div class="err" id="err-start"></div>
+    </div>
+  </section>
+
+  <!-- Экран 2: диалог -->
+  <section id="chat" class="hidden">
+    <div class="top">
+      <div><b>Покупатель</b><div class="muted" id="ver" style="font-size:12px"></div></div>
+      <button class="ghost" id="btn-end">Завершить</button>
+    </div>
+    <div class="muted" id="turns"></div>
+    <div id="log"></div>
+    <div class="typing hidden" id="typing">Покупатель печатает…</div>
+    <div class="err" id="err-chat"></div>
+    <div class="bar">
+      <button class="mic" id="btn-mic" title="Говорить" aria-label="Говорить">🎤</button>
+      <textarea id="input" rows="1" placeholder="Ваша реплика…"></textarea>
+      <button class="send" id="btn-send" aria-label="Отправить">➤</button>
+    </div>
+    </section>
+
+  <!-- Экран 3: самооценка -->
+  <section id="s-self" class="hidden">
+    <h1>Что вы сделали?</h1>
+    <p class="muted">Отметьте честно — ИИ оценит диалог отдельно, супервайзер увидит оба результата.</p>
+    <div class="card" id="checks"></div>
+    <button class="primary" id="btn-finish">Отправить и получить разбор</button>
+    <div class="typing hidden" id="typing2">Тренер разбирает диалог…</div>
+    <div class="err" id="err-self"></div>
+  </section>
+
+  <!-- Экран 4: результат -->
+  <section id="s-result" class="hidden">
+    <h1>Разбор</h1>
+        <div class="card"><pre id="evaluation"></pre></div>
+    <button class="primary" id="btn-again">Следующий покупатель</button>
+  </section>
+
+</div>
+<script>
+// ▼▼▼ Вставьте сюда адрес веб-приложения Apps Script (…/exec)
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyH7l9aZC3t_Sv-ywaIV1wtCO-GRrNVmMQu_4dfEZ_xlwtuSoNs5E3TVYCkWoiXu1qK/exec';
+// ▲▲▲
+const MAX_TURNS = 40;
+const CHECKS = [
+  'Выяснил открытыми вопросами: кто пользуется, чем пользовались, что не устраивает, что важно',
+  'Резюмировал потребности и получил «да»',
+  'Предложил модель под потребности и назвал выгоду простыми словами',
+  'На возражение выяснил причину и дал аргумент под неё',
+  'Прямо предложил купить',
+  'Предложил дополнительный товар',
+  'Поздоровался, представился, попрощался'
+];
+
+const $ = id => document.getElementById(id);
+const store = {
+  get(k){ try { return localStorage.getItem(k) || ''; } catch(e){ return ''; } },
+  set(k,v){ try { localStorage.setItem(k,v); } catch(e){} }
+};
+let persona = null, messages = [], busy = false, finished = false;
+
+$('name').value = store.get('tr_name');
+$('code').value = store.get('tr_code');
+
+function show(id){ ['s-start','chat','s-self','s-result'].forEach(s => $(s).classList.toggle('hidden', s !== id)); }
+function sellerTurns(){ return messages.filter(m => m.role === 'seller').length; }
+
+async function api(body){
+  const r = await fetch(SCRIPT_URL, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify(body)});
+  const d = await r.json();
+  if (d.error) throw new Error(d.error);
+  return d;
+}
+
+$('btn-load').onclick = async () => {
+  const name = $('name').value.trim(), code = $('code').value.trim();
+  $('err-start').textContent = '';
+  if (!name || !code){ $('err-start').textContent = 'Заполните имя и код доступа.'; return; }
+  store.set('tr_name', name); store.set('tr_code', code);
+  $('btn-load').disabled = true;
+  try {
+    const r = await fetch(SCRIPT_URL + '?code=' + encodeURIComponent(code));
+    const d = await r.json();
+    if (d.error) throw new Error(d.error);
+    // Покупатель случайный, не тот же, что в прошлый раз
+    $('ver').textContent = 'страница v9 · сервер ' + (d.version || 'СТАРЫЙ');
+    const last = store.get('tr_last');
+    const pool = d.personas.length > 1 ? d.personas.filter(p => p.id !== last) : d.personas;
+    const p = pool[Math.floor(Math.random() * pool.length)];
+    store.set('tr_last', p.id);
+    startChat(p);
+  } catch(e){ $('err-start').textContent = e.message || 'Не удалось загрузить покупателей.'; }
+  $('btn-load').disabled = false;
+};
+
+function addMsg(role, text){
+  const who = document.createElement('div');
+  who.className = 'who' + (role === 'seller' ? ' seller-who' : '');
+  who.textContent = role === 'seller' ? 'Вы' : 'Покупатель';
+  const m = document.createElement('div');
+  m.className = 'msg ' + (role === 'seller' ? 'seller' : 'cust');
+  m.textContent = text;
+  $('log').append(who, m);
+  $('log').scrollTop = $('log').scrollHeight;
+  window.scrollTo(0, document.body.scrollHeight);
+}
+function updateTurns(){ $('turns').textContent = 'Ваших реплик: ' + sellerTurns() + ' из ' + MAX_TURNS; }
+
+function startChat(p){
+  persona = p; messages = []; finished = false;
+  $('log').innerHTML = ''; $('err-chat').textContent = '';
+  messages.push({role:'customer', text:p.first});
+  show('chat'); addMsg('customer', p.first); updateTurns();
+  setInputEnabled(true); $('input').focus();
+}
+
+function setInputEnabled(on){
+  ['input','btn-send','btn-mic'].forEach(id => $(id).disabled = !on);
+}
+
+async function send(){
+  stopMic();
+  const text = $('input').value.trim();
+  if (!text || busy || finished) return;
+  $('input').value = ''; baseText = ''; autoGrow();
+  messages.push({role:'seller', text}); addMsg('seller', text); updateTurns();
+  busy = true; setInputEnabled(false); $('typing').classList.remove('hidden'); $('err-chat').textContent = '';
+  try {
+    const d = await api({action:'chat', code:store.get('tr_code'), personaId:persona.id, messages});
+    messages.push({role:'customer', text:d.reply}); addMsg('customer', d.reply);
+    $('ver').textContent = 'страница v9 · сервер ' + (d.version || 'СТАРЫЙ');
+    if (d.done || sellerTurns() >= MAX_TURNS){ finished = true; $('err-chat').textContent = 'Разговор окончен. Нажмите «Завершить».'; }
+  } catch(e){
+    $('err-chat').textContent = e.message || 'Нет связи. Попробуйте ещё раз.';
+    messages.pop(); $('input').value = text;
+  }
+  $('typing').classList.add('hidden'); busy = false;
+  setInputEnabled(!finished);
+}
+$('btn-send').onclick = send;
+$('input').addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); send(); } });
+function autoGrow(){ const t = $('input'); t.style.height = 'auto'; t.style.height = Math.min(t.scrollHeight, 140) + 'px'; }
+$('input').addEventListener('input', autoGrow);
+
+// Голосовой ввод (Chrome / Яндекс Браузер на Android и ПК)
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+let rec = null, recOn = false, baseText = '';
+if (!SR){ $('btn-mic').title = 'Голосовой ввод не поддерживается этим браузером — используйте клавиатуру с микрофоном'; }
+function stopMic(){ if (rec){ rec.onresult = null; try { rec.abort(); } catch(e){} } recOn = false; $('btn-mic').classList.remove('on'); }
+$('btn-mic').onclick = () => {
+  if (!SR){ $('err-chat').textContent = 'Этот браузер не умеет голосовой ввод. Нажмите микрофон на клавиатуре телефона.'; return; }
+  if (recOn){ stopMic(); return; }
+  rec = new SR(); rec.lang = 'ru-RU'; rec.interimResults = true; rec.continuous = true;
+  baseText = $('input').value ? $('input').value.trim() + ' ' : '';
+  const myRec = rec;
+  rec.onresult = e => {
+    if (rec !== myRec || !recOn) return;
+    const parts = [];
+    for (let i = 0; i < e.results.length; i++) parts.push(e.results[i][0].transcript.trim());
+    $('input').value = (baseText + parts.join(' ')).replace(/\s+/g, ' ').trimStart(); autoGrow();
+  };
+  rec.onend = () => { recOn = false; $('btn-mic').classList.remove('on'); };
+  rec.onerror = e => { $('err-chat').textContent = e.error === 'not-allowed' ? 'Разрешите доступ к микрофону в настройках браузера.' : ''; };
+  rec.start(); recOn = true; $('btn-mic').classList.add('on');
+};
+
+$('btn-end').onclick = () => {
+  stopMic();
+  if (sellerTurns() === 0){ show('s-start'); return; }
+  const box = $('checks'); box.innerHTML = '';
+  CHECKS.forEach((c, i) => {
+    const row = document.createElement('label'); row.className = 'check';
+    row.innerHTML = '<input type="checkbox"><span></span>';
+    row.querySelector('input').value = c; row.querySelector('span').textContent = c;
+    box.appendChild(row);
+  });
+  show('s-self');
+};
+
+$('btn-finish').onclick = async () => {
+  const self = [...document.querySelectorAll('#checks input:checked')].map(i => i.value);
+  $('btn-finish').disabled = true; $('typing2').classList.remove('hidden'); $('err-self').textContent = '';
+  try {
+    const d = await api({action:'finish', code:store.get('tr_code'), name:store.get('tr_name'), personaId:persona.id, messages, self});
+    $('evaluation').textContent = d.evaluation;
+    show('s-result');
+  } catch(e){ $('err-self').textContent = e.message || 'Не удалось отправить. Попробуйте ещё раз.'; }
+  $('typing2').classList.add('hidden'); $('btn-finish').disabled = false;
+};
+
+$('btn-again').onclick = () => { show('s-start'); $('btn-load').click(); };
+</script>
+</body>
+</html>
