@@ -530,22 +530,22 @@ async function pump(){
   lastError = false;
   updateSync();
   while(queue.length){
-    const idx = queue[0];
-    const r = results[idx];
-    const sig = sigOf(r);
-    if(!r.status || sentSig[idx] === sig){ queue.shift(); continue; }
+    // убираем из очереди то, что уже отправлено
+    queue = queue.filter(i => results[i].status && sentSig[i] !== sigOf(results[i]));
+    if(!queue.length) break;
+    const batch = queue.slice(0, 25);                 // до 25 позиций за один запрос
+    const sigs = batch.map(i => sigOf(results[i]));
     const ok = await postJson(ENDPOINT_URL, {
       employee: employeeName,
       store: store,
       timestamp: new Date().toISOString(),
-      items: [{article:r.article, mgb:r.mgb, name:r.name, category:r.category, price:r.price, status:r.status}]
-    }, 30000, 3);
+      items: batch.map(i => { const r = results[i];
+        return {article:r.article, mgb:r.mgb, name:r.name, category:r.category, price:r.price, status:r.status}; })
+    }, 45000, 3);
     if(ok){
-      sentSig[idx] = sig;
-      if(queue[0] === idx) queue.shift();
-      // если пока шла отправка значение поменяли — отправим ещё раз
-      const now = results[idx];
-      if(now.status && sigOf(now) !== sig && !queue.includes(idx)) queue.push(idx);
+      batch.forEach((i, k) => { sentSig[i] = sigs[k]; });
+      // если пока шла отправка значение поменяли — оно останется в очереди и уйдёт ещё раз
+      queue = queue.filter(i => results[i].status && sentSig[i] !== sigOf(results[i]));
       persist();
       updateSync();
     } else {
@@ -628,7 +628,6 @@ async function submitAll(){
 }
 
 // ---- Фото: сжимаем по одному (лёгко для памяти) и сразу отправляем в фоне ----
-let photoChain = Promise.resolve();
 let photosPending = 0;
 let photoTotal = 0, photoSentN = 0, photoFailN = 0;   // счётчик фото за сеанс
 
@@ -698,32 +697,55 @@ function addThumb(idx, src){
   document.getElementById('photoThumbs').appendChild(img);
 }
 
-async function uploadPhotos(files, idx, st){
-  let okCount = 0, fail = 0;
-  for(const f of files){
-    try{
-      const res = await resizeImage(f);
-      addThumb(idx, res.thumb);
-      const ok = await postJson(PHOTO_ENDPOINT_URL, {store: st, item: ITEMS[idx].name, photos: [res.full]}, 60000, 3);
-      if(ok){ okCount++; photoSentN++; } else { fail++; photoFailN++; }
-    }catch(err){
-      fail++; photoFailN++;
-    }
-    updatePhotoCount();
+// Очередь фото: до 3 отправок одновременно. Фото одного товара — строго по очереди,
+// первое фото сеанса — в одиночку (чтобы на Диске не появились одинаковые папки).
+const PHOTO_WORKERS = 3;
+let photoJobs = [];          // {idx, file, st}
+let photoActive = 0;
+let photoBusyIdx = {};       // idx товара -> идёт отправка
+let photoFirstDone = false;
+let photoItemStat = {};      // idx -> {left, ok, fail}
+
+function itemPhotoUi(idx){
+  const st = photoItemStat[idx];
+  if(!st || idx !== current) return;
+  if(st.left){ setPhotoUi(idx, "Отправка фото... осталось " + st.left, ""); return; }
+  const pDrop = document.getElementById('photoDrop');
+  if(st.ok){ pDrop.textContent = "📷 Фото уже приложено (можно добавить ещё)"; pDrop.classList.add('has-files'); }
+  if(st.fail) setPhotoUi(idx, "Не все фото отправились, добавьте ещё раз", 'bad');
+  else setPhotoUi(idx, "Фото отправлено ✓", 'ok');
+}
+
+function nextPhotoJob(){
+  const limit = photoFirstDone ? PHOTO_WORKERS : 1;
+  while(photoActive < limit){
+    const k = photoJobs.findIndex(j => !photoBusyIdx[j.idx]);
+    if(k < 0) return;
+    const job = photoJobs.splice(k, 1)[0];
+    photoActive++;
+    photoBusyIdx[job.idx] = true;
+    runPhotoJob(job).finally(() => {
+      photoActive--;
+      photosPending--;
+      delete photoBusyIdx[job.idx];
+      nextPhotoJob();
+    });
   }
-  if(okCount){ results[idx].photoSent = true; persist(); }
-  if(idx === current){
-    const pDrop = document.getElementById('photoDrop');
-    if(okCount){
-      pDrop.textContent = "📷 Фото уже приложено (можно добавить ещё)";
-      pDrop.classList.add('has-files');
-    }
-    if(fail){
-      setPhotoUi(idx, "Не все фото отправились, добавьте ещё раз", 'bad');
-    } else {
-      setPhotoUi(idx, "Фото отправлено ✓", 'ok');
-    }
-  }
+}
+
+async function runPhotoJob(job){
+  const st = photoItemStat[job.idx];
+  let ok = false;
+  try{
+    const res = await resizeImage(job.file);
+    addThumb(job.idx, res.thumb);
+    ok = await postJson(PHOTO_ENDPOINT_URL, {store: job.st, item: ITEMS[job.idx].name, photos: [res.full]}, 60000, 3);
+  }catch(err){ ok = false; }
+  if(ok){ photoSentN++; st.ok++; results[job.idx].photoSent = true; persist(); photoFirstDone = true; }
+  else { photoFailN++; st.fail++; }
+  st.left--;
+  updatePhotoCount();
+  itemPhotoUi(job.idx);
 }
 
 document.getElementById('photoInput').addEventListener('change', (e) => {
@@ -731,14 +753,15 @@ document.getElementById('photoInput').addEventListener('change', (e) => {
   if(!files.length) return;
   const idx = current;
   const st = store;
-  photosPending++;
+  photoItemStat[idx] = photoItemStat[idx] || {left:0, ok:0, fail:0};
+  photoItemStat[idx].left += files.length;
+  files.forEach(f => photoJobs.push({idx: idx, file: f, st: st}));
+  photosPending += files.length;
   photoTotal += files.length;
   updatePhotoCount();
-  setPhotoUi(idx, "Отправка фото...", "");
-  photoChain = photoChain
-    .then(() => uploadPhotos(files, idx, st))
-    .catch(() => {})
-    .then(() => { photosPending--; });
+  itemPhotoUi(idx);
+  nextPhotoJob();
+  e.target.value = "";
 });
 
 document.getElementById('photoDrop').addEventListener('click', () => {
