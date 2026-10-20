@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Проверка цен · Polaris</title>
+<style>
+  :root{
+    --bg:#0b0e16;
+    --card:#141a26;
+    --card-line:#232c3d;
+    --accent:#f5a623;
+    --text:#eef2f8;
+    --muted:#8f9ab3;
+    --ok:#4ade80;
+    --bad:#f87171;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+  }
+  .wrap{width:100%;max-width:560px;padding:28px 20px 60px;}
+  .eyebrow{color:var(--muted);font-size:13px;letter-spacing:.04em;}
+  h1{font-size:24px;margin:6px 0 4px;}
+  .sub{color:var(--muted);font-size:14px;margin-bottom:24px;}
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--card-line);
+    border-radius:14px;
+    padding:20px;
+    margin-bottom:16px;
+  }
+  label{display:block;font-size:13px;color:var(--muted);margin-bottom:8px;}
+  input[type=text], input[type=number], select{
+    width:100%;
+    background:#0f141f;
+    border:1px solid var(--card-line);
+    color:var(--text);
+    padding:12px 14px;
+    border-radius:10px;
+    font-size:16px;
+  }
+  input:focus, select:focus{outline:2px solid var(--accent);}
+
+  .progress-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+  .progress-bar{flex:1;height:4px;background:var(--card-line);border-radius:2px;margin-right:14px;overflow:hidden;}
+  .progress-fill{height:100%;background:var(--accent);transition:width .2s;}
+  .progress-num{color:var(--accent);font-weight:600;font-size:14px;white-space:nowrap;}
+
+  .item-name{font-size:18px;font-weight:600;margin-bottom:4px;line-height:1.3;}
+  .item-art{color:var(--muted);font-size:13px;margin-bottom:18px;}
+
+  .status-row{display:flex;gap:10px;margin-bottom:14px;}
+  .status-btn{
+    flex:1;padding:12px;border-radius:10px;border:1px solid var(--card-line);
+    background:#0f141f;color:var(--text);font-size:14px;cursor:pointer;
+  }
+  .status-btn.active-ok{border-color:var(--ok);color:var(--ok);}
+  .status-btn.active-bad{border-color:var(--bad);color:var(--bad);}
+
+  .drop{
+    border:2px dashed var(--card-line); border-radius:14px; padding:28px 16px;
+    text-align:center; color:var(--muted); font-size:14px; margin-top:16px; cursor:pointer;
+  }
+  .drop.has-files{border-color:var(--accent); color:var(--text);}
+  input[type=file]{display:none;}
+  .thumbs{display:flex; flex-wrap:wrap; gap:8px; margin-top:14px;}
+  .thumbs img{width:64px; height:64px; object-fit:cover; border-radius:8px; border:1px solid var(--card-line);}
+  .photo-status{margin-top:14px; font-size:14px; text-align:center;}
+  .photo-status.ok{color:var(--ok);}
+  .photo-status.bad{color:var(--bad);}
+
+  .sync{margin-top:14px; font-size:13px; text-align:center; color:var(--muted); min-height:18px;}
+  .sync.ok{color:var(--ok);}
+  .sync.bad{color:var(--bad);}
+  .pbar{height:6px;background:#1c2433;border-radius:4px;margin-top:6px;overflow:hidden;}
+  .pbar-fill{height:100%;background:var(--accent);transition:width .3s;}
+  .sync.ok .pbar-fill{background:var(--ok);}
+
+  .nav-row{display:flex;gap:10px;margin-top:20px;}
+  button.nav{
+    flex:1;padding:14px;border-radius:10px;border:none;font-size:15px;font-weight:600;cursor:pointer;
+  }
+  .btn-primary{background:var(--accent);color:#1a1204;}
+  .btn-primary:disabled{opacity:.5;cursor:default;}
+  .btn-secondary{background:#0f141f;color:var(--text);border:1px solid var(--card-line);}
+  .btn-secondary:disabled{opacity:.4;cursor:default;}
+
+  .field-name{display:flex;flex-direction:column;gap:14px;}
+
+  .done h2{font-size:20px;}
+  .done p{color:var(--muted);font-size:14px;line-height:1.5;}
+  .hidden{display:none;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ЭКРАН 0: имя + магазин -->
+  <div id="screen-start">
+    <div class="eyebrow">POLARIS · METRO</div>
+    <h1>Проверка цен</h1>
+    <div class="sub">Заполните перед началом обхода зала.</div>
+
+    <div class="card hidden" id="resumeCard">
+      <div id="resumeText" style="font-size:14px;line-height:1.5;margin-bottom:14px;"></div>
+      <div class="nav-row" style="margin-top:0;">
+        <button class="nav btn-primary" onclick="resumeSaved()">Продолжить</button>
+        <button class="nav btn-secondary" onclick="discardSaved()">Начать заново</button>
+      </div>
+    </div>
+
+    <div class="card field-name">
+      <div>
+        <label>ВАШЕ ИМЯ И ФАМИЛИЯ</label>
+        <input type="text" id="employeeName" placeholder="Например: Иванов Иван">
+      </div>
+      <div>
+        <label>МАГАЗИН</label>
+        <select id="storeSelect">
+          <option value="20" selected>№ 20</option>
+          <option value="15">№ 15</option>
+        </select>
+      </div>
+    </div>
+    <div class="nav-row">
+      <button class="nav btn-primary" onclick="startChecklist()">Начать</button>
+    </div>
+  </div>
+
+  <!-- ЭКРАН 1: карточка товара -->
+  <div id="screen-item" class="hidden">
+    <div class="progress-row">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-num" id="progressNum"></div>
+    </div>
+    <div class="card">
+      <div class="eyebrow" id="itemCategory" style="margin-bottom:6px;"></div>
+      <div class="item-name" id="itemName"></div>
+      <div class="item-art" id="itemArt"></div>
+
+      <label>ЦЕНА (текущая, со скидкой если есть)</label>
+      <input type="number" id="priceInput" placeholder="Например: 1499" inputmode="numeric">
+
+      <div class="status-row" style="margin-top:14px;">
+        <button class="status-btn" id="btnNoAvail" onclick="setStatus('нет')" style="flex:none;width:100%;">Нет в наличии</button>
+      </div>
+
+      <div class="drop" id="photoDrop">📷 Добавить фото</div>
+      <input type="file" id="photoInput" accept="image/*" multiple>
+      <div class="thumbs" id="photoThumbs"></div>
+      <div class="photo-status" id="photoStatus"></div>
+    </div>
+    <div class="nav-row">
+      <button class="nav btn-secondary" id="btnBack" onclick="prevItem()">Назад</button>
+      <button class="nav btn-primary" onclick="nextItem()">Далее</button>
+    </div>
+    <div class="sync" id="syncStatus"></div>
+    <div class="sync" id="photoCount"></div>
+  </div>
+
+  <!-- ЭКРАН 1б: блок закончен -->
+  <div id="screen-block" class="hidden">
+    <div class="card done">
+      <h2 id="blockDoneTitle"></h2>
+      <p id="blockDoneText"></p>
+      <div class="sync" id="photoCountBlock"></div>
+    </div>
+    <div class="nav-row">
+      <button class="nav btn-secondary" onclick="backFromBlock()">Назад</button>
+      <button class="nav btn-primary" onclick="nextBlock()">Продолжить</button>
+    </div>
+  </div>
+
+  <!-- ЭКРАН 2: готово -->
+  <div id="screen-done" class="hidden">
+    <div class="card done">
+      <h2>Готово</h2>
+      <p id="doneSummary"></p>
+      <div class="sync" id="photoCountDone"></div>
+    </div>
+    <div class="nav-row">
+      <button class="nav btn-primary" id="btnSubmit" onclick="submitAll()">Отправить отчёт</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// URL скрипта цен (doPost)
+const ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbyrc0M1X-17x3up0j5sKuaPiSqJJDw3uksW-siFyHHzhrfBMw5TV1cOyXx4buWN9hH0NQ/exec";
+// URL отдельного скрипта приёма фото (PhotoUploadBackend.gs) — кладёт снимки в папку на Google Диске
+const PHOTO_ENDPOINT_URL = ENDPOINT_URL; // фото и цены принимает один скрипт таблицы
+
+const STORAGE_KEY = "pc_state_v4"; // v4: три блока (регуляр, коллекция, кукфест), 20.10.2026
+const RESUME_MAX_AGE_MS = 24 * 60 * 60 * 1000;
+
+// Полный список из Артикулы_для_мониторинга.xlsx (89 позиций), отсортирован по алфавиту.
+// Артикул = "Артикул SubSyst (магазина)" — тот же номер, что на ценнике/терминале Metro.
+const ITEMS = [
+  {block:"Регуляр", article:"6699", mgb:"327075", name:"Аэрогриль электрический PAF 5502 Черный POLARIS CN, А_ПП, , шт", category:"МБТ"},
+  {block:"Регуляр", article:"6751", mgb:"327078", name:"Аэрогриль электрический PAF 8003W WIFI IQ Home Черный POLARIS CN", category:"МБТ"},
+  {block:"Регуляр", article:"76918", mgb:"458523", name:"Блендер настольный PTB 1037G Графитовый POLARIS CN, А_ПП, , шт", category:"МБТ"},
+  {block:"Регуляр", article:"308591", mgb:"293699", name:"БЛЕНДЕР ПОГРУЖНОЙ PHB 1636AL CUBE POLARIS", category:"МБТ"},
+  {block:"Регуляр", article:"127236", mgb:"119982", name:"Блендер ручной PHB 1397 Черный POLARIS CN", category:"МБТ"},
+  {block:"Регуляр", article:"210901", mgb:"160441", name:"Блендер ручной PHB 1476 черный POLARIS CN", category:"МБТ"},
+  {block:"Регуляр", article:"76924", mgb:"458525", name:"Блендер ручной PHB 1510GL Silent Черный POLARIS CN, А_ПП, , шт", category:"МБТ"},
+  {block:"Регуляр", article:"76883", mgb:"458018", name:"Весы напольные электронные PWS 1896 IQ Home Антрацит POLARIS CN, А_ПП, , шт", category:"МБТ"},
+  {block:"Регуляр", article:"258380", mgb:"209321", name:"Весы напольные электронные PWS 1898 IQ Home Серый POLARIS CN", category:"МБТ"},
+  {block:"Регуляр", article:"283924", mgb:"267959", name:"Вспениватель молока PAMF 5005 Белый POLARIS CN, Не обнаружен, , шт", category:"МБТ"},
+  {block:"Регуляр", article:"258720", mgb:"210716", name:"ГРИЛЬ PGP 3005 POLARIS", category:"МБТ"},
+  {block:"Регуляр", article:"267498", mgb:"225536", name:"ГРИЛЬ PGP 3014 POLARIS", category:"МБТ"},
+  {block:"Регуляр", article:"308592", mgb:"293700", name:"ГРИЛЬ PGP 3017 POLARIS", category:"МБТ"},
+  {block:"Регуляр", article:"228429", mgb:"177976", name:"Концентрированное средство для удаления накипи для кофемашин и кофеварок PCDL 1005 ECO Белый POLARI", category:"МБТ"},
+  {block:"Регуляр", article:"308593", mgb:"293701", name:"КОФЕВАРКА 3 В 1 PCM 4018 POLARIS", category:"МБТ"},
+  {block:"Регуляр", article:"219437", mgb:"167719", name:"Кофеварка 3-in-1 PCM 2020 3-in-1 Нержавеющая сталь/черный POLARIS CN", category:"МБТ"},
+  {block:"Регуляр", article:"71513", mgb:"393112", name:"Кофемашина PACM 2044SW Белый", category:"МБТ"},
+  {block:"Регуляр", article:"204540", mgb:"154967", name:"КОФЕМАШИНА PACM 2065AC POLARIS", category:"МБТ"},
+  {block:"Регуляр", article:"76882", mgb:"457470", name:"Кофемашина PACM 2071AC Черный (POLARIS), А_ПП, , шт", category:"МБТ"},
+  {block:"Регуляр", article:"76884", mgb:"458021", name:"Кофемолка PCG 2014 Белый POLARIS CN, А_ПП, , шт", category:"МБТ"},
+  {block:"Регуляр", article:"213268", mgb:"162144", name:"Миксер PHM 7021 Белый POLARIS CN", category:"МБТ"},
+  {block:"Регуляр", article:"74996", mgb:"444004", name:"Мойщик окон Polaris Wifi IQ Home PRWC 3001", category:"МБТ"},
+  {block:"Регуляр", article:"135176", mgb:"144788", name:"Мультиварка PMC 0593AD серебряный POLARIS CN", category:"МБТ"},
+  {block:"Регуляр", article:"308589", mgb:"293697", name:"МУЛЬТИВАРКА PMC 0598AD POLARIS", category:"МБТ"},
+  {block:"Регуляр", article:"127237", mgb:"119983", name:"Мясорубка PMG 2050 RUS Белый POLARIS RU, А_ПП, , шт", category:"МБТ"},
+  {block:"Регуляр", article:"308590", mgb:"293698", name:"МЯСОРУБКА PMG 2075 RUS POLARIS", category:"МБТ"},
+  {block:"Регуляр", article:"267500", mgb:"225546", name:"ПАРОГЕНЕРАТОР PSS 4010K POLARIS", category:"МБТ"},
+  {block:"Регуляр", article:"22067", mgb:"8963", name:"Парогенератор PSS 7510K Белый/черный POLARIS CN", category:"МБТ"},
+  {block:"Регуляр", article:"308597", mgb:"293668", name:"ПАРОГЕНЕРАТОР PSS 8065K POLARIS", category:"МБТ"},
+  {block:"Регуляр", article:"98743", mgb:"89245", name:"Печь микроволновая PMO 2002DG RUS с грилем Черный POLARIS RU", category:"МБТ"},
+  {block:"Регуляр", article:"657806", mgb:"552181", name:"Прибор для выпечки PST 0105 черный POLARIS CN", category:"МБТ"},
+  {block:"Регуляр", article:"308586", mgb:"293695", name:"ПРИБОР ДЛЯ ВЫПЕЧКИ PST 0703 POLARIS", category:"МБТ"},
+  {block:"Регуляр", article:"616873", mgb:"479475", name:"Пылесос PVC 2003RI Серый POLARIS CN", category:"МБТ"},
+  {block:"Регуляр", article:"127239", mgb:"119984", name:"ПЫЛЕСОС ВЕРТИКАЛЬНЫЙ PVCS 7090 HANDSTICK PRO AQUA POLARIS", category:"МБТ"},
+  {block:"Регуляр", article:"76916", mgb:"458521", name:"Пылесос портативный PVCS 4010 FusionPRO Белый POLARIS CN", category:"МБТ"},
+  {block:"Регуляр", article:"258382", mgb:"209323", name:"Робот-пылесос PVCR G2 0826W WIFI IQ Home Белый POLARIS CN", category:"МБТ"},
+  {block:"Регуляр", article:"228428", mgb:"177969", name:"Робот-пылесос с пыленакопителем PVCRDC G2 6002 WIFI IQ Home Белый POLARIS CN", category:"МБТ"},
+  {block:"Регуляр", article:"267501", mgb:"225529", name:"ТОСТЕР PET 0732 POLARIS", category:"МБТ"},
+  {block:"Регуляр", article:"76893", mgb:"458033", name:"Утюг PIR 2497AK 3m Белый/розовый POLARIS CN, А_ПП, , шт", category:"МБТ"},
+  {block:"Регуляр", article:"213276", mgb:"162151", name:"Утюг PIR 2821AK 3m Черный/Бирюзовый POLARIS CN", category:"МБТ"},
+  {block:"Регуляр", article:"308596", mgb:"293727", name:"УТЮГ PIR 2862AK POLARIS", category:"МБТ"},
+  {block:"Регуляр", article:"308585", mgb:"293686", name:"ЧАЙНИК СТЕКЛЯННЫЙ PWK 0507CAD 1.7Л POLARIS", category:"МБТ"},
+  {block:"Регуляр", article:"76747", mgb:"456459", name:"Электрочайник PWK 1712CGLD WIFI IQ Home Черный POLARIS CN, А_ПП, , шт", category:"МБТ"},
+  {block:"Регуляр", article:"76748", mgb:"456805", name:"Электрочайник PWK 1739CGL Сталь POLARIS CN, А_ПП, , шт", category:"МБТ"},
+  {block:"Регуляр", article:"659546", mgb:"553751", name:"Электрочайник PWK 1791CGL Матовый POLARIS CN, ОК, , шт", category:"МБТ"},
+  {block:"Регуляр", article:"213277", mgb:"162140", name:"Электрочайник PWK 1817CGL Water Way Pro Матовый POLARIS CN, ОК, , шт", category:"МБТ"},
+  {block:"Регуляр", article:"76880", mgb:"456807", name:"Электрочайник PWK 1865CA Стальной POLARIS CN, А_ПП, , шт", category:"МБТ"},
+  {block:"Регуляр", article:"213299", mgb:"162139", name:"Электрочайник PWK 1899 CA Матовый POLARIS CN, ОК, , шт", category:"МБТ"},
+  {block:"Регуляр", article:"306367", mgb:"292023", name:"POLARIS CALIDO ЗАВАРОЧНЫЙ ЧАЙНИК 800МЛ", category:"Посуда"},
+  {block:"Регуляр", article:"305047", mgb:"290825", name:"Кастрюля Allure-20C", category:"Посуда"},
+  {block:"Регуляр", article:"305064", mgb:"290826", name:"Кастрюля Allure-24C", category:"Посуда"},
+  {block:"Регуляр", article:"320627", mgb:"302855", name:"Кастрюля Megapolis-20C Коричневый ков. ал. 20 см POLARIS CN", category:"Посуда"},
+  {block:"Регуляр", article:"320629", mgb:"302856", name:"Кастрюля Megapolis-24C Коричневый ков. ал. 24 см POLARIS CN", category:"Посуда"},
+  {block:"Регуляр", article:"286194", mgb:"270306", name:"Кастрюля Mela-20C Серый нерж. сталь 4 л POLARIS CN", category:"Посуда"},
+  {block:"Регуляр", article:"286197", mgb:"270307", name:"Кастрюля Mela-22C Серый нерж. сталь 5 л POLARIS CN", category:"Посуда"},
+  {block:"Регуляр", article:"64001", mgb:"371224", name:"Кастрюля Monolit-20C Черный ков. ал. 2,3 л POLARIS CN", category:"Посуда"},
+  {block:"Регуляр", article:"107068", mgb:"95026", name:"Кастрюля Monolit-24C Черный ков. ал. 4 л POLARIS CN", category:"Посуда"},
+  {block:"Регуляр", article:"305061", mgb:"290801", name:"Кастрюля Stein-20C Серый лит. ал. 2,5 л POLARIS CN", category:"Посуда"},
+  {block:"Регуляр", article:"305014", mgb:"290799", name:"Кастрюля Stein-24C Серый лит. ал. 4,3 л POLARIS CN", category:"Посуда"},
+  {block:"Регуляр", article:"305051", mgb:"290824", name:"Ковш Allure-16SP", category:"Посуда"},
+  {block:"Регуляр", article:"320574", mgb:"302854", name:"Ковш Megapolis-16SP Коричневый ков. ал. 16 см POLARIS CN", category:"Посуда"},
+  {block:"Регуляр", article:"286182", mgb:"270305", name:"Ковш Mela-16SP Серый нерж. сталь 2,2 л POLARIS CN", category:"Посуда"},
+  {block:"Регуляр", article:"305063", mgb:"290850", name:"Ковш Stein-16SP Серый лит. ал. 1,45 л POLARIS CN", category:"Посуда"},
+  {block:"Регуляр", article:"669114", mgb:"317212", name:"Н-Р СКОВОРОД 24+26СМ SWISS COLLECTION POLARIS", category:"Посуда"},
+  {block:"Регуляр", article:"305007", mgb:"290848", name:"Набор ножей нерж. сталь Allure-3SS Черный/бронза 3 пред. POLARIS CN", category:"Посуда"},
+  {block:"Регуляр", article:"260903", mgb:"216336", name:"Набор посуды Loretto-06S из 6 пред. Серый нерж. сталь POLARIS CN", category:"Посуда"},
+  {block:"Регуляр", article:"305050", mgb:"290827", name:"Сковорода Allure-20F Бронза ков. ал. 20 см POLARIS CN", category:"Посуда"},
+  {block:"Регуляр", article:"305026", mgb:"290828", name:"Сковорода Allure-24F Бронза ков. ал. 24 см POLARIS CN", category:"Посуда"},
+  {block:"Регуляр", article:"305025", mgb:"290829", name:"Сковорода Allure-26F Бронза ков. ал. 26 см POLARIS CN", category:"Посуда"},
+  {block:"Регуляр", article:"305059", mgb:"290833", name:"Сковорода Allure-28F Бронза ков. ал. 28 см POLARIS CN", category:"Посуда"},
+  {block:"Регуляр", article:"320519", mgb:"302851", name:"Сковорода Calido-24FP Черный лит. ал. 24 см POLARIS CN", category:"Посуда"},
+  {block:"Регуляр", article:"320631", mgb:"302857", name:"Сковорода Megapolis-20F Коричневый ков. ал. 20 см POLARIS CN", category:"Посуда"},
+  {block:"Регуляр", article:"320635", mgb:"302858", name:"Сковорода Megapolis-24F Коричневый ков. ал. 24 см POLARIS CN", category:"Посуда"},
+  {block:"Регуляр", article:"320637", mgb:"302859", name:"Сковорода Megapolis-28F Коричневый ков. ал. 28 см POLARIS CN", category:"Посуда"},
+  {block:"Регуляр", article:"305058", mgb:"290800", name:"Сковорода Stein-20F Серый лит. ал. 20 см POLARIS CN", category:"Посуда"},
+  {block:"Регуляр", article:"305342", mgb:"290802", name:"Сковорода Stein-24F Серый лит. ал. 24 см POLARIS CN", category:"Посуда"},
+  {block:"Регуляр", article:"305038", mgb:"290803", name:"Сковорода Stein-28F Серый лит. ал. 28 см POLARIS CN", category:"Посуда"},
+  {block:"Регуляр", article:"305031", mgb:"290846", name:"Сковорода блинная Allure-24PC Бронза ков. ал. 24 см POLARIS CN", category:"Посуда"},
+  {block:"Регуляр", article:"320691", mgb:"302860", name:"Сковорода блинная Megapolis-22PC Коричневый ков. ал. 22 см POLARIS CN", category:"Посуда"},
+  {block:"Регуляр", article:"305048", mgb:"290804", name:"Сковорода блинная Stein-22PC Серый лит. ал. 22 см POLARIS CN", category:"Посуда"},
+  {block:"Регуляр", article:"305062", mgb:"290847", name:"Сковорода Вок Allure-28W Бронза ков. ал. 28 см POLARIS CN", category:"Посуда"},
+  {block:"Регуляр", article:"320520", mgb:"302852", name:"СКОВОРОДА С/Р 26СМ CALIDO POLARIS", category:"Посуда"},
+  {block:"Регуляр", article:"320530", mgb:"302853", name:"СКОВОРОДА С/Р 28СМ CALIDO POLARIS", category:"Посуда"},
+  {block:"Регуляр", article:"306366", mgb:"292022", name:"Термокружка Allure-500TM Бронза POLARIS CN", category:"Посуда"},
+  {block:"Регуляр", article:"306365", mgb:"292017", name:"Френч-пресс Allure-1100FP Бронза 1100 мл POLARIS CN", category:"Посуда"},
+  {block:"Регуляр", article:"306353", mgb:"291960", name:"Френч-пресс Allure-800FP Бронза 800 мл POLARIS CN", category:"Посуда"},
+  {block:"Регуляр", article:"64611", mgb:"371275", name:"Френч-пресс Stein-600FP Графитовый 600 мл POLARIS CN", category:"Посуда"},
+  {block:"Регуляр", article:"306388", mgb:"292024", name:"Чайник заварочный Graphit-1000TP Графитовый 1000 мл POLARIS CN", category:"Посуда"},
+  {block:"Регуляр", article:"305007", mgb:"290823", name:"ЧАЙНИК СО СВИСТКОМ 2,8Л CALIDO POLARIS", category:"Посуда"},
+  {block:"Коллекция", article:"211837", mgb:"570356", name:"Электрочайник PWK 0503CGL Water Way Pro Черный POLARIS CN", category:"Коллекция"},
+  {block:"Коллекция", article:"212416", mgb:"570357", name:"Электрочайник PWK 1776CA Water Way Pro Стальной POLARIS CN", category:"Коллекция"},
+  {block:"Коллекция", article:"212406", mgb:"570358", name:"Блендер ручной PHB 1450 Черный POLARIS CN", category:"Коллекция"},
+  {block:"Коллекция", article:"212340", mgb:"570359", name:"Блендер ручной PHB 1540L Черный POLARIS CN", category:"Коллекция"},
+  {block:"Коллекция", article:"212334", mgb:"570346", name:"Аэрогриль электрический PAF 6020 Серебряный POLARIS CN", category:"Коллекция"},
+  {block:"Коллекция", article:"212328", mgb:"570360", name:"Прибор для выпечки PST 1201 Серебристый POLARIS CN", category:"Коллекция"},
+  {block:"Коллекция", article:"211838", mgb:"570361", name:"Мясорубка PMG 2040 Черный POLARIS CN", category:"Коллекция"},
+  {block:"Коллекция", article:"283926", mgb:"267970", name:"Мясорубка PMG 2058 Графитовый POLARIS CN", category:"Коллекция"},
+  {block:"Коллекция", article:"211839", mgb:"570362", name:"Кофемашина PACM 2056AC Черный (POLARIS)", category:"Коллекция"},
+  {block:"Коллекция", article:"211840", mgb:"570363", name:"Отпариватель компактный PGS 1480C Белый POLARIS CN", category:"Коллекция"},
+  {block:"Коллекция", article:"212325", mgb:"570364", name:"Увлажнитель воздуха PUH 3040 Графитовый POLARIS CN", category:"Коллекция"},
+  {block:"Коллекция", article:"211841", mgb:"570365", name:"Пылесос портативный PVCS 9806 Белый POLARIS CN, ОК", category:"Коллекция"},
+  {block:"Коллекция", article:"211898", mgb:"570366", name:"Пылесос PVC 2211 Белый POLARIS CN", category:"Коллекция"},
+  {block:"Кукфест", article:"99178", mgb:"566921", name:"Чайник со свистком 2,5 л Graphit-2,5L Серый нерж. сталь POLARIS CN", category:"Посуда Кукфест НГ"},
+  {block:"Кукфест", article:"304844", mgb:"290771", name:"Набор ножей нерж. сталь Stein-3SS Черный 3 пред. POLARIS CN", category:"Посуда Кукфест НГ"},
+  {block:"Кукфест", article:"304808", mgb:"290770", name:"Набор ножей нерж. сталь с подставкой Cook Master-5SS Черный/Дерево 5 пред. POLARIS CN", category:"Посуда Кукфест НГ"},
+  {block:"Кукфест", article:"310677", mgb:"295166", name:"Набор ножей нерж. сталь с овощечисткой Verde-3SS Черный 3 пред. POLARIS CN", category:"Посуда Кукфест НГ"},
+  {block:"Кукфест", article:"200693", mgb:"569243", name:"Набор ножей нерж. сталь с подставкой Calido-6SS Черный/Дерево 6 пред. POLARIS CN", category:"Посуда Кукфест НГ"},
+  {block:"Кукфест", article:"138210", mgb:"568805", name:"Набор посуды EasyKeep-6S из 8 пред. Серый нерж. сталь POLARIS CN", category:"Посуда Кукфест НГ"},
+  {block:"Кукфест", article:"138209", mgb:"568806", name:"Набор посуды Sentido-41SC из 4 пред. Серый нерж. сталь POLARIS CN", category:"Посуда Кукфест НГ"},
+  {block:"Кукфест", article:"221990", mgb:"571389", name:"Набор посуды Stein-3D из 3 пред. cо съемной ручкой Серый ков. ал. POLARIS CN", category:"Посуда Кукфест НГ"},
+  {block:"Кукфест", article:"320519", mgb:"302851", name:"Сковорода Calido-24FP Черный лит. ал. 24 см POLARIS CN", category:"Посуда Кукфест НГ"},
+  {block:"Кукфест", article:"320520", mgb:"302852", name:"Сковорода Calido-26FP Черный лит. ал. 26 см POLARIS CN", category:"Посуда Кукфест НГ"},
+  {block:"Кукфест", article:"320530", mgb:"302853", name:"Сковорода Calido-28FP Черный лит. ал. 28 см POLARIS CN", category:"Посуда Кукфест НГ"},
+  {block:"Кукфест", article:"", mgb:"", name:"Сковорода глубокая с крышкой Sentido-24ST Графитовый ков. ал. 24 см POLARIS CN", category:"Посуда Кукфест НГ", noArt:true},
+  {block:"Кукфест", article:"", mgb:"", name:"Сковорода глубокая с крышкой Sentido-28ST Графитовый ков. ал. 28 см POLARIS CN", category:"Посуда Кукфест НГ", noArt:true},
+  {block:"Кукфест", article:"221994", mgb:"571390", name:"Сковорода Sentido-20F Графитовый ков. ал. 20 см POLARIS CN", category:"Посуда Кукфест НГ"},
+  {block:"Кукфест", article:"221995", mgb:"571391", name:"Сковорода Sentido-24F Графитовый ков. ал. 24 см POLARIS CN", category:"Посуда Кукфест НГ"},
+  {block:"Кукфест", article:"221996", mgb:"571392", name:"Сковорода Sentido-28F Графитовый ков. ал. 28 см POLARIS CN", category:"Посуда Кукфест НГ"},
+  {block:"Кукфест", article:"221976", mgb:"571388", name:"Ковш Sentido-16SP Серый нерж. сталь 1,5 л POLARIS CN", category:"Посуда Кукфест НГ"},
+  {block:"Кукфест", article:"221975", mgb:"571387", name:"Кастрюля Sentido-20C Серый нерж. сталь 3,3 л POLARIS CN", category:"Посуда Кукфест НГ"},
+  {block:"Кукфест", article:"204599", mgb:"569653", name:"Электромельница PEPM 2403 Графит POLARIS CN", category:"Посуда Кукфест НГ"},
+  {block:"Кукфест", article:"201664", mgb:"569333", name:"Френч-пресс Graphit-600FP Графитовый 600 мл POLARIS CN", category:"Посуда Кукфест НГ"},
+  {block:"Кукфест", article:"201665", mgb:"569334", name:"Френч-пресс Graphit-1000FP Графитовый 1000 мл POLARIS CN", category:"Посуда Кукфест НГ"},
+  {block:"Кукфест", article:"306502", mgb:"292034", name:"Термокружка Vita-520TM Белый магн. Кор", category:"Посуда Кукфест НГ"},
+  {block:"Кукфест", article:"201663", mgb:"569332", name:"Термокружка Calido-600TM", category:"Посуда Кукфест НГ"}
+];
+
+// Блоки обхода: идут строго по порядку
+const BLOCKS = ["Регуляр", "Коллекция", "Кукфест"];
+const BLOCK_TITLE = {"Регуляр":"Мониторинг (регуляр)", "Коллекция":"Коллекция", "Кукфест":"Посуда Кукфест НГ"};
+const blockOf = i => ITEMS[i].block;
+const blockStart = b => ITEMS.findIndex(it => it.block === b);
+const blockLen = b => ITEMS.filter(it => it.block === b).length;
+
+let current = 0;
+let results = ITEMS.map(it => ({...it, price:"", status:"", photoSent:false}));
+let employeeName = "", store = "";
+
+// ---- Отправка цен в таблицу: по одной позиции, сразу после «Далее» ----
+let sentSig = {};      // индекс позиции -> что уже отправлено ("статус|цена")
+let queue = [];        // индексы позиций, ожидающих отправки
+let sending = false;
+let lastError = false;
+let retryTimer = null;
+
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const sigOf = r => r.status + "|" + r.price;
+
+// ---- Сохранение на телефоне (чтобы перезагрузка страницы не стирала введённое) ----
+function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+function lsDel(k){ try{ localStorage.removeItem(k); }catch(e){} }
+
+function persist(){
+  if(!employeeName) return;
+  lsSet(STORAGE_KEY, JSON.stringify({
+    ts: Date.now(), employeeName: employeeName, store: store, current: current,
+    results: results.map(r => ({price:r.price, status:r.status, photoSent:!!r.photoSent})),
+    sentSig: sentSig, queue: queue
+  }));
+}
+
+function loadSaved(){
+  const raw = lsGet(STORAGE_KEY);
+  if(!raw) return null;
+  try{
+    const s = JSON.parse(raw);
+    if(!s || !s.employeeName || !Array.isArray(s.results) || s.results.length !== ITEMS.length) return null;
+    if(Date.now() - (s.ts||0) > RESUME_MAX_AGE_MS) return null;
+    return s;
+  }catch(e){ return null; }
+}
+
+function showResumeIfAny(){
+  const s = loadSaved();
+  if(!s) return;
+  const done = s.results.filter(r => r.status).length;
+  if(!done) return;
+  document.getElementById('resumeText').textContent =
+    "Найден незавершённый отчёт: " + s.employeeName + ", магазин № " + s.store +
+    ", заполнено " + done + " из " + ITEMS.length + ". Продолжить с того же места?";
+  document.getElementById('resumeCard').classList.remove('hidden');
+}
+
+function resumeSaved(){
+  const s = loadSaved();
+  if(!s){ discardSaved(); return; }
+  employeeName = s.employeeName;
+  store = String(s.store);
+  current = Math.min(Math.max(s.current|0, 0), ITEMS.length - 1);
+  results = ITEMS.map((it,i) => ({...it,
+    price: s.results[i].price || "",
+    status: s.results[i].status || "",
+    photoSent: !!s.results[i].photoSent}));
+  sentSig = s.sentSig || {};
+  queue = Array.isArray(s.queue) ? s.queue.filter(i => i >= 0 && i < ITEMS.length) : [];
+  // всё, что отмечено, но не подтверждено как отправленное, — в очередь
+  results.forEach((r,i) => { if(r.status && sentSig[i] !== sigOf(r) && !queue.includes(i)) queue.push(i); });
+  document.getElementById('employeeName').value = employeeName;
+  document.getElementById('storeSelect').value = store;
+  document.getElementById('screen-start').classList.add('hidden');
+  document.getElementById('screen-item').classList.remove('hidden');
+  renderItem();
+  pump();
+}
+
+function discardSaved(){
+  lsDel(STORAGE_KEY);
+  document.getElementById('resumeCard').classList.add('hidden');
+}
+
+function startChecklist(){
+  employeeName = document.getElementById('employeeName').value.trim();
+  store = document.getElementById('storeSelect').value;
+  if(!employeeName){ alert("Заполните имя"); return; }
+  current = 0;
+  results = ITEMS.map(it => ({...it, price:"", status:"", photoSent:false}));
+  sentSig = {}; queue = [];
+  persist();
+  document.getElementById('screen-start').classList.add('hidden');
+  document.getElementById('screen-item').classList.remove('hidden');
+  renderItem();
+}
+
+function renderItem(){
+  const it = ITEMS[current];
+  const bi = BLOCKS.indexOf(it.block);
+  document.getElementById('itemCategory').textContent = "Блок " + (bi+1) + " из " + BLOCKS.length + " · " + BLOCK_TITLE[it.block] + (it.block === "Регуляр" ? " · " + it.category : "");
+  document.getElementById('itemName').textContent = it.name;
+  document.getElementById('itemArt').textContent = it.noArt ? "Артикул не заведён — ищите по названию" : "Артикул " + it.article;
+  document.getElementById('priceInput').value = results[current].price;
+  const bs = blockStart(it.block), bl = blockLen(it.block);
+  document.getElementById('progressNum').textContent = (current-bs+1) + "/" + bl;
+  document.getElementById('progressFill').style.width = ((current-bs)/bl*100) + "%";
+  document.getElementById('btnBack').disabled = (current === 0);
+  highlightStatus();
+
+  // сброс/восстановление блока фото под конкретный товар
+  document.getElementById('photoInput').value = "";
+  document.getElementById('photoThumbs').innerHTML = "";
+  const pDrop = document.getElementById('photoDrop');
+  const pStatus = document.getElementById('photoStatus');
+  pStatus.className = 'photo-status';
+  pStatus.textContent = "";
+  if(results[current].photoSent){
+    pDrop.textContent = "📷 Фото уже приложено (можно добавить ещё)";
+    pDrop.classList.add('has-files');
+    pStatus.textContent = "Фото отправлено ✓";
+    pStatus.className = 'photo-status ok';
+  } else {
+    pDrop.textContent = "📷 Добавить фото";
+    pDrop.classList.remove('has-files');
+  }
+  updateSync();
+}
+
+function setStatus(s){
+  results[current].status = s;
+  if(s === "нет"){
+    results[current].price = "";
+    document.getElementById('priceInput').value = "";
+  }
+  highlightStatus();
+  persist();
+}
+
+function highlightStatus(){
+  const b = document.getElementById('btnNoAvail');
+  b.classList.remove('active-bad');
+  if(results[current].status === 'нет') b.classList.add('active-bad');
+}
+
+// цена набирается — запоминаем на телефоне; если раньше было «нет в наличии», а цену ввели — значит товар есть
+document.getElementById('priceInput').addEventListener('input', (e) => {
+  const v = e.target.value;
+  results[current].price = v;
+  if(v && results[current].status === 'нет'){
+    results[current].status = 'есть';
+    highlightStatus();
+  }
+  persist();
+});
+
+function saveCurrent(){
+  results[current].price = document.getElementById('priceInput').value;
+}
+
+function nextItem(){
+  saveCurrent();
+  if(!results[current].status){
+    if(results[current].price){
+      results[current].status = 'есть'; // цена введена — считаем "в наличии" автоматически
+    } else {
+      alert("Введите цену или нажмите \"Нет в наличии\"");
+      return;
+    }
+  }
+  markDirty(current);
+  if(current < ITEMS.length - 1){
+    if(blockOf(current+1) !== blockOf(current)){ persist(); showBlockDone(); return; }
+    current++;
+    persist();
+    renderItem();
+  } else {
+    persist();
+    showDone();
+  }
+}
+
+function prevItem(){
+  saveCurrent();
+  markDirty(current);
+  if(current > 0){
+    current--;
+    persist();
+    renderItem();
+  }
+}
+
+function showBlockDone(){
+  const b = blockOf(current), nb = blockOf(current+1);
+  const idx = ITEMS.map((it,i)=>i).filter(i => ITEMS[i].block === b);
+  const yes = idx.filter(i => results[i].status === 'есть').length;
+  const no = idx.filter(i => results[i].status === 'нет').length;
+  document.getElementById('blockDoneTitle').textContent = BLOCK_TITLE[b] + " — готово";
+  document.getElementById('blockDoneText').textContent =
+    "С ценой: " + yes + ", нет в наличии: " + no + ". Дальше — " + BLOCK_TITLE[nb] + " (" + blockLen(nb) + " поз.).";
+  document.getElementById('screen-item').classList.add('hidden');
+  document.getElementById('screen-block').classList.remove('hidden');
+  updatePhotoCount();
+}
+function nextBlock(){
+  document.getElementById('screen-block').classList.add('hidden');
+  document.getElementById('screen-item').classList.remove('hidden');
+  current++;
+  persist();
+  renderItem();
+}
+function backFromBlock(){
+  document.getElementById('screen-block').classList.add('hidden');
+  document.getElementById('screen-item').classList.remove('hidden');
+  renderItem();
+}
+
+function showDone(){
+  document.getElementById('screen-item').classList.add('hidden');
+  document.getElementById('screen-done').classList.remove('hidden');
+  const filled = results.filter(r => r.status).length;
+  const parts = BLOCKS.map(b => BLOCK_TITLE[b] + ": " + ITEMS.filter((it,i) => it.block === b && results[i].status).length + "/" + blockLen(b));
+  document.getElementById('doneSummary').textContent =
+    parts.join(" · ") + ". Цены уже уходят в таблицу. Дождитесь, пока уйдут все фото, и нажмите «Отправить отчёт».";
+  updatePhotoCount();
+}
+
+// ---- Очередь отправки ----
+function markDirty(idx){
+  const r = results[idx];
+  if(!r.status) return;
+  if(sentSig[idx] === sigOf(r)) return;
+  if(!queue.includes(idx)) queue.push(idx);
+  persist();
+  pump();
+}
+
+async function postJson(url, obj, timeoutMs, tries){
+  const body = JSON.stringify(obj);
+  for(let a = 1; a <= tries; a++){
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), timeoutMs);
+    try{
+      await fetch(url, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {"Content-Type":"text/plain"},
+        body: body,
+        signal: ctrl.signal
+      });
+      clearTimeout(t);
+      return true;
+    }catch(e){
+      clearTimeout(t);
+      if(a < tries) await sleep(1500 * a);
+    }
+  }
+  return false;
+}
+
+async function pump(){
+  if(sending) return;
+  sending = true;
+  lastError = false;
+  updateSync();
+  while(queue.length){
+    // убираем из очереди то, что уже отправлено
+    queue = queue.filter(i => results[i].status && sentSig[i] !== sigOf(results[i]));
+    if(!queue.length) break;
+    const batch = queue.slice(0, 25);                 // до 25 позиций за один запрос
+    const sigs = batch.map(i => sigOf(results[i]));
+    const ok = await postJson(ENDPOINT_URL, {
+      employee: employeeName,
+      store: store,
+      timestamp: new Date().toISOString(),
+      items: batch.map(i => { const r = results[i];
+        return {block:r.block, article:r.article, mgb:r.mgb, name:r.name, category:r.category, price:r.price, status:r.status}; })
+    }, 45000, 3);
+    if(ok){
+      batch.forEach((i, k) => { sentSig[i] = sigs[k]; });
+      // если пока шла отправка значение поменяли — оно останется в очереди и уйдёт ещё раз
+      queue = queue.filter(i => results[i].status && sentSig[i] !== sigOf(results[i]));
+      persist();
+      updateSync();
+    } else {
+      lastError = true;
+      break;
+    }
+  }
+  sending = false;
+  persist();
+  updateSync();
+  if(lastError && queue.length){
+    clearTimeout(retryTimer);
+    retryTimer = setTimeout(pump, 8000);
+  }
+}
+
+window.addEventListener('online', () => { if(queue.length) pump(); });
+document.addEventListener('visibilitychange', () => {
+  if(document.visibilityState === 'visible' && queue.length) pump();
+});
+
+function updateSync(){
+  const el = document.getElementById('syncStatus');
+  if(!el) return;
+  const n = queue.length;
+  const anySent = Object.keys(sentSig).length > 0;
+  if(n && sending){
+    el.textContent = "Отправка в таблицу… (в очереди: " + n + ")";
+    el.className = "sync";
+  } else if(n && lastError){
+    el.textContent = "Нет связи. Введённое сохранено на телефоне, отправим автоматически (в очереди: " + n + ")";
+    el.className = "sync bad";
+  } else if(n){
+    el.textContent = "В очереди на отправку: " + n;
+    el.className = "sync";
+  } else if(anySent){
+    el.textContent = "Все введённые цены отправлены в таблицу ✓";
+    el.className = "sync ok";
+  } else {
+    el.textContent = "";
+    el.className = "sync";
+  }
+}
+
+async function flushAll(){
+  while(sending) await sleep(300);
+  await pump();
+  while(sending) await sleep(300);
+}
+
+async function submitAll(){
+  const btn = document.getElementById('btnSubmit');
+  const p = document.getElementById('doneSummary');
+  btn.disabled = true;
+  btn.textContent = "Отправка…";
+  p.textContent = "Отправляю…";
+
+  // всё отмеченное, что ещё не подтверждено, — в очередь
+  results.forEach((r,i) => { if(r.status && sentSig[i] !== sigOf(r) && !queue.includes(i)) queue.push(i); });
+  persist();
+
+  // дожидаемся фото, которые ещё загружаются
+  let waited = 0;
+  while(photosPending > 0 && waited < 180000){ await sleep(500); waited += 500; }
+
+  await flushAll();
+
+  const total = results.filter(r => r.status).length;
+  const confirmed = results.filter((r,i) => r.status && sentSig[i] === sigOf(r)).length;
+
+  if(confirmed === total && !queue.length){
+    p.textContent = "Отчёт отправлен. Спасибо! Позиций в таблице: " + confirmed + ".";
+    lsDel(STORAGE_KEY);
+    btn.textContent = "Отправлено ✓";
+  } else {
+    p.textContent = "Отправлено " + confirmed + " из " + total + ". Нет связи — данные сохранены на телефоне. Нажмите «Отправить отчёт» ещё раз, когда появится интернет.";
+    btn.disabled = false;
+    btn.textContent = "Отправить отчёт";
+  }
+}
+
+// ---- Фото: сжимаем по одному (лёгко для памяти) и сразу отправляем в фоне ----
+let photosPending = 0;
+let photoTotal = 0, photoSentN = 0, photoFailN = 0;   // счётчик фото за сеанс
+
+function updatePhotoCount(){
+  const left = photoTotal - photoSentN - photoFailN;
+  let t = "", cls = "sync";
+  if(photoTotal){
+    t = "Фото: выбрано " + photoTotal + " · отправлено " + photoSentN + " · в очереди " + left;
+    if(photoFailN){ t += " · не ушло " + photoFailN + " (добавьте их ещё раз)"; cls = "sync bad"; }
+    else if(!left){ t += " ✓"; cls = "sync ok"; }
+  }
+  const pct = photoTotal ? Math.round((photoSentN + photoFailN) / photoTotal * 100) : 0;
+  ["photoCount","photoCountDone","photoCountBlock"].forEach(id => {
+    const el = document.getElementById(id);
+    if(!el) return;
+    el.className = cls;
+    el.innerHTML = "";
+    if(!photoTotal) return;
+    const txt = document.createElement('div'); txt.textContent = t; el.appendChild(txt);
+    const bar = document.createElement('div'); bar.className = "pbar";
+    const fill = document.createElement('div'); fill.className = "pbar-fill"; fill.style.width = pct + "%";
+    bar.appendChild(fill); el.appendChild(bar);
+  });
+  const btn = document.getElementById('btnSubmit');
+  if(btn && !btn.textContent.includes('✓') && btn.textContent !== "Отправка…"){
+    btn.disabled = left > 0;
+    btn.textContent = left > 0 ? "Ждём фото: осталось " + left : "Отправить отчёт";
+  }
+}
+
+function loadImage(file){
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => resolve({img: img, url: url});
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("img")); };
+    img.src = url;
+  });
+}
+
+async function resizeImage(file, maxSize, quality){
+  maxSize = maxSize || 1280;
+  quality = quality || 0.7;
+  const loaded = await loadImage(file);
+  const img = loaded.img;
+  try{
+    const w = img.naturalWidth, h = img.naturalHeight;
+    const k = Math.min(1, maxSize / Math.max(w, h));
+    const cw = Math.max(1, Math.round(w * k)), ch = Math.max(1, Math.round(h * k));
+    const canvas = document.createElement('canvas');
+    canvas.width = cw; canvas.height = ch;
+    canvas.getContext('2d').drawImage(img, 0, 0, cw, ch);
+    const full = canvas.toDataURL('image/jpeg', quality);
+    // маленькая миниатюра из уже уменьшенного кадра (не держим в памяти большой оригинал)
+    const tk = 96 / Math.max(cw, ch);
+    const tc = document.createElement('canvas');
+    tc.width = Math.max(1, Math.round(cw * tk)); tc.height = Math.max(1, Math.round(ch * tk));
+    tc.getContext('2d').drawImage(canvas, 0, 0, tc.width, tc.height);
+    const thumb = tc.toDataURL('image/jpeg', 0.6);
+    canvas.width = canvas.height = 0;
+    tc.width = tc.height = 0;
+    return {full: full, thumb: thumb};
+  } finally {
+    URL.revokeObjectURL(loaded.url);
+    img.src = "";
+  }
+}
+
+function setPhotoUi(idx, text, cls){
+  if(idx !== current) return;
+  const pStatus = document.getElementById('photoStatus');
+  pStatus.textContent = text;
+  pStatus.className = 'photo-status' + (cls ? ' ' + cls : '');
+}
+
+function addThumb(idx, src){
+  if(idx !== current) return;
+  const img = document.createElement('img');
+  img.src = src;
+  document.getElementById('photoThumbs').appendChild(img);
+}
+
+// Очередь фото: до 3 отправок одновременно. Фото одного товара — строго по очереди,
+// первое фото сеанса — в одиночку (чтобы на Диске не появились одинаковые папки).
+const PHOTO_WORKERS = 3;
+let photoJobs = [];          // {idx, file, st}
+let photoActive = 0;
+let photoBusyIdx = {};       // idx товара -> идёт отправка
+let photoFirstDone = false;
+let photoItemStat = {};      // idx -> {left, ok, fail}
+
+function itemPhotoUi(idx){
+  const st = photoItemStat[idx];
+  if(!st || idx !== current) return;
+  if(st.left){ setPhotoUi(idx, "Отправка фото... осталось " + st.left, ""); return; }
+  const pDrop = document.getElementById('photoDrop');
+  if(st.ok){ pDrop.textContent = "📷 Фото уже приложено (можно добавить ещё)"; pDrop.classList.add('has-files'); }
+  if(st.fail) setPhotoUi(idx, "Не все фото отправились, добавьте ещё раз", 'bad');
+  else setPhotoUi(idx, "Фото отправлено ✓", 'ok');
+}
+
+function nextPhotoJob(){
+  const limit = photoFirstDone ? PHOTO_WORKERS : 1;
+  while(photoActive < limit){
+    const k = photoJobs.findIndex(j => !photoBusyIdx[j.idx]);
+    if(k < 0) return;
+    const job = photoJobs.splice(k, 1)[0];
+    photoActive++;
+    photoBusyIdx[job.idx] = true;
+    runPhotoJob(job).finally(() => {
+      photoActive--;
+      photosPending--;
+      delete photoBusyIdx[job.idx];
+      nextPhotoJob();
+    });
+  }
+}
+
+async function runPhotoJob(job){
+  const st = photoItemStat[job.idx];
+  let ok = false;
+  try{
+    const res = await resizeImage(job.file);
+    addThumb(job.idx, res.thumb);
+    const it = ITEMS[job.idx];
+    ok = await postJson(PHOTO_ENDPOINT_URL, {type:"photo", store: job.st, block: it.block, article: it.article, mgb: it.mgb,
+      item: it.name, name: it.name, employee: employeeName, photos: [res.full]}, 60000, 3);
+  }catch(err){ ok = false; }
+  if(ok){ photoSentN++; st.ok++; results[job.idx].photoSent = true; persist(); photoFirstDone = true; }
+  else { photoFailN++; st.fail++; }
+  st.left--;
+  updatePhotoCount();
+  itemPhotoUi(job.idx);
+}
+
+document.getElementById('photoInput').addEventListener('change', (e) => {
+  const files = Array.from(e.target.files);
+  if(!files.length) return;
+  const idx = current;
+  const st = store;
+  photoItemStat[idx] = photoItemStat[idx] || {left:0, ok:0, fail:0};
+  photoItemStat[idx].left += files.length;
+  files.forEach(f => photoJobs.push({idx: idx, file: f, st: st}));
+  photosPending += files.length;
+  photoTotal += files.length;
+  updatePhotoCount();
+  itemPhotoUi(idx);
+  nextPhotoJob();
+  e.target.value = "";
+});
+
+document.getElementById('photoDrop').addEventListener('click', () => {
+  document.getElementById('photoInput').click();
+});
+
+showResumeIfAny();
+</script>
+</body>
+</html>
