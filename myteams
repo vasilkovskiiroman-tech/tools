@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f1115">
+<title>Рабочий центр</title>
+<style>
+  :root { --bg:#0f1115; --card:#181b22; --card2:#1e222b; --line:#262b36; --txt:#e8eaf0; --mut:#8a90a0; }
+  * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body { margin:0; background:var(--bg); color:var(--txt); font:15px/1.35 -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
+  .wrap { max-width:960px; margin:0 auto; padding:20px 14px calc(28px + env(safe-area-inset-bottom)); }
+  header { text-align:center; margin:6px 0 18px; }
+  .tag { display:inline-block; font-size:11px; letter-spacing:.08em; font-weight:700; color:#aab4ff; border:1px solid #3a4280; background:#1a1e3a; padding:4px 10px; border-radius:999px; }
+  h1 { margin:10px 0 2px; font-size:26px; }
+  .sub { color:var(--mut); font-size:13px; }
+  .search { width:100%; margin:4px 0 14px; padding:12px 14px; border-radius:12px; border:1px solid var(--line); background:var(--card); color:var(--txt); font-size:15px; outline:none; }
+  h2 { font-size:11px; letter-spacing:.1em; color:var(--mut); font-weight:700; margin:18px 4px 8px; text-transform:uppercase; }
+  .grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  @media (min-width:720px) { .grid { grid-template-columns:repeat(3, 1fr); } }
+  a.card { display:flex; flex-direction:column; gap:6px; min-height:92px; padding:14px; border-radius:14px; background:var(--card); border:1px solid var(--line); color:inherit; text-decoration:none; }
+  a.card:active { background:var(--card2); transform:scale(.99); }
+  a.card.wide { grid-column:1 / -1; flex-direction:row; align-items:center; min-height:64px; }
+  .ico { font-size:24px; line-height:1; }
+  .t { font-weight:700; font-size:14.5px; }
+  .d { color:var(--mut); font-size:12px; }
+  .kind { margin-left:auto; color:var(--mut); font-size:11px; }
+  a.card.off { opacity:.45; pointer-events:none; }
+  .hide { display:none !important; }
+  footer { text-align:center; color:var(--mut); font-size:11px; margin-top:22px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="tag">МБТ POLARIS · СПБ LOVE</span>
+    <h1>Рабочий центр</h1>
+    <div class="sub">Васильковский Роман · Supvr</div>
+  </header>
+  <input class="search" id="q" type="search" placeholder="Поиск: ДНС, фото, ТП, тест…" autocomplete="off">
+  <main id="app"></main>
+  <footer>Ссылки меняются в начале скрипта — массив LINKS</footer>
+</div>
+<script>
+// Ссылка пустая — карточка серая. Вставь ссылку в url между кавычками.
+const LINKS = [
+  { sec: 'Отчёты', items: [
+    { i: '📊', t: 'DNS недельный отчёт', d: 'Сводка, листы точек, недели', url: 'https://docs.google.com/spreadsheets/d/1rMW5dYEjC5m9dnOWDD3u7ANp5KxzjGhTE5YIOfMq_RU/edit' },
+    { i: '🗓️', t: 'Планёрка', d: 'Итог по экспертам, маршрут, визиты', url: '' },
+    { i: '🕵️', t: 'Аналитика ТП', d: 'Тайный покупатель и штрафы', url: 'https://docs.google.com/spreadsheets/d/19vXKMBVXeDvwWkMVJF9ShJifG-2ILfA3Nw1HtKgB-jc/edit' },
+    { i: '📁', t: 'Папка «DNS мои отчёты»', d: 'Сюда кладу все файлы', url: 'https://drive.google.com/drive/folders/1ttzBewp2BMexYrrk6e0CjKPJLN0-Aqfx' }
+  ]},
+  { sec: 'Визит и задачи', items: [
+    { i: '🎯', t: '6 секторов · Визит', d: 'Подготовка, 4 вопроса, дневник, домашка', url: 'https://vasilkovskiiroman-tech.github.io/tools/index.html', wide: true },
+    { i: '🗺️', t: '6 секторов · Таблица', d: 'Что я заполнил', url: 'https://docs.google.com/spreadsheets/d/1qtPW_m5I4KlcRmuYWGdi32dkpFTKKaGvfv58s5xGgyw/edit' },
+    { i: '📋', t: 'Управление Роман', d: 'Задачи, контроль, визиты', url: 'https://docs.google.com/spreadsheets/d/1w8G55BF-KkkSOkAKFZWjvsxJMu2Z0FLmsvxpIwFjVIs/edit' },
+    { i: '🏆', t: 'Win-Win · Журнал', d: 'Приход/уход, селфи', url: 'https://docs.google.com/spreadsheets/d/1wSzPIGf1yy6lk0yX0-ARGq_TNpNtdDumnCih7Qnzhro/edit' }
+  ]},
+  { sec: 'Фокусы магазинов', items: [
+    { i: '🔵', t: 'Фокусы ДНС', d: 'Продажи фокусов, разбор точки', url: 'https://docs.google.com/spreadsheets/d/1UE0K7tQ9Nyuw0DYqYcLJkNGviPR7rcCYlhxyTMlNmPc/edit' },
+    { i: '🟠', t: 'Фокусы МаксиДом', d: 'Продажи фокусов МаксиДом', url: 'https://docs.google.com/spreadsheets/d/1n7tgJrNKS-k_bUZfY0-9k9lr_l9f7IKdR-82HHE_M1M/edit' }
+  ]},
+  { sec: 'Эксперты', items: [
+    { i: '🎙️', t: 'Тренажёр продаж', d: 'Ролевая с покупателем', url: 'https://vasilkovskiiroman-tech.github.io/tools/trener2.html' },
+    { i: '📒', t: 'Тренажёр · сессии', d: 'Результаты, мой комментарий', url: 'https://docs.google.com/spreadsheets/d/1KvkoGmh17tOpA_CRhAx363OMXPLo9eEUhEXATrgCbgk/edit' },
+    { i: '📸', t: 'Фотоотчёт экспертов', d: 'Страница загрузки фото', url: 'https://vasilkovskiiroman-tech.github.io/tools/polaris-foto.html' },
+    { i: '🖼️', t: 'Фотоотчёт · журнал', d: 'Кто и когда прислал', url: 'https://docs.google.com/spreadsheets/d/1MtN9HIW1QDuGLsw8H-AYazlJe8epLBU7TlMmMgn5CwI/edit' }
+  ]},
+  { sec: 'Тесты · DISC + Герчиков + Активность', items: [
+    { i: '⚡', t: 'DISC тест', d: 'Тип поведения', url: 'https://vasilkovskiiroman-tech.github.io/tools/Disktest.html' },
+    { i: '💰', t: 'Герчиков', d: 'Тип мотивации', url: 'https://vasilkovskiiroman-tech.github.io/tools/Gerchikov2.html' },
+    { i: '🔥', t: 'Активность', d: 'Инициатива и вовлечённость', url: 'https://vasilkovskiiroman-tech.github.io/tools/aktiv.html' },
+    { i: '📈', t: 'Результаты тестов', d: 'Сводная по команде', url: 'https://docs.google.com/spreadsheets/d/1_KRt0hGgdGIDMZfsQ0wEplt8tC8wKqIt3HRWLnQ_fPI/edit' }
+  ]}
+];
+const app = document.getElementById('app');
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const kind = u => !u ? 'нет ссылки' : /spreadsheets/.test(u) ? 'таблица' : /drive\.google/.test(u) ? 'папка' : 'страница';
+app.innerHTML = LINKS.map(s => '<section data-sec><h2>' + esc(s.sec) + '</h2><div class="grid">' + s.items.map(x =>
+  '<a class="card' + (x.wide ? ' wide' : '') + (x.url ? '' : ' off') + '" href="' + esc(x.url || '#') + '" target="_blank" rel="noopener" data-k="' + esc((x.t + ' ' + x.d + ' ' + s.sec).toLowerCase()) + '">' +
+  '<span class="ico">' + x.i + '</span><span><div class="t">' + esc(x.t) + '</div><div class="d">' + esc(x.d) + '</div></span>' +
+  (x.wide ? '<span class="kind">' + kind(x.url) + ' ›</span>' : '') + '</a>').join('') + '</div></section>').join('');
+document.getElementById('q').addEventListener('input', e => {
+  const q = e.target.value.trim().toLowerCase();
+  document.querySelectorAll('[data-sec]').forEach(sec => {
+    let any = false;
+    sec.querySelectorAll('a.card').forEach(a => { const ok = !q || a.dataset.k.indexOf(q) >= 0; a.classList.toggle('hide', !ok); if (ok) any = true; });
+    sec.classList.toggle('hide', !any);
+  });
+});
+</script>
+</body>
+</html>
